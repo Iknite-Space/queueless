@@ -29,8 +29,8 @@ func Migrate(dbURL string, migrationsPath string) error {
 
 	// defer m.Close()
 	defer func() {
-		if err, _ := m.Close(); err != nil {
-			log.Printf("Error closing migration: %v", err)
+		if err,_ := m.Close(); err != nil {
+		log.Printf("Error closing migration: %v", err)
 		}
 	}()
 
@@ -61,7 +61,7 @@ func MigrateDown(dbURL string, migrationsPath string) error {
 
 	// defer m.Close()
 	defer func() {
-		if err, _ := m.Close(); err != nil {
+		if err,_ := m.Close(); err != nil {
 			log.Printf("Error closing migration: %v", err)
 		}
 	}()
