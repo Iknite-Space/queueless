@@ -4,8 +4,7 @@
 name: golangci-lint
 on:
   push:
-
-    # branches:
+   # branches:
     #   - main
     #   - master
   pull_request:
