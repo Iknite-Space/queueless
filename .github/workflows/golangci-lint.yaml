@@ -1,19 +1,21 @@
 
+
 # This workflow ensures automatic linting for your Go API using golangci-lint 
-
-
 
 name: golangci-lint
 on:
   push:
+
     # branches:
     #   - main
     #   - master
+
   pull_request:
 
 
 jobs:
   golangci:
+
     name: api-lint
     runs-on: ubuntu-latest
     steps:
@@ -26,6 +28,4 @@ jobs:
         with:
           version: v2.1
           working-directory: ./api
-
-
 
