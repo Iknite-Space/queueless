@@ -2,7 +2,6 @@ package repo
 
 import (
 	"errors"
-	"log"
 	"path/filepath"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -58,6 +57,7 @@ func MigrateDown(dbURL string, migrationsPath string) error {
 	if err != nil {
 		return err
 	}
+
 
 	// defer m.Close()
 	defer func() {
