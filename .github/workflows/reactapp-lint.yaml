@@ -22,10 +22,11 @@ jobs:
         with:
           node-version: 18
       - name: Install dependencies
-        run: npm ci
         working-directory: ./app
+        run: npm ci
       - name: Run ESLint
-        run: npx eslint src --fix
+        working-directory: ./app
+        run: npx eslint src --fix #--format stylish
 
 
 
