@@ -25,5 +25,3 @@ jobs:
         working-directory: ./app
         run: npx eslint src --fix --format stylish
 
-
-
