@@ -23,6 +23,7 @@ jobs:
         run: npm ci
       - name: Run ESLint
         working-directory: ./app
+
         run: npx eslint src --fix --format stylish
 
 
