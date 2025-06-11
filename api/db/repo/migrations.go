@@ -2,6 +2,7 @@ package repo
 
 import (
 	"errors"
+	"log"
 	"path/filepath"
 
 	"github.com/golang-migrate/migrate/v4"
