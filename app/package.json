@@ -42,6 +42,7 @@
     "@typescript-eslint/parser": "^8.34.0",
     "@typescript-eslint/utils": "^8.34.0",
     "eslint": "^9.28.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.2.0"
   }
