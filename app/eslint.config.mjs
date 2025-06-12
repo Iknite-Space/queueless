@@ -4,7 +4,7 @@ import react from "eslint-plugin-react";
 export default [
 
  {
-    files: ["**/*.{js,mjs,cjs,jsx}"],
+   files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
       parserOptions: {
         ecmaFeatures: {

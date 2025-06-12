@@ -9,12 +9,14 @@ export default function ComingSoonPage() {
     navigate('/organizations'); // Navigate to the organization route
   };
 
+
   return (
     <div className="coming-soon-container">
       <header className="intro">
         <h1 className='project-title'>Qless</h1>
         <p>Coming Soon...</p>
       </header>
+
 
       <button 
         className="browse-button" 
@@ -23,5 +25,6 @@ export default function ComingSoonPage() {
         Browse Organizations
       </button>
     </div>
-  );
-}
+
+ );
+};
