@@ -11,7 +11,7 @@ export default function ComingSoonPage() {
   };
 
 
-  return (
+ return (
     <div className="coming-soon-container">
       <header className="intro">
         <h1 className='project-title'>Qless</h1>

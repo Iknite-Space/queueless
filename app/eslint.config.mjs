@@ -2,6 +2,7 @@
 import globals from "globals";
 import react from "eslint-plugin-react";
 export default [
+
   {
     files: ["**/*.{js,mjs,cjs,jsx}"],
     languageOptions: {
@@ -19,7 +20,8 @@ export default [
       "react/jsx-uses-vars": "error",
       "no-unused-vars": "warn",
 
+
  },
  },
-  react.configs.flat.recommended,
+ react.configs.flat.recommended,
 ];
