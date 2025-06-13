@@ -6,8 +6,7 @@ import './App.css';
 
 
 import { ComingSoonPage } from './components/ComingSoonPage';
-import ServicesPage from './components/ServicesPage';
- 
+import ServicesPage from './components/ServicesPage'; 
 import OrganizationCard from './components/OrganizationCard';
 
 function App() {
