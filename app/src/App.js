@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import './App.css';
 import { ComingSoonPage } from './components/ComingSoonPage';
+
 import ServicePage from './components/ServicesPage';
 
 
