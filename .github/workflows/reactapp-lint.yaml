@@ -1,0 +1,32 @@
+# This workflow ensures automatic linting  for the React App using ESLint 
+
+
+
+
+name: reactapp-lint
+on:
+  push:
+    # branches:
+    #   - main
+    #   - master
+  pull_request:
+
+
+jobs:
+  eslint:
+    name: app-lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+      - name: Install dependencies
+        working-directory: ./app
+        run: npm ci
+      - name: Run ESLint
+        working-directory: ./app
+        run: npx eslint src --fix --format stylish
+
+
+
