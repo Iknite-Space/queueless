@@ -143,7 +143,12 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 		return
 	}
 
-	h.generateSlotTemplates(c, serviceID)
+	if err := h.generateSlotTemplates(c, serviceID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": fmt.Sprintf("Failed to generate slot templates: %v", err),
+		})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":   "success",
