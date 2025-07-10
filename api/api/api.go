@@ -25,84 +25,43 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}))
 
-	r.GET("//healthcheck", h.handleHealthcheck)
-	r.POST("/message", h.handleCreateMessage)
-	r.GET("/message/:id", h.handleGetMessage)
-	r.DELETE("/message/:id", h.handleDeleteMessage)
-	r.GET("/thread/:id/messages", h.handleGetThreadMessages)
+	r.GET("/api/v1/organizations", h.handleGetOrganizations)
+	r.GET("/api/v1/organizations/:id/services", h.handleGetServicesByOrganization)
 
 	return r
 }
 
-func (h *MessageHandler) handleHealthcheck(c *gin.Context) {
-	c.String(http.StatusOK, "ok")
-}
+// Endpoint to get all organizations
+func (h *MessageHandler) handleGetOrganizations(c *gin.Context) {
 
-func (h *MessageHandler) handleCreateMessage(c *gin.Context) {
-	var req repo.CreateMessageParams
-	err := c.ShouldBindBodyWithJSON(&req)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	message, err := h.querier.CreateMessage(c, req)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, message)
-}
-
-func (h *MessageHandler) handleGetMessage(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
-		return
-	}
-
-	message, err := h.querier.GetMessageByID(c, id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, message)
-}
-
-func (h *MessageHandler) handleGetThreadMessages(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
-		return
-	}
-
-	messages, err := h.querier.GetMessagesByThread(c, id)
+	organizations, err := h.querier.GetOrganizations(c)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"thread":   id,
-		"topic":    "example",
-		"messages": messages,
+		"status":        "success",
+		"organizations": organizations,
 	})
 }
 
-func (h *MessageHandler) handleDeleteMessage(c *gin.Context) {
+// Endpoint to get all services by organization
+func (h *MessageHandler) handleGetServicesByOrganization(c *gin.Context) {
 	id := c.Param("id")
 	if id == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
 		return
 	}
 
-	err := h.querier.DeleteMessage(c, id)
+	services, err := h.querier.GetServicesByOrganization(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, "ok")
+	c.JSON(http.StatusOK, gin.H{
+		"status":   "success",
+		"services": services,
+	})
 }
