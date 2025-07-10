@@ -1,9 +1,5 @@
-.organization-cards {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* Center cards horizontally */
-}
 
+/* src/components/OrganizationCard.css */
 .organization-card {
     border: 1px solid #ccc;
     border-radius: 8px;
