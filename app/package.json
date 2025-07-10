@@ -38,6 +38,7 @@
     ]
   },
   "devDependencies": {
+<<<<<<< HEAD
 
     "@babel/preset-react": "^7.27.1",
     "@eslint/js": "^9.28.0",
@@ -46,6 +47,10 @@
     "eslint": "^9.28.0",
     "eslint-config-react-app": "^7.0.1",
 
+=======
+    "@eslint/js": "^9.28.0",
+    "eslint": "^8.57.1",
+>>>>>>> 0c206ee5006780bd088da03925c3af0073e0e652
     "eslint-plugin-react": "^7.37.5",
     "globals": "^16.2.0"
   }

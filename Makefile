@@ -13,4 +13,4 @@ run:
 	cd api/cmd/api && go run main.go
 
 sqlc generate:
-	cd api/internal/stocks && sqlc generate
+	cd api/db && sqlc generate
