@@ -1,0 +1,40 @@
+:root {
+  /* ===== PRIMARY BRAND COLORS ===== */
+
+  --primary-blue: #2563eb;      /* Core brand color — used for buttons, links, and key CTAs */
+  --primary-dark: #1e293b;      /* Dark brand tone — used for headings or emphasis text */
+  --primary-light: #eff6ff;     /* Soft blue tint — backgrounds, section dividers, or highlight zones */
+
+  /* ===== SECONDARY ACCENTS ===== */
+
+  --accent-orange: #f97316;     /* Used for hover interactions, warning accents, or icons */
+  --accent-green: #22c55e;      /* Success feedback — confirmation, checkmarks, positive actions */
+
+  /* ===== TERTIARY NEUTRALS ===== */
+
+  --bg-white: #ffffff;          /* Default surface — card backgrounds, hero sections */
+  --bg-gray: #f9fafb;           /* Subtle backdrop — body background, containers */
+  --border-gray: #e5e7eb;       /* Border color — card outlines, dividers, input edges */
+  --text-dark: #1f2937;         /* Primary text — body content, labels, headlines */
+  --text-muted: #6b7280;        /* Secondary text — descriptions, placeholders, tooltips */
+
+  /* ===== UTILITY & ALERTS ===== */
+
+  --error-red: #ef4444;         /* Error states — form validation, danger buttons, alerts */
+  --alert-amber: #facc15;       /* Attention — token highlights, warnings, confirmation banners */
+  --info-blue: #3b82f6;         /* Informational tone — hints, alerts, badges */
+
+  /* ===== GRADIENTS & SPECIAL CASES ===== */
+
+  --hero-gradient-start: #2563eb; /* Gradient start — hero background or banner */
+  --hero-gradient-end: #1e40af;   /* Gradient end — darker blend for hero sections */
+
+  /* ===== ELEVATION / DEPTH ===== */
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05); /* Subtle hover or card elevation */
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08); /* Medium elevation — modals, active cards */
+}
+
+
+
+
