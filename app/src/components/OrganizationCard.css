@@ -1,0 +1,23 @@
+/* src/components/OrganizationCard.css */
+.organization-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 16px;
+    text-align: center;
+    width: 200px; /* Adjust width as needed */
+}
+
+.organization-logo {
+    width: 100%; /* Make logo responsive */
+    height: auto;
+}
+
+.organization-name {
+    font-size: 1.5em;
+    margin: 8px 0;
+}
+
+.organization-location {
+    color: #666;
+}
