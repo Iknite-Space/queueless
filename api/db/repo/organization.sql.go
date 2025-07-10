@@ -7,7 +7,37 @@ package repo
 
 import (
 	"context"
+
+	"github.com/jackc/pgx/v5/pgtype"
 )
+
+const createService = `-- name: CreateService :one
+INSERT INTO services (
+    organization_id, service_name, service_description, duration
+) VALUES (
+    $1, $2, $3, $4
+)
+RETURNING service_id
+`
+
+type CreateServiceParams struct {
+	OrganizationID     string `json:"organization_id"`
+	ServiceName        string `json:"service_name"`
+	ServiceDescription string `json:"service_description"`
+	Duration           int32  `json:"duration"`
+}
+
+func (q *Queries) CreateService(ctx context.Context, arg CreateServiceParams) (string, error) {
+	row := q.db.QueryRow(ctx, createService,
+		arg.OrganizationID,
+		arg.ServiceName,
+		arg.ServiceDescription,
+		arg.Duration,
+	)
+	var service_id string
+	err := row.Scan(&service_id)
+	return service_id, err
+}
 
 const getOrganizations = `-- name: GetOrganizations :many
 SELECT organization_id, name, location, start_time, end_time FROM organizations
@@ -39,6 +69,32 @@ func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) 
 	return items, nil
 }
 
+const getServiceWithOrgTimes = `-- name: GetServiceWithOrgTimes :one
+SELECT s.service_id, s.duration, o.start_time, o.end_time
+FROM services s
+JOIN organizations o ON s.organization_id = o.organization_id
+WHERE s.service_id = $1
+`
+
+type GetServiceWithOrgTimesRow struct {
+	ServiceID string      `json:"service_id"`
+	Duration  int32       `json:"duration"`
+	StartTime pgtype.Time `json:"start_time"`
+	EndTime   pgtype.Time `json:"end_time"`
+}
+
+func (q *Queries) GetServiceWithOrgTimes(ctx context.Context, serviceID string) (GetServiceWithOrgTimesRow, error) {
+	row := q.db.QueryRow(ctx, getServiceWithOrgTimes, serviceID)
+	var i GetServiceWithOrgTimesRow
+	err := row.Scan(
+		&i.ServiceID,
+		&i.Duration,
+		&i.StartTime,
+		&i.EndTime,
+	)
+	return i, err
+}
+
 const getServicesByOrganization = `-- name: GetServicesByOrganization :many
 SELECT service_id, organization_id, service_name, service_description, duration FROM services
 WHERE organization_id = $1
@@ -68,4 +124,22 @@ func (q *Queries) GetServicesByOrganization(ctx context.Context, organizationID 
 		return nil, err
 	}
 	return items, nil
+}
+
+const insertSlotTemplate = `-- name: InsertSlotTemplate :exec
+INSERT INTO service_slot_templates (
+    service_id, start_time, end_time
+) VALUES ($1, $2, $3)
+ON CONFLICT (service_id, start_time) DO NOTHING
+`
+
+type InsertSlotTemplateParams struct {
+	ServiceID string      `json:"service_id"`
+	StartTime pgtype.Time `json:"start_time"`
+	EndTime   pgtype.Time `json:"end_time"`
+}
+
+func (q *Queries) InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error {
+	_, err := q.db.Exec(ctx, insertSlotTemplate, arg.ServiceID, arg.StartTime, arg.EndTime)
+	return err
 }
