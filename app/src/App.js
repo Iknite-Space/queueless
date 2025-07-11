@@ -6,10 +6,6 @@ import './App.css';
 
 
 import { ComingSoonPage } from './components/ComingSoonPage';
-import React from 'react';
-
-
-
 import ServicesPage from './components/ServicesPage';
  
 import OrganizationCard from './components/OrganizationCard';
