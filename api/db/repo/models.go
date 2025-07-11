@@ -23,3 +23,10 @@ type Service struct {
 	ServiceDescription string `json:"service_description"`
 	Duration           int32  `json:"duration"`
 }
+
+type ServiceSlotTemplate struct {
+	ID        string      `json:"id"`
+	ServiceID string      `json:"service_id"`
+	StartTime pgtype.Time `json:"start_time"`
+	EndTime   pgtype.Time `json:"end_time"`
+}
