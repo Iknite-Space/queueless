@@ -52,7 +52,7 @@ function ServicesPage() {
       });
   }, []); // Empty dependency array means this runs only once when the component loads
 
-  // Render the service cards inside a responsive container
+ // Render the service cards inside a responsive container
   return (
     <div className="services-grid">
       {services.map((service) => (

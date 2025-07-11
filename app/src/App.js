@@ -11,8 +11,6 @@ import OrganizationCard from './components/OrganizationCard';
 
 import ServicesPage from './components/ServicesPage';
 
-
-
 function App() {
   return (
  <>
