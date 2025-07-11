@@ -8,6 +8,7 @@ export function ComingSoonPage() {
         <h1 className='project-title'>Qless</h1>
         <p>Coming Soon.....</p>
       </header>
+
     </>
   );
 }
