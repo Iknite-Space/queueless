@@ -1,12 +1,37 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './OrganizationCard.css';
 
 function OrganizationCard() {
-    const organizations = [
-        { name: 'MTN-BUEA', location: 'Molyko' },
-        { name: 'ECOBANK-BUEA', location: 'Malingo' },
-    ];
+    const [organizations, setOrganizations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchOrganizations = async () => {
+            try {
+                const response = await fetch('localhost:8085/api/v1/organizations');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setOrganizations(data); // Set the fetched data
+            } catch (error) {
+                setError(error.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrganizations(); // Call the fetch function
+    }, []); // ensures this runs once on mount
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
 
     return (
         <div className="organization-cards">
