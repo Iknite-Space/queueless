@@ -35,6 +35,41 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08); /* Medium elevation — modals, active cards */
 }
 
+.buttonPrimary {
+  background-color: var(--primary-blue);
+  color: var(--primary-white);
+}
+
+.card {
+  border: 1px solid var(--border-gray);
+  background-color: var(--accent-gray);
+  color: var(--text-dark);
+}
 
 
 
+:root {
+  /* ===== PRIMARY COLORS (Brand Identity & CTAs) ===== */
+
+  --primary-navy: #1e3a8a;        /* Dominant header/nav bar color — strong brand presence */
+  --primary-blue: #2563eb;        /* Call-to-action buttons, main links, hero highlights */
+  --primary-white: #ffffff;       /* Key surface color — cards, sections, general background */
+
+  /* ===== SECONDARY COLORS (Accent & Interactions) ===== */
+
+  --accent-orange: #f97316;       /* Hover states, highlight icons, alert labels */
+  --accent-light-blue: #93c5fd;   /* Secondary buttons, info highlights */
+  --accent-gray: #f3f4f6;         /* Soft backgrounds for sections, muted fill behind elements */
+
+  /* ===== TERTIARY COLORS (Text & Structure) ===== */
+
+  --text-dark: #1f2937;           /* Primary body text, labels, headlines */
+  --text-muted: #6b7280;          /* Placeholder text, descriptions, tooltips */
+  --border-gray: #e5e7eb;         /* Borders for cards, forms, input fields */
+
+  /* ===== UTILITY COLORS ===== */
+
+  --error-red: #ef4444;           /* Error messages, failed validation */
+  --alert-yellow: #facc15;        /* Warning banners, confirmation tokens */
+  --info-blue: #3b82f6;           /* Informational tags, hint bubbles */
+}
