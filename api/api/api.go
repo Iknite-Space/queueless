@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
 )
@@ -22,8 +23,16 @@ func NewMessageHandler(querier repo.Querier) *MessageHandler {
 }
 
 func (h *MessageHandler) WireHttpHandler() http.Handler {
-
 	r := gin.Default()
+
+	    // addin CORS middleware
+			r.Use(cors.New(cors.Config{
+        AllowOrigins:     []string{"http://localhost:3000"},
+        AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+        AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+        AllowCredentials: true,
+    }))
+
 	r.Use(gin.CustomRecovery(func(c *gin.Context, _ any) {
 		c.String(http.StatusInternalServerError, "Internal Server Error: panic")
 		c.AbortWithStatus(http.StatusInternalServerError)
