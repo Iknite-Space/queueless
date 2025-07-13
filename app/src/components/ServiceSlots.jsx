@@ -1,3 +1,4 @@
+import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react';
 import './ServiceSlots.css'; 
@@ -25,11 +26,10 @@ export function ServiceSlots() {
     <div className="slots-container">
         {slots.map((slot) => {
           return (
-            <div className="slot-button">
-            <button key={slot.id}>{formatTime(slot.start_time.Microseconds)}</button>
+            <div key={slot.id} className="slot-button">
+            <button >{formatTime(slot.start_time.Microseconds)}</button>
             </div>
           );
-          
         })}
         
       </div>
