@@ -2,9 +2,9 @@ import React from "react";
 import '../styles/CustomerInput.css' 
 
 function CustomerInput() {
-  return (<>
+  return (<div className="input-background">
 
-  
+
       
     <div className="input-form-container">
       <div className="input-image">
@@ -28,7 +28,7 @@ function CustomerInput() {
           <button className="submit-button">Submit</button>
         </div>
       </div>
-    </div></>
+    </div></div>
   );
 }
 
