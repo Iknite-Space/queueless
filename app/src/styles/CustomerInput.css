@@ -1,7 +1,7 @@
 .input-background{
   width: 100vw;
   height: 100vh;
-  background-color: rgb(190, 190, 190);
+  background: rgba(0, 0, 0,0.5);
   position: fixed;
   display: flex;
   justify-content: center;

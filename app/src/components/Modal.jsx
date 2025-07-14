@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import CustomerInput from "./CustomerInput";
 
+
 function Modal() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -10,11 +11,14 @@ function Modal() {
 
   return (
     <>
-      <button type="button" onClick={toggleModal}>
+      {modalIsOpen && <CustomerInput setModalIsOpen={setModalIsOpen} />}
+
+
+      <button type="button" onClick={toggleModal} >
+
         Open modal
       </button>
 
-      {modalIsOpen && <CustomerInput setModalIsOpen={setModalIsOpen} />}
     </>
   );
 }
