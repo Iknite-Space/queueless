@@ -1,6 +1,6 @@
 body {
-  background-color: var(--primary-dark);
-margin-top: 70px;
+  background-color: var(--text-muted);
+
 
 }
 
@@ -11,9 +11,13 @@ margin-top: 70px;
   display: flex;
   width: 50%;
   height: fit-content;
-  margin: auto;
-
- 
+  margin: 5% auto;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+    background: linear-gradient(to bottom, #041844d2, #0149be);
 }
 
 /* code for the image section */
@@ -43,6 +47,8 @@ margin-top: 70px;
   padding: 10px;
   width: 250px;
   margin-bottom: 40px;
+  color:var(--text-dark);
+
 }
 
 .input-form-actions {
