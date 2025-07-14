@@ -1,0 +1,82 @@
+body {
+  background-color: var(--primary-dark);
+margin-top: 70px;
+
+}
+
+/* code for the main main input container */
+.input-form-container {
+  padding: 70px 0px;
+  background: #f3f3f3;
+  display: flex;
+  width: 50%;
+  height: fit-content;
+  margin: auto;
+
+ 
+}
+
+/* code for the image section */
+
+.input-image {
+
+}
+
+/* section for the user input  */
+
+.customer-input {
+  display: flex;
+  flex-direction: column;
+  
+
+  padding: 30px 10px 10px 10px;
+}
+
+.customer-input input {
+  border-radius: 4px;
+  border-style: none;
+  height: 30px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+  padding: 10px;
+  width: 250px;
+  margin-bottom: 40px;
+}
+
+.input-form-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  margin-block-start: 30px;
+}
+.input-form-actions button {
+  font-family: arial;
+  color: white;
+  font-weight: bold;
+}
+
+.cancel-button {
+  background: var(--error-red);
+  padding: 8px 15px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-style: none;
+  cursor: pointer;
+}
+
+.submit-button {
+  background: var(--primary-blue);
+  padding: 8px 15px;
+  border-radius: 6px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  -ms-border-radius: 6px;
+  -o-border-radius: 6px;
+  border-style: none;
+  cursor: pointer;
+}
