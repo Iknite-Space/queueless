@@ -1,7 +1,11 @@
-body {
-  background-color: var(--text-muted);
-
-
+.input-background{
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(190, 190, 190);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* code for the main main input container */
