@@ -2,7 +2,10 @@ import React from "react";
 import '../styles/CustomerInput.css' 
 
 function CustomerInput() {
-  return (
+  return (<>
+
+  
+      
     <div className="input-form-container">
       <div className="input-image">
         <img
@@ -17,7 +20,7 @@ function CustomerInput() {
 
         <input type="text" placeholder="Enter Username" id="" />
         <input type="email" placeholder="Example@example.com" id="" />
-        <input type="tel" placeholder="Momo Number (+237)" id="" />
+        <input type="tel" placeholder="Momo Number (+237) 6xx xxx xxx" id="" />
         </div>
 
         <div className="input-form-actions">
@@ -25,7 +28,7 @@ function CustomerInput() {
           <button className="submit-button">Submit</button>
         </div>
       </div>
-    </div>
+    </div></>
   );
 }
 
