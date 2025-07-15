@@ -1,0 +1,6 @@
+.slot-page-container {
+  display: flex;
+  flex: 300px 1fr;
+  margin: 15px;
+
+}
