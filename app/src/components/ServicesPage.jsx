@@ -31,7 +31,7 @@ function ServicesPage() {
   useEffect(() => {
     // Fetch service data from the backend
     fetch(
-      "http://localhost:8085/api/v1/organizations/0c596809-578d-4495-88ec-a17f61cbd9cd/services"
+      "http://localhost:8085/api/v1/organizations/5b997706-07c9-4093-be2f-42b1aac1c1e9/services"
     )
       .then((response) => {
         // If the response is not OK, throw an error to catch it later
@@ -52,8 +52,9 @@ function ServicesPage() {
       });
   }, []); // Empty dependency array means this runs only once when the component loads
 
-  // Render the service cards inside a responsive container
-  return (
+
+ // Render the service cards inside a responsive container
+ return (
     <div className="services-grid">
       {services.map((service) => (
         // Pass each service's data to the ServiceCard component

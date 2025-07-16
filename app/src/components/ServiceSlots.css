@@ -1,0 +1,10 @@
+.slot-button button{
+  background-color: #fff;
+  padding: 6px 15px;
+  margin: 5px;
+  border: 1px solid #00368e;
+  border-radius: 15px;
+  cursor: pointer;
+
+
+}
