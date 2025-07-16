@@ -38,12 +38,17 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}))
 
+	r.GET("//healthcheck", h.handleHealthcheck)
 	r.GET("/api/v1/organizations", h.handleGetOrganizations)
 	r.GET("/api/v1/organizations/:id/services", h.handleGetServicesByOrganization)
 	r.POST("/api/v1/:id/services", h.handleCreateService)
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 
 	return r
+}
+
+func (h *MessageHandler) handleHealthcheck(c *gin.Context) {
+	c.String(http.StatusOK, "ok")
 }
 
 // Endpoint to get all organizations
