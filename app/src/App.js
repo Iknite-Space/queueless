@@ -7,9 +7,9 @@ import { ComingSoonPage } from "./components/ComingSoonPage";
 import ServicesPage from "./components/ServicesPage";
 import CustomerInput from "./components/CustomerInput";
 
-
 import Modal from "./components/Modal";
 import OrganizationCard from './components/OrganizationCard';
+
 
 
 function App() {
@@ -28,6 +28,8 @@ function App() {
           {/*  service  Screen */}
           <Route path="/services" element={<ServicesPage />} />
 
+
+        <Route path="/service/slots" element={<ServiceSlotsPage />} />
           {/*  input  Screen */}
           <Route path="/input" element={<CustomerInput />} />
 

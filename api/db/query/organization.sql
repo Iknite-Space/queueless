@@ -25,3 +25,14 @@ INSERT INTO service_slot_templates (
     service_id, start_time, end_time
 ) VALUES ($1, $2, $3)
 ON CONFLICT (service_id, start_time) DO NOTHING;
+
+-- name: GetServiceSlots :many
+SELECT 
+    id,
+    service_id,
+    start_time,
+    end_time
+FROM service_slot_templates
+WHERE service_id = $1
+ORDER BY start_time;
+

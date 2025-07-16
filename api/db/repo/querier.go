@@ -11,6 +11,7 @@ import (
 type Querier interface {
 	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
 	GetOrganizations(ctx context.Context) ([]Organization, error)
+	GetServiceSlots(ctx context.Context, serviceID string) ([]ServiceSlotTemplate, error)
 	GetServiceWithOrgTimes(ctx context.Context, serviceID string) (GetServiceWithOrgTimesRow, error)
 	GetServicesByOrganization(ctx context.Context, organizationID string) ([]Service, error)
 	InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error
