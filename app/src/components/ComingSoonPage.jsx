@@ -3,8 +3,12 @@ import './ComingSoonPage.css';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-export  default function ComingSoonPage() {
+export default function ComingSoonPage() {
   const navigate = useNavigate();
+
+  const handleBrowseClick = () => {
+    navigate('/organizations'); // Navigate to the organization route
+  };
 
   return (
 
@@ -21,6 +25,7 @@ export  default function ComingSoonPage() {
       >
         Browse Organizations
       </button>
+
     </>
 
  );
