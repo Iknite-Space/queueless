@@ -7,7 +7,7 @@ import { ComingSoonPage } from "./components/ComingSoonPage";
 import ServicesPage from "./components/ServicesPage";
 import CustomerInput from "./components/CustomerInput";
 
-import ServiceSlotsPage from "./components/ServiceSlotsPage";
+import {ServiceSlotsPage} from "./components/ServiceSlotsPage";
 import Modal from "./components/Modal";
 import OrganizationCard from './components/OrganizationCard';
 
