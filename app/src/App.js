@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css';
 import { ComingSoonPage } from './components/ComingSoonPage';
 import ServicesPage from './components/ServicesPage';
-import { ServiceSlotsPage } from './components/ServiceSlotsPage';
+
 
 
 function App() {
