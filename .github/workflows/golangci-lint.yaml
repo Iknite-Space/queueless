@@ -14,7 +14,7 @@ on:
 
 jobs:
   golangci:
-    name: lint
+    name: api-lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
