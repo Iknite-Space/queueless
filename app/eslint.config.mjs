@@ -1,3 +1,4 @@
+
 import globals from "globals";
 import react from "eslint-plugin-react";
 export default [
@@ -7,6 +8,7 @@ export default [
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
+
         },
       },
       globals: globals.browser,

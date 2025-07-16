@@ -1,4 +1,5 @@
 
+import React from 'react';
 import './App.css';
 import { ComingSoonPage } from './components/ComingSoonPage';
 import React from 'react';
