@@ -8,6 +8,7 @@ export default [
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
+
         },
       },
       globals: globals.browser,
