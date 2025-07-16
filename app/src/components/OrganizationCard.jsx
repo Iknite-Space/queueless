@@ -1,48 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import './OrganizationCard.css';
 
-function OrganizationCard() {
+import React, { useEffect, useState } from 'react';
+
+function OrganizationCard (){
     const [organizations, setOrganizations] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchOrganizations = async () => {
-            try {
-                const response = await fetch('localhost:8085/api/v1/organizations');
-                if (!response.ok) {
+        fetch("http://localhost:8085/api/v1/organizations")
+            .then((res) => {
+                if (!res.ok) {
                     throw new Error('Network response was not ok');
                 }
-                const data = await response.json();
-                setOrganizations(data); // Set the fetched data
-            } catch (error) {
-                setError(error.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchOrganizations(); // Call the fetch function
-    }, []); // ensures this runs once on mount
-
-    if (loading) {
-        return <div>Loading...</div>;
-    }
-
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
+                return res.json();
+            })
+            .then((data) => setOrganizations(data.organizations))
+            .catch((error) => {
+                console.error("Failed to fetch organizations:", error);
+            });
+    }, []);
 
     return (
-        <div className="organization-cards">
-            {organizations.map((org, index) => (
-                <div key={index} className="organization-card">
-                    <h2 className="organization-name">{org.name}</h2>
-                    <p className="organization-location">{org.location}</p>
-                </div>
-            ))}
+        <div>
+            {organizations.length > 0 ? (
+                organizations.map((org) => (
+                    <div key={org.organization_id}>
+                        <h2>{org.name}</h2>
+                        <p>{org.location}</p>
+                    </div>
+                ))
+            ) : (
+                <p>No organizations found.</p>
+            )}
         </div>
     );
-}
+};
 
-export default OrganizationCard;
+export default OrganizationCard; // Ensure this is a default export

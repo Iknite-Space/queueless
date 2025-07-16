@@ -1,3 +1,8 @@
+.organization-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center cards horizontally */
+}
 
 .organization-card {
     border: 1px solid #ccc;
@@ -6,11 +11,11 @@
     margin: 16px;
     text-align: center;
     width: 200px; /* Adjust width as needed */
+    transition: box-shadow 0.3s ease; /* Smooth transition */
 }
 
-.organization-logo {
-    width: 100%; /* Make logo responsive */
-    height: auto;
+.organization-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Add shadow on hover */
 }
 
 .organization-name {
@@ -20,4 +25,5 @@
 
 .organization-location {
     color: #666;
+    font-style: italic; /* Italicize location */
 }
