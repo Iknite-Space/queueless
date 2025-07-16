@@ -69,6 +69,42 @@ func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) 
 	return items, nil
 }
 
+const getServiceSlots = `-- name: GetServiceSlots :many
+SELECT 
+    id,
+    service_id,
+    start_time,
+    end_time
+FROM service_slot_templates
+WHERE service_id = $1
+ORDER BY start_time
+`
+
+func (q *Queries) GetServiceSlots(ctx context.Context, serviceID string) ([]ServiceSlotTemplate, error) {
+	rows, err := q.db.Query(ctx, getServiceSlots, serviceID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ServiceSlotTemplate{}
+	for rows.Next() {
+		var i ServiceSlotTemplate
+		if err := rows.Scan(
+			&i.ID,
+			&i.ServiceID,
+			&i.StartTime,
+			&i.EndTime,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getServiceWithOrgTimes = `-- name: GetServiceWithOrgTimes :one
 SELECT s.service_id, s.duration, o.start_time, o.end_time
 FROM services s

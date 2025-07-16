@@ -5,8 +5,9 @@ import "./App.css";
 import { ComingSoonPage } from "./components/ComingSoonPage";
 import ServicesPage from "./components/ServicesPage";
 import CustomerInput from "./components/CustomerInput";
-
+import { ServiceSlotsPage } from './components/ServiceSlotsPage';
 import Modal from "./components/Modal";
+
 
 function App() {
   return (
@@ -19,6 +20,8 @@ function App() {
           {/*  service  Screen */}
           <Route path="/services" element={<ServicesPage />} />
 
+
+        <Route path="/service/slots" element={<ServiceSlotsPage />} />
           {/*  input  Screen */}
           <Route path="/input" element={<CustomerInput />} />
 

@@ -25,13 +25,13 @@ func NewMessageHandler(querier repo.Querier) *MessageHandler {
 func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r := gin.Default()
 
-	    // addin CORS middleware
-			r.Use(cors.New(cors.Config{
-        AllowOrigins:     []string{"http://localhost:3000"},
-        AllowMethods:     []string{"GET", "POST", "OPTIONS"},
-        AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
-        AllowCredentials: true,
-    }))
+	// addin CORS middleware
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		AllowCredentials: true,
+	}))
 
 	r.Use(gin.CustomRecovery(func(c *gin.Context, _ any) {
 		c.String(http.StatusInternalServerError, "Internal Server Error: panic")
@@ -41,6 +41,7 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/organizations", h.handleGetOrganizations)
 	r.GET("/api/v1/organizations/:id/services", h.handleGetServicesByOrganization)
 	r.POST("/api/v1/:id/services", h.handleCreateService)
+	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 
 	return r
 }
@@ -77,6 +78,26 @@ func (h *MessageHandler) handleGetServicesByOrganization(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":   "success",
 		"services": services,
+	})
+}
+
+// Endpoint to get all services by organization
+func (h *MessageHandler) handleGetServiceSlots(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+		return
+	}
+
+	slots, err := h.querier.GetServiceSlots(c, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		"slots":  slots,
 	})
 }
 
