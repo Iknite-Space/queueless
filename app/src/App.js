@@ -10,6 +10,7 @@ import OrganizationCard from './components/OrganizationCard';
 
 
 import ServicesPage from './components/ServicesPage';
+import OrganizationCard from './components/OrganizationCard';
 
 function App() {
 
