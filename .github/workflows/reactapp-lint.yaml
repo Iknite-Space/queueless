@@ -1,8 +1,5 @@
 # This workflow ensures automatic linting  for the React App using ESLint 
 
-
-
-
 name: reactapp-lint
 on:
   push:
@@ -26,7 +23,7 @@ jobs:
         run: npm ci
       - name: Run ESLint
         working-directory: ./app
-        run: npx eslint src --fix --format stylish
 
+        run: npx eslint src --fix --format stylish
 
 
