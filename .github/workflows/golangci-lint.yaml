@@ -11,9 +11,11 @@ on:
 
 
 jobs:
-  golangc:
-   name: api-lint
-   runs-on: ubuntu-latest
+
+  golangci:
+    name: api-lint
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5

@@ -18,14 +18,6 @@ export default function ComingSoonPage() {
         <p>Coming Soon...</p>
       </header>
 
-
-      <button 
-        className="browse-button" 
-        onClick={handleBrowseClick}
-      >
-        Browse Organizations
-      </button>
-
     </>
 
  );
