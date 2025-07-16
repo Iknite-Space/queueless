@@ -11,6 +11,7 @@ import CustomerInput from "./components/CustomerInput";
 import Modal from "./components/Modal";
 import OrganizationCard from './components/OrganizationCard';
 
+
 function App() {
 
   return (
@@ -19,6 +20,7 @@ function App() {
         <Routes>
           {/*  Default landing or placeholder */}
           <Route path="/" element={<ComingSoonPage />} />
+
 
       {/* organizations screen */}
 <Route path="/organizations" element={<OrganizationCard />} />
