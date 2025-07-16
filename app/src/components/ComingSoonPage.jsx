@@ -1,15 +1,8 @@
 
 import './ComingSoonPage.css';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
-export default function ComingSoonPage() {
-  const navigate = useNavigate();
-
-  const handleBrowseClick = () => {
-    navigate('/organizations'); // Navigate to the organization route
-  };
-
+export function ComingSoonPage() {
   return (
 
     <>

@@ -9,13 +9,6 @@ import CustomerInput from "./components/CustomerInput";
 
 
 import Modal from "./components/Modal";
-
-import { ComingSoonPage } from './components/ComingSoonPage';
-import ServicesPage from './components/ServicesPage'; 
-import OrganizationCard from './components/OrganizationCard';
-
-
-import ServicesPage from './components/ServicesPage';
 import OrganizationCard from './components/OrganizationCard';
 
 function App() {
