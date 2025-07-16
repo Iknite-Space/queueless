@@ -12,7 +12,7 @@ export function WeekHeader() {
 
   useEffect(() => {
     const days = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 1; i < 6; i++) {
       const date = addDays(currentWeekStart, i);
       days.push({
         day: format(date, 'EEE'),

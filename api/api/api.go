@@ -101,6 +101,7 @@ func (h *MessageHandler) handleGetServiceSlots(c *gin.Context) {
 	})
 }
 
+// helper functions
 func fromPGTime(t pgtype.Time) (time.Time, error) {
 	if !t.Valid {
 		return time.Time{}, fmt.Errorf("invalid pgtype.Time")
