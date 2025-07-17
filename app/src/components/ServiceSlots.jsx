@@ -2,15 +2,22 @@ import React from 'react'
 import axios from 'axios'
 import { useEffect, useState } from 'react';
 import './ServiceSlots.css'; 
+import { useParams } from 'react-router';
 
 export function ServiceSlots() {
+
+const {serviceId} = useParams
+
   // fetch slots from the backend
     const [slots, setSlots] = useState([]);
   
     useEffect(() => {
-      axios.get('http://localhost:8085/api/v1/service/9f641718-e1fa-4177-b227-5e397805a443/slots')
+      axios
+        .get(
+          `http://localhost:8085/api/v1/service/${serviceId}/slots`
+        )
         .then((response) => {
-          setSlots(response.data.slots)
+          setSlots(response.data.slots);
         });
     }, []);
     
@@ -24,6 +31,7 @@ export function ServiceSlots() {
 
   return (
     <div className="slots-container">
+      <p>hello </p>
         {slots.map((slot) => {
           return (
             <div key={slot.id} className="slot-button">

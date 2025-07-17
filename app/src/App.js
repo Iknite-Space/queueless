@@ -26,10 +26,10 @@ function App() {
 <Route path="/organizations" element={<OrganizationCard />} />
 
           {/*  service  Screen */}
-          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/:orgId/services" element={<ServicesPage />} />
 
 
-        <Route path="/service/slots" element={<ServiceSlotsPage />} />
+        <Route path="/service/:serviceId/slots" element={<ServiceSlotsPage />} />
           {/*  input  Screen */}
           <Route path="/input" element={<CustomerInput />} />
 
