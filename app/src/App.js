@@ -1,4 +1,3 @@
-
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
@@ -7,14 +6,11 @@ import { ComingSoonPage } from "./components/ComingSoonPage";
 import ServicesPage from "./components/ServicesPage";
 import CustomerInput from "./components/CustomerInput";
 
-import {ServiceSlotsPage} from "./components/ServiceSlotsPage";
+import { ServiceSlotsPage } from "./components/ServiceSlotsPage";
 import Modal from "./components/Modal";
-import OrganizationCard from './components/OrganizationCard';
-
-
+import OrganizationCard from "./components/OrganizationCard";
 
 function App() {
-
   return (
     <>
       <Router>
@@ -22,14 +18,16 @@ function App() {
           {/*  Default landing or placeholder */}
           <Route path="/" element={<ComingSoonPage />} />
 
-      {/* organizations screen */}
-<Route path="/organizations" element={<OrganizationCard />} />
+          {/* organizations screen */}
+          <Route path="/organizations" element={<OrganizationCard />} />
 
           {/*  service  Screen */}
-          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/:orgId/services" element={<ServicesPage />} />
 
-
-        <Route path="/service/slots" element={<ServiceSlotsPage />} />
+          <Route
+            path="/service/:serviceId/slots"
+            element={<ServiceSlotsPage />}
+          />
           {/*  input  Screen */}
           <Route path="/input" element={<CustomerInput />} />
 
@@ -38,7 +36,6 @@ function App() {
       </Router>
     </>
   );
-
- }
+}
 
 export default App;

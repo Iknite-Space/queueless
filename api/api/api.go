@@ -27,7 +27,8 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 
 	// addin CORS middleware
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		// included https://api.queueless.xyz to handle endpoint, as the access point
+		AllowOrigins:     []string{"http://localhost:3000", "https://api.queueless.xyz"},
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		AllowCredentials: true,

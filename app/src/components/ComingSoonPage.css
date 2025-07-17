@@ -7,7 +7,21 @@
   text-align: center;
 }
 
-
 .project-title {
   margin-bottom: 300px;
+}
+
+.navigation-button {
+  padding: 10px 20px;
+  background-color: #0066cc;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 50%;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
 }

@@ -13,6 +13,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   display: block;
   gap:2px;
+  cursor: pointer;
 }
 
 .card:hover {
