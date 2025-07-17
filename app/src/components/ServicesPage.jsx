@@ -34,7 +34,7 @@ function ServicesPage() {
   // useEffect runs once when the component mounts
   useEffect(() => {
     // Fetch service data from the backend
-    fetch(`http://localhost:8085/api/v1/organizations/${orgId}/services`)
+    fetch(`https://api.queueless.xyz/api/v1/organizations/${orgId}/services`)
       .then((response) => {
         // If the response is not OK, throw an error to catch it later
         if (!response.ok) {

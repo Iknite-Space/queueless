@@ -1,50 +1,54 @@
-import React from 'react'
-import axios from 'axios'
-import { useEffect, useState } from 'react';
-import './ServiceSlots.css'; 
-import { useParams } from 'react-router';
-import Modal from './Modal';
-
+import React from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import "./ServiceSlots.css";
+import { useParams } from "react-router";
+import Modal from "./Modal";
+import { useNavigate } from "react-router";
 export function ServiceSlots() {
+  const { serviceId } = useParams();
 
-const {serviceId} = useParams
+  const [showModal, setShowModal] = useState(false);
 
   // fetch slots from the backend
-    const [slots, setSlots] = useState([]);
-  
-    useEffect(() => {
-      axios
-        .get(
-          `http://localhost:8085/api/v1/service/${serviceId}/slots`
-        )
-        .then((response) => {
-          setSlots(response.data.slots);
-        });
-    }, [serviceId]);
-    
-  
-    // helper function to convert microseconds to readable time
-    const formatTime = (microseconds) => {
+  const [slots, setSlots] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`https://api.queueless.xyz/api/v1/service/${serviceId}/slots`)
+      .then((response) => {
+        console.log(JSON.stringify(response.data.slots, null, 2));
+
+        setSlots(response.data.slots);
+      });
+  }, [serviceId]);
+
+  // helper function to convert microseconds to readable time
+  const formatTime = (microseconds) => {
     const ms = microseconds / 1000;
     const date = new Date(ms);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
+  const navigate = useNavigate();
+
+  const handleClickSlot = () => {
+    navigate("/input");
+    setShowModal(true);
+
+  };
+
 
   return (
     <div className="slots-container">
-      <p>hello </p>
-        {slots.map((slot) => {
-          return (
-            <div key={slot.id} className="slot-button">
-              <button type="button" onClick={Modal}>
-                Open bbbbbbbbbb modal
-              </button>
+      {slots.map((slot) => (
+        <div key={slot.id} className="slot-button">
+          <button onClick={() => handleClickSlot(slot)}>
+            {formatTime(slot.start_time.Microseconds)}
+          </button>
+        </div>
+      ))}
 
-              <button>{formatTime(slot.start_time.Microseconds)}</button>
-            </div>
-          );
-        })}
-        
-      </div>
+      {showModal && <Modal  />}
+    </div>
   );
 }

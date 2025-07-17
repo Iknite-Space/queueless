@@ -23,7 +23,6 @@ function OrganizationCard() {
 
   useEffect(() => {
     fetch(
-      "http://localhost:8085/api/v1/organizations",
       "https://api.queueless.xyz/api/v1/organizations"
     )
       .then((res) => {
