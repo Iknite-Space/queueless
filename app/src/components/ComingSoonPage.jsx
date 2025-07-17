@@ -11,9 +11,8 @@ export function ComingSoonPage() {
 
   return (
     <>
-      <header className="intro">
+      <header className="coming-soon-container">
         <h1 className="project-title">Qless</h1>
-        <p>Coming Soon...</p>
       </header>
 
       <button className="navigation-button" onClick={handleClick}>
