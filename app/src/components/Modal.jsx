@@ -14,7 +14,7 @@ function Modal() {
       {modalIsOpen && <CustomerInput setModalIsOpen={setModalIsOpen} />}
 
 
-      <button type="button" onClick={toggleModal} >
+      <button type="button" onClick={toggleModal} className="navigation-button">
 
         Open modal
       </button>

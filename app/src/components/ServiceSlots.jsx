@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useEffect, useState } from 'react';
 import './ServiceSlots.css'; 
 import { useParams } from 'react-router';
+import Modal from './Modal';
 
 export function ServiceSlots() {
 
@@ -19,7 +20,7 @@ const {serviceId} = useParams
         .then((response) => {
           setSlots(response.data.slots);
         });
-    }, []);
+    }, [serviceId]);
     
   
     // helper function to convert microseconds to readable time
@@ -35,7 +36,11 @@ const {serviceId} = useParams
         {slots.map((slot) => {
           return (
             <div key={slot.id} className="slot-button">
-            <button >{formatTime(slot.start_time.Microseconds)}</button>
+              <button type="button" onClick={Modal}>
+                Open bbbbbbbbbb modal
+              </button>
+
+              <button>{formatTime(slot.start_time.Microseconds)}</button>
             </div>
           );
         })}
