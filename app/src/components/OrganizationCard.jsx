@@ -22,7 +22,10 @@ function OrganizationCard() {
   const [organizations, setOrganizations] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8085/api/v1/organizations")
+    fetch(
+      "http://localhost:8085/api/v1/organizations",
+      "https://api.queueless.xyz/api/v1/organizations"
+    )
       .then((res) => {
         if (!res.ok) {
           throw new Error("Network response was not ok");
