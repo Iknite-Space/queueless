@@ -1,6 +1,7 @@
 import "./ComingSoonPage.css";
 import React from "react";
 import { useNavigate } from "react-router";
+import Footer from "./Footer";
 
 export function ComingSoonPage() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export function ComingSoonPage() {
       <button className="navigation-button" onClick={handleClick}>
         View Organisations
       </button>
+      <Footer />
     </>
   );
 }
