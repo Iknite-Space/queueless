@@ -3,13 +3,13 @@ package campay
 import (
 	"bytes"
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
-	"time"
 )
 
 type RequestBody struct {
-	Amount      int `json:"amount"`
+	Amount      string `json:"amount"`
 	Number      string  `json:"from"`
 	Description string `json:"description"`
 	Reference   string `json:"external_reference"`
@@ -42,13 +42,13 @@ func MakePayment(apiKey string, amount string, momoNumber string, description st
 	resp.Header.Set("Authorization", "Token "+apiKey)
 	resp.Header.Set("Content-Type", "application/json")
 
-client := &http.Client{
-    Timeout: 10 * time.Second,
-}
-response, err := client.Do(resp)
+// client := &http.Client{
+//     Timeout: 10 * time.Second,
+// }
+// response, err := client.Do(resp)
 
 
-	// response, err := http.DefaultClient.Do(resp)
+	response, err := http.DefaultClient.Do(resp)
 
 	//habdling response error
 	if err != nil {
@@ -64,6 +64,10 @@ response, err := client.Do(resp)
 
 	// read response body
 	var paymentResponse Response
+
+	bodyBytes, _ := io.ReadAll(response.Body)
+log.Println("Raw response:", string(bodyBytes))
+
 	// json.NewDecoder(response.Body).Decode(&sb)
 	if err := json.NewDecoder(response.Body).Decode(&paymentResponse);
 	err !=nil{

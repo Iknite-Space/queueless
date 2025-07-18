@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
+	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5/pgtype"
@@ -39,16 +41,17 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}))
 
-	r.GET("//healthcheck", h.handleHealthcheck)
+	r.GET("//healthcheck", h.handleHealthCheck)
 	r.GET("/api/v1/organizations", h.handleGetOrganizations)
 	r.GET("/api/v1/organizations/:id/services", h.handleGetServicesByOrganization)
 	r.POST("/api/v1/:id/services", h.handleCreateService)
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
+	r.POST("/api/v1/payments/initiate", h.handleInitiatePayment)
 
 	return r
 }
 
-func (h *MessageHandler) handleHealthcheck(c *gin.Context) {
+func (h *MessageHandler) handleHealthCheck(c *gin.Context) {
 	c.String(http.StatusOK, "ok")
 }
 
@@ -191,4 +194,41 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 		"status":   "success",
 		"services": "Service successfully created",
 	})
+}
+
+// hamdler function for payment
+func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
+    var body struct {
+        Amount      string `json:"amount"`
+        PhoneNumber string `json:"phone_number"`
+        Description string `json:"description"`
+        Reference   string `json:"reference"`
+    }
+
+    if err := c.ShouldBindJSON(&body); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+        return
+    }
+
+    apiKey := os.Getenv("CAMPAY_API_KEY") // Load your API key from .env
+
+    resp, err := campay.MakePayment(
+        apiKey,
+        body.Amount,
+        body.PhoneNumber,
+        body.Description,
+        body.Reference,
+    )
+
+    if err != nil {
+        log.Printf("Campay error: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Payment request failed"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{
+        "status":    "success",
+        "reference": resp.Reference,
+        "ussd_code": resp.Ussd_Code,
+    })
 }
