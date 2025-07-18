@@ -9,8 +9,8 @@ export default function Footer() {
       <div className="footer-section">
         <h3>Quick Links</h3>
         <ul>
-          <li><span className="disabled-link">About Us</span></li>
-          <li><span className="disabled-link">Contact Us</span></li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Contact Us</a></li>
         </ul>
       </div>
 

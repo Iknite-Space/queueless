@@ -1,11 +1,11 @@
 
 .footer-container {
-    background-color: #f0f0f0;
+    background-color: var(--primary-dark);
     padding: 40px 20px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    color: #333;
+    color: hsl(0, 43%, 96%);
     font-size: 14px;
     border-top: 1px solid #ccc;
   }
@@ -34,7 +34,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #0077cc;
+    color: hwb(249 71% 6%);
   }
   
   .footer-section li a:hover {
@@ -46,12 +46,12 @@
     text-align: center;
     margin-top: 30px;
     font-size: 13px;
-    color: #555;
+    color: #bcbaea;
   }
   
   a {
     text-decoration: none;
-    color: #0077cc;
+    color: #b3ade0;
   }
   
   a:hover {
@@ -59,7 +59,7 @@
   }
   
   .disabled-link {
-    color: #999;
+    color: hsl(246, 55%, 75%);
     cursor: default;
   }
   
