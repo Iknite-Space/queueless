@@ -39,7 +39,7 @@ export function WeekHeader() {
       <div className="week-header-container">
         <div className="slot-info">
                   <h1>Book An Appointment</h1>
-                  <h2>MTN Molyko</h2>
+                  <h2 className="org">MTN Molyko</h2>
                   <h3 className="service">Sim card registrations</h3>
                 </div>
         <div className="week-header-controls">
