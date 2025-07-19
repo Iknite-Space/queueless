@@ -27,7 +27,8 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 
 	// addin CORS middleware
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		// included https://api.queueless.xyz to handle endpoint, as the access point
+		AllowOrigins:     []string{"http://localhost:3000", "https://queueless.xyz"},
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
 		AllowCredentials: true,
@@ -38,12 +39,17 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 		c.AbortWithStatus(http.StatusInternalServerError)
 	}))
 
+	r.GET("//healthcheck", h.handleHealthcheck)
 	r.GET("/api/v1/organizations", h.handleGetOrganizations)
 	r.GET("/api/v1/organizations/:id/services", h.handleGetServicesByOrganization)
 	r.POST("/api/v1/:id/services", h.handleCreateService)
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 
 	return r
+}
+
+func (h *MessageHandler) handleHealthcheck(c *gin.Context) {
+	c.String(http.StatusOK, "ok")
 }
 
 // Endpoint to get all organizations
@@ -101,6 +107,7 @@ func (h *MessageHandler) handleGetServiceSlots(c *gin.Context) {
 	})
 }
 
+// helper functions
 func fromPGTime(t pgtype.Time) (time.Time, error) {
 	if !t.Valid {
 		return time.Time{}, fmt.Errorf("invalid pgtype.Time")

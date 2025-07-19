@@ -26,3 +26,4 @@ Directory Structure
     `go run cmd/api/...`
 
     The server will start, and it will print the available endpoints.
+

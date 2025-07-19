@@ -1,8 +1,8 @@
-
 import React from "react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-import "../styles/ServicesPage.css"
+import "../styles/ServicesPage.css";
+import { useNavigate, useParams } from "react-router";
 ServiceCard.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
@@ -24,15 +24,17 @@ function ServiceCard({ name, description, duration }) {
 
 // Component to display a list of services fetched from the backend
 function ServicesPage() {
+  // useParams to read the org id
+  const { orgId } = useParams();
+  const navigate = useNavigate(); 
+
   // State to store the list of services retrieved from the API
   const [services, setServices] = useState([]);
 
   // useEffect runs once when the component mounts
   useEffect(() => {
     // Fetch service data from the backend
-    fetch(
-      "http://localhost:8085/api/v1/organizations/5b997706-07c9-4093-be2f-42b1aac1c1e9/services"
-    )
+    fetch(`https://api.queueless.xyz/api/v1/organizations/${orgId}/services`)
       .then((response) => {
         // If the response is not OK, throw an error to catch it later
         if (!response.ok) {
@@ -42,7 +44,7 @@ function ServicesPage() {
         return response.json();
       })
       .then((data) => {
-        console.log("Fetched services:", data.services);
+        console.log(JSON.stringify(data.services, null, 2));
         // Set the fetched data into the services state
         setServices(data.services);
       })
@@ -50,20 +52,23 @@ function ServicesPage() {
         // Log any error that occurs during the fetch process
         console.error("Error fetching services:", err);
       });
-  }, []); // Empty dependency array means this runs only once when the component loads
+  }, [orgId]); // Empty dependency array means this runs only once when the component loads
 
-
- // Render the service cards inside a responsive container
- return (
+  // Render the service cards inside a responsive container
+  return (
     <div className="services-grid">
       {services.map((service) => (
         // Pass each service's data to the ServiceCard component
-        <ServiceCard
+        <div
           key={service.service_id}
-          name={service.service_name}
-          description={service.service_description}
-          duration={service.duration}
-        />
+          onClick={() => navigate(`/service/${service.service_id}/slots`)}
+        >
+          <ServiceCard
+            name={service.service_name}
+            description={service.service_description}
+            duration={service.duration}
+          />
+        </div>
       ))}
     </div>
   );
