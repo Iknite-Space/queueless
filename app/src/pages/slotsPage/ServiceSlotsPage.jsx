@@ -1,10 +1,10 @@
 import React from "react";
 
-import { WeekHeader } from "./WeekHeader";
-import { DatePicker } from "./DatePicker";
+import { WeekHeader } from "../../components/weekHeaders/WeekHeader";
+import { DatePicker } from "../../components/datePicker/DatePicker";
 import "./ServiceSlotsPage.css";
 
-import Modal from "./Modal";
+import Modal from "../../components/customerInputModal/Modal";
 // function Modal() {
 //   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -43,7 +43,6 @@ export function ServiceSlotsPage() {
       </div>
 
       <Modal />
-
     </>
   );
 }

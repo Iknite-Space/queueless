@@ -3,14 +3,15 @@ package campay
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 )
 
 type RequestBody struct {
+	From      string  `json:"from"`
 	Amount      string `json:"amount"`
-	Number      string  `json:"from"`
 	Description string `json:"description"`
 	Reference   string `json:"external_reference"`
 }
@@ -20,27 +21,28 @@ type RequestBody struct {
 type Response struct {
 	Reference string `json:"reference"`
 	Ussd_Code string `json:"ussd_code"`
+	Operator  string `json:"operator"`
 }
 
-func MakePayment(apiKey string, amount string, momoNumber string, description string, ref string) (Response, error) {
+func MakePayment(apiKey string, momoNumber string, amount string,  description string, ref string) (Response, error) {
 
 	postBody, _ := json.Marshal(map[string]string{
-		"amount":             amount,
 		"from":               momoNumber,
+		"amount":             amount,
 		"description":        description,
 		"external_reference": ref,
 	})
 
-	responseBody := bytes.NewBuffer(postBody)
+	reqBody := bytes.NewBuffer(postBody)
 
 	//GO HTTP post request
 
-	resp, err := http.NewRequest(http.MethodPost, "https://demo.campay.net/api/collect/", responseBody)
+	req, err := http.NewRequest(http.MethodPost, "https://demo.campay.net/api/collect/", reqBody)
 	if err != nil {
 		log.Fatal(err)
 	}
-	resp.Header.Set("Authorization", "Token "+apiKey)
-	resp.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Authorization", "Token " + apiKey)
+	req.Header.Set("Content-Type", "application/json")
 
 // client := &http.Client{
 //     Timeout: 10 * time.Second,
@@ -48,8 +50,8 @@ func MakePayment(apiKey string, amount string, momoNumber string, description st
 // response, err := client.Do(resp)
 
 
-	response, err := http.DefaultClient.Do(resp)
-
+	response, err := http.DefaultClient.Do(req)
+	fmt.Println(response)
 	//habdling response error
 	if err != nil {
 		log.Fatalf("Error %v", err)
@@ -76,3 +78,5 @@ log.Println("Raw response:", string(bodyBytes))
 	return paymentResponse, nil
 
 }
+
+

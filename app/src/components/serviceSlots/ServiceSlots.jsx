@@ -3,7 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import "./ServiceSlots.css";
 import { useParams } from "react-router";
-import Modal from "./Modal";
+import Modal from "../customerInputModal/Modal";
 import { useNavigate } from "react-router";
 export function ServiceSlots() {
   const { serviceId } = useParams();
@@ -34,9 +34,7 @@ export function ServiceSlots() {
   const handleClickSlot = () => {
     navigate("/input");
     setShowModal(true);
-
   };
-
 
   return (
     <div className="slots-container">
@@ -48,7 +46,7 @@ export function ServiceSlots() {
         </div>
       ))}
 
-      {showModal && <Modal  />}
+      {showModal && <Modal />}
     </div>
   );
 }

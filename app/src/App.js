@@ -2,13 +2,13 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-import { ComingSoonPage } from "./components/ComingSoonPage";
-import ServicesPage from "./components/ServicesPage";
-import CustomerInput from "./components/CustomerInput";
+import { ComingSoonPage } from "./pages/landingPage/ComingSoonPage";
+import ServicesPage from "./pages/servicePage/ServicesPage";
+import CustomerInput from "./components/customerInput/CustomerInput";
 
-import { ServiceSlotsPage } from "./components/ServiceSlotsPage";
-import Modal from "./components/Modal";
-import OrganizationCard from "./components/OrganizationCard";
+import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
+import Modal from "./components/customerInputModal/Modal";
+import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 
 function App() {
   return (

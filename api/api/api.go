@@ -199,8 +199,8 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 // hamdler function for payment
 func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
     var body struct {
+			PhoneNumber string `json:"phone_number"`
         Amount      string `json:"amount"`
-        PhoneNumber string `json:"phone_number"`
         Description string `json:"description"`
         Reference   string `json:"reference"`
     }
@@ -214,8 +214,8 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 
     resp, err := campay.MakePayment(
         apiKey,
-        body.Amount,
         body.PhoneNumber,
+        body.Amount,
         body.Description,
         body.Reference,
     )
@@ -228,6 +228,7 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{
         "status":    "success",
+				"resp":   resp,
         "reference": resp.Reference,
         "ussd_code": resp.Ussd_Code,
     })

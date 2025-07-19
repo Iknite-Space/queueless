@@ -1,6 +1,5 @@
 import React from "react";
-import CustomerInput from "./CustomerInput";
-
+import CustomerInput from "../customerInput/CustomerInput";
 
 function Modal() {
   return (
