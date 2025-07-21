@@ -1,3 +1,4 @@
+
 package campay
 
 import (
@@ -7,76 +8,94 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
-type RequestBody struct {
-	From      string  `json:"from"`
-	Amount      string `json:"amount"`
-	Description string `json:"description"`
-	Reference   string `json:"external_reference"`
+type PaymentRequest struct {
+	From             string `json:"from"`
+	Amount           string `json:"amount"`
+	Currency         string `json:"currency"`
+	Description      string `json:"description"`
+	ExternalReference string `json:"external_reference"`
 }
 
-
-
-type Response struct {
+type PaymentResponse struct {
 	Reference string `json:"reference"`
-	Ussd_Code string `json:"ussd_code"`
+	UssdCode  string `json:"ussd_code"`  // Changed from Ussd_Code to match JSON tag
 	Operator  string `json:"operator"`
+	Status    string `json:"status"`     // Campay often includes status
 }
 
-func MakePayment(apiKey string, momoNumber string, amount string,  description string, ref string) (Response, error) {
-
-	postBody, _ := json.Marshal(map[string]string{
-		"from":               momoNumber,
-		"amount":             amount,
-		"description":        description,
-		"external_reference": ref,
-	})
-
-	reqBody := bytes.NewBuffer(postBody)
-
-	//GO HTTP post request
-
-	req, err := http.NewRequest(http.MethodPost, "https://demo.campay.net/api/collect/", reqBody)
-	if err != nil {
-		log.Fatal(err)
+func RequestPayment(momoNumber, amount, currency, description, ref string) (*PaymentResponse, error) {
+	token := os.Getenv("CAMPAY_API_KEY")
+	if token == "" {
+		return nil, fmt.Errorf("missing CAMPAY_API_KEY in environment")
 	}
-	req.Header.Set("Authorization", "Token " + apiKey)
+
+	requestBody := PaymentRequest{
+		From:             momoNumber,
+		Amount:           amount,
+		Currency:         currency,
+		Description:      description,
+		ExternalReference: ref,
+	}
+
+	jsonBody, err := json.Marshal(requestBody)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal request: %v", err)
+	}
+
+	req, err := http.NewRequest(
+		"POST", 
+		"https://demo.campay.net/api/collect/", 
+		bytes.NewBuffer(jsonBody),
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to create request: %v", err)
+	}
+
+	req.Header.Set("Authorization", "Token "+token)
 	req.Header.Set("Content-Type", "application/json")
 
-// client := &http.Client{
-//     Timeout: 10 * time.Second,
-// }
-// response, err := client.Do(resp)
-
-
-	response, err := http.DefaultClient.Do(req)
-	fmt.Println(response)
-	//habdling response error
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalf("Error %v", err)
+		return nil, fmt.Errorf("request failed: %v", err)
 	}
-	// defer response.Body.Close()
-		defer func() {
-    if err := response.Body.Close(); 
-	err != nil {
-        log.Println("Error closing response body:", err)
-    }
-}()
+	defer resp.Body.Close()
 
-	// read response body
-	var paymentResponse Response
-
-	bodyBytes, _ := io.ReadAll(response.Body)
-log.Println("Raw response:", string(bodyBytes))
-
-	// json.NewDecoder(response.Body).Decode(&sb)
-	if err := json.NewDecoder(response.Body).Decode(&paymentResponse);
-	err !=nil{
-		log.Println("JSON decode error:", err)
+	// Read response once
+	bodyBytes, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read response: %v", err)
 	}
-	return paymentResponse, nil
 
+	log.Printf("Raw Campay response: %s", string(bodyBytes))
+
+	// Parse response
+	var result struct {
+		Reference string `json:"reference"`
+		UssdCode  string `json:"ussd_code"`
+		Operator  string `json:"operator"`
+		Status    string `json:"status"`
+		Error     string `json:"error"` // Campay sometimes returns errors here
+	}
+
+	if err := json.Unmarshal(bodyBytes, &result); err != nil {
+		return nil, fmt.Errorf("failed to decode response: %v", err)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("payment failed (status %d): %s", resp.StatusCode, result.Error)
+	}
+
+	return &PaymentResponse{
+		Reference: result.Reference,
+		UssdCode:  result.UssdCode,
+		Operator:  result.Operator,
+		Status:    result.Status,
+	}, nil
 }
-
-

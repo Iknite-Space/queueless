@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
@@ -25,6 +24,8 @@ func NewMessageHandler(querier repo.Querier) *MessageHandler {
 }
 
 func (h *MessageHandler) WireHttpHandler() http.Handler {
+
+	// r = router
 	r := gin.Default()
 
 	// addin CORS middleware
@@ -196,40 +197,59 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 	})
 }
 
+
 // hamdler function for payment
 func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
-    var body struct {
-			PhoneNumber string `json:"phone_number"`
+    // Define request struct (use consistent JSON tags)
+    var requestBody struct {
+        PhoneNumber string `json:"phone_number"`
         Amount      string `json:"amount"`
+        Currency    string `json:"currency"`
         Description string `json:"description"`
         Reference   string `json:"reference"`
     }
 
-    if err := c.ShouldBindJSON(&body); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request body"})
+    // Bind and validate request
+    if err := c.ShouldBindJSON(&requestBody); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "error": "Invalid request body",
+            "details": err.Error(),
+        })
+        return
+    }
+		    if requestBody.PhoneNumber == "" {
+        c.JSON(http.StatusBadRequest, gin.H{
+            "error": "Phone number is required",
+        })
         return
     }
 
-    apiKey := os.Getenv("CAMPAY_API_KEY") // Load your API key from .env
-
-    resp, err := campay.MakePayment(
-        apiKey,
-        body.PhoneNumber,
-        body.Amount,
-        body.Description,
-        body.Reference,
+    // Call Campay package
+    resp, err := campay.RequestPayment(
+        requestBody.PhoneNumber,
+        requestBody.Amount,
+        requestBody.Currency,
+        requestBody.Description,
+        requestBody.Reference,
     )
 
     if err != nil {
-        log.Printf("Campay error: %v", err)
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Payment request failed"})
-        return
+			log.Printf("Campay API error: %v", err)
+			c.JSON(http.StatusInternalServerError, gin.H{
+				"error": "Failed to initiate payment",
+				"details": err.Error(),
+			})
+			return
     }
-
+		
+		    // Set default status if empty
+		if resp.Status == ""{
+			resp.Status = "PENDING"
+		}
+    // Successful response
     c.JSON(http.StatusOK, gin.H{
-        "status":    "success",
-				"resp":   resp,
-        "reference": resp.Reference,
-        "ussd_code": resp.Ussd_Code,
+			"data":   resp,
     })
+		
+
 }
