@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -47,7 +49,8 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/organizations/:id/services", h.handleGetServicesByOrganization)
 	r.POST("/api/v1/:id/services", h.handleCreateService)
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
-	r.POST("/api/v1/payments/initiate", h.handleInitiatePayment)
+	r.POST("/api/v1/payment/initiate", h.handleInitiatePayment)
+	r.GET("/api/v1/payment/webhook", h.handleCampayWebhook)
 
 	return r
 }
@@ -204,7 +207,7 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
     var requestBody struct {
         PhoneNumber string `json:"phone_number"`
         Amount      string `json:"amount"`
-        Currency    string `json:"currency"`
+        Currency    string `json:"curhttp://localhost:8085/api/v1/payment/webhookrency"`
         Description string `json:"description"`
         Reference   string `json:"reference"`
     }
@@ -252,4 +255,38 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
     })
 		
 
+}
+
+
+func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
+	// 1. Get the most important parameters
+	status := c.Query("status")          // "SUCCESSFUL" or "FAILED"
+	reference := c.Query("reference")    // Transaction ID
+	amount := c.Query("amount")          // e.g. "1000"
+	currency := c.Query("currency")      // e.g. "XAF"
+	signature := c.Query("signature")    // JWT token
+	phone := c.Query("phone_number")     // e.g. "237612345678"
+
+	// Verify JWT signature (add this after getting the parameters)
+secret := os.Getenv("CAMPAY_WEBHOOK_SECRET")
+token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
+    return []byte(secret), nil
+})
+
+if err != nil || !token.Valid {
+    log.Println("INVALID SIGNATURE!")
+    c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid signature"})
+    return
+}
+
+	// 2. Log everything (for debugging)
+	log.Println("\n=== NEW WEBHOOK ===")
+	log.Println("Status:", status)
+	log.Println("Reference:", reference)
+	log.Println("Amount:", amount, currency)
+	log.Println("Phone:", phone)
+	log.Println("Signature:", signature)
+
+	// 3. Just respond with "OK" for now
+	c.String(http.StatusOK, "Webhook received!")
 }
