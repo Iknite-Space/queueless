@@ -1,36 +1,37 @@
-.input-background{
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0,0.5);
-  position: fixed;
+  .input-background{
+   width: 800px;
+   height: 600px;
+  background: linear-gradient(to bottom right, #02153D, #0149be);
+  /* position: fixed;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+} 
+
+.form-header {
+  color: white;
+  font-family: arial;
+  text-align: center;
+  padding-top: 55px;
 }
 
-/* code for the main main input container */
+
 .input-form-container {
   padding: 70px 0px;
-  background: #f3f3f3;
+  /* background: #f3f3f3; */
   display: flex;
-  width: 50%;
+  justify-content: space-around;
+  align-items: center;
+  width: 80%;
   height: fit-content;
-  margin: 5% auto;
+  /* margin: 0px auto; */
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
-    background: linear-gradient(to bottom, #041844d2, #0149be);
+    /* background: linear-gradient(to bottom right, #041844d2, #0149be); */
 }
-
-/* code for the image section */
-
-.input-image {
-
-}
-
-/* section for the user input  */
 
 .customer-input {
   display: flex;
@@ -49,26 +50,33 @@
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
   padding: 10px;
-  width: 250px;
+  width: 300px;
   margin-bottom: 40px;
   color:var(--text-dark);
 
 }
 
+.customer-input select {
+  height: 34px;
+  border-radius: 4px;
+}
+
 .input-form-actions {
   display: flex;
-  justify-content: space-between;
-  padding: 10px;
+  justify-content: space-around;
+  /* padding: 10px; */
   margin-block-start: 30px;
 }
+  
 .input-form-actions button {
   font-family: arial;
   color: white;
   font-weight: bold;
 }
 
-.cancel-button {
-  background: var(--error-red);
+.cancel-button, .submit-button {
+  width: 70px;
+  background: var(--accent-orange);
   padding: 8px 15px;
   border-radius: 6px;
   -webkit-border-radius: 6px;
@@ -79,8 +87,12 @@
   cursor: pointer;
 }
 
-.submit-button {
-  background: var(--primary-blue);
+.cancel-button:hover, .submit-button:hover {
+  background-color: var(--accent-orange);
+}
+
+/* .submit-button {
+  background: var(--accent-orange);
   padding: 8px 15px;
   border-radius: 6px;
   -webkit-border-radius: 6px;
@@ -89,4 +101,4 @@
   -o-border-radius: 6px;
   border-style: none;
   cursor: pointer;
-}
+}  */
