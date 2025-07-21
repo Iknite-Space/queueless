@@ -48,7 +48,7 @@ function OrganizationCard() {
           <div
             key={org.organization_id}
             onClick={() =>
-              navigate(`/${org.organization_id}/services`)
+              navigate(`/${org.organization_id}/services`, { state : org})
             }
           >
             <Cards name={org.name} location={org.location} />
