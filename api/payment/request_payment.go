@@ -65,7 +65,15 @@ func RequestPayment(momoNumber, amount, currency, description, ref string) (*Pay
 	if err != nil {
 		return nil, fmt.Errorf("request failed: %v", err)
 	}
-	defer resp.Body.Close()
+
+	//	defer resp.Body.Close()
+
+	defer func() {
+    err := resp.Body.Close()
+    if err != nil {
+        log.Fatal(err)
+    }
+}()
 
 	// Read response once
 	bodyBytes, err := io.ReadAll(resp.Body)
