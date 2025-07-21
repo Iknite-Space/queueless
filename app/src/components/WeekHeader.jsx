@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useLocation } from "react-router";
 import {
   format,
   startOfWeek,
@@ -16,6 +17,10 @@ export function WeekHeader() {
     startOfWeek(new Date(), { weekStartsOn: 0 })
   );
   const [weekDates, setWeekDates] = useState([]);
+
+  // extract the state elements sent via navigate
+  const location = useLocation();
+  const { org, service } = location.state || {};
 
   useEffect(() => {
     const days = [];
@@ -39,8 +44,8 @@ export function WeekHeader() {
       <div className="week-header-container">
         <div className="slot-info">
                   <h1>Book An Appointment</h1>
-                  <h2 className="org">MTN Molyko</h2>
-                  <h3 className="service">Sim card registrations</h3>
+                  <h2 className="org">{org.name}</h2>
+                  <h3 className="service">{service.service_name}</h3>
                 </div>
         <div className="week-header-controls">
           <button onClick={goToPreviousWeek} className="nav-button">
@@ -57,6 +62,7 @@ export function WeekHeader() {
         <div className="week-grid">
           {weekDates.map((d, i) => {
             const isPast = d.fullDate < new Date() && !isToday(d.fullDate);
+            console.log(d.fullDate)
 
             return (
               <div
@@ -70,7 +76,7 @@ export function WeekHeader() {
                   <div className="day-date">{d.date}</div>
                 </div>
                 <div className="time-slots">
-                  <ServiceSlots />
+                  <ServiceSlots org={org} service={service} date={d.fullDate.toISOString()} />
                 </div>
               </div>
             );
