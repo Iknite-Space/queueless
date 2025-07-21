@@ -28,3 +28,43 @@
     color: #666;
     font-style: italic; /* Italicize location */
 }
+
+
+
+
+
+/* .organization-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+} */
+
+.org-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(203, 101, 101, 0.08);
+  padding: 1.5rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: block;
+   margin-bottom: 2px;
+   cursor: pointer;
+}
+
+.org-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+
+
+.organization-name {
+  margin: 0.5rem 0;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+.organization-location {
+  font-size: 0.95rem;
+  color: #666;
+}
