@@ -2,13 +2,15 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
-import { ComingSoonPage } from "./pages/landingPage/ComingSoonPage";
-import ServicesPage from "./pages/servicePage/ServicesPage";
-import CustomerInput from "./components/customerInput/CustomerInput";
 
-import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
-import Modal from "./components/customerInputModal/Modal";
-import OrganizationCard from "./pages/organizationPage/OrganizationCard";
+import { ComingSoonPage } from "./components/ComingSoonPage";
+import ServicesPage from "./components/ServicesPage";
+
+import { ServiceSlotsPage } from "./components/ServiceSlotsPage";
+import OrganizationCard from "./components/OrganizationCard";
+import DownloadTicket from './components/DownloadTicket';
+
+
 
 function App() {
   return (
@@ -29,9 +31,13 @@ function App() {
             element={<ServiceSlotsPage />}
           />
           {/*  input  Screen */}
-          <Route path="/input" element={<CustomerInput />} />
+          {/* <Route path="/input" element={<CustomerInput />} /> */}
 
-          <Route path="/modal" element={<Modal />} />
+   
+          {/* download sreen */}
+          <Route path="/download-ticket" element={<DownloadTicket />} />
+
+
         </Routes>
       </Router>
     </>

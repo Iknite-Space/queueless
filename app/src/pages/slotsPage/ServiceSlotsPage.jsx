@@ -1,7 +1,14 @@
 import React from "react";
 
+<<<<<<< HEAD:app/src/pages/slotsPage/ServiceSlotsPage.jsx
 import { WeekHeader } from "../../components/weekHeaders/WeekHeader";
 import { DatePicker } from "../../components/datePicker/DatePicker";
+=======
+import { WeekHeader } from "./WeekHeader";
+// import {DatePicker} from './DatePicker'
+import Header from './Header'
+
+>>>>>>> main:app/src/components/ServiceSlotsPage.jsx
 import "./ServiceSlotsPage.css";
 
 import Modal from "../../components/customerInputModal/Modal";
@@ -28,16 +35,11 @@ import Modal from "../../components/customerInputModal/Modal";
 export function ServiceSlotsPage() {
   return (
     <>
+    <Header />
       <div className="slot-page-container">
-        {/* <div className="title">
-        <h1>Select an appointment time</h1>
-        <h2>MTN Molyko</h2>
-        <h3>Sim card registrations</h3>
-      </div>
-       */}
-        <div className="calendar">
+        {/* <div className="calendar">
           <DatePicker />
-        </div>
+        </div> */}
 
         <WeekHeader />
       </div>
