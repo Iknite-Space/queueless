@@ -7,6 +7,8 @@ import ServicesPage from "./components/ServicesPage";
 
 import { ServiceSlotsPage } from "./components/ServiceSlotsPage";
 import OrganizationCard from "./components/OrganizationCard";
+import DownloadTicket from './components/DownloadTicket';
+
 
 function App() {
   return (
@@ -29,7 +31,11 @@ function App() {
           {/*  input  Screen */}
           {/* <Route path="/input" element={<CustomerInput />} /> */}
 
-          {/* <Route path="/modal" element={<Modal />} /> */}
+   
+          {/* download sreen */}
+          <Route path="/download-ticket" element={<DownloadTicket />} />
+
+
         </Routes>
       </Router>
     </>
