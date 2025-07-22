@@ -2,9 +2,13 @@
   background-color: #fff;
   padding: 6px 15px;
   margin: 5px;
-  border: 1px solid #00368e;
+  border: 1px solid var(--primary-blue);
   border-radius: 15px;
   cursor: pointer;
+}
 
-
+.time-slots button:hover {
+  background-color: var(--primary-blue);
+  color: white;
+  border-color: var(--primary-blue);
 }
