@@ -1,8 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+<<<<<<< HEAD:app/src/pages/servicePage/ServicesPage.jsx
 import "./ServicesPage.css";
 import { useNavigate, useParams } from "react-router";
+=======
+import "../styles/ServicesPage.css";
+import { useNavigate, useParams, useLocation } from "react-router";
+>>>>>>> main:app/src/components/ServicesPage.jsx
 ServiceCard.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
@@ -11,6 +16,7 @@ ServiceCard.propTypes = {
 
 // src/components/ServiceCard.jsx
 function ServiceCard({ name, description, duration }) {
+  
   return (
     <>
       <div className="card">
@@ -27,6 +33,9 @@ function ServicesPage() {
   // useParams to read the org id
   const { orgId } = useParams();
   const navigate = useNavigate(); 
+
+  const location = useLocation();
+  const  org  = location.state;
 
   // State to store the list of services retrieved from the API
   const [services, setServices] = useState([]);
@@ -60,7 +69,7 @@ function ServicesPage() {
         // Pass each service's data to the ServiceCard component
         <div
           key={service.service_id}
-          onClick={() => navigate(`/service/${service.service_id}/slots`)}
+          onClick={() => navigate(`/service/${service.service_id}/slots`, { state: {org, service}})}
         >
           <ServiceCard
             name={service.service_name}
