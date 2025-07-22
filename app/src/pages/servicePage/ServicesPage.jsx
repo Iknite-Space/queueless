@@ -44,7 +44,6 @@ function ServicesPage() {
         return response.json();
       })
       .then((data) => {
-        console.log(JSON.stringify(data.services, null, 2));
         // Set the fetched data into the services state
         setServices(data.services);
       })

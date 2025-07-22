@@ -17,8 +17,6 @@ export function ServiceSlots() {
     axios
       .get(`https://api.queueless.xyz/api/v1/service/${serviceId}/slots`)
       .then((response) => {
-        console.log(JSON.stringify(response.data.slots, null, 2));
-
         setSlots(response.data.slots);
       });
   }, [serviceId]);
