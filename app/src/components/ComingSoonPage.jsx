@@ -1,7 +1,9 @@
 import "./ComingSoonPage.css";
+
 import React from "react";
 import { useNavigate } from "react-router";
 import Header from "./Header";
+
 
 export function ComingSoonPage() {
   const navigate = useNavigate();

@@ -1,19 +1,17 @@
 import React from "react";
 import "../styles/CustomerInput.css";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router";
-
 
 CustomerInput.propTypes = {
-  onClose: PropTypes.func.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
 };
 
+function CustomerInput({ handleCloseModal }) {
 
-function CustomerInput({ onClose }) {
-  const navigate = useNavigate()
-  
+
   return (
     <div className="input-background">
+      <h2 className="form-header">Fill in your details to confirm your slot</h2>
       <div className="input-form-container">
         <div className="input-image">
           <img
@@ -22,25 +20,40 @@ function CustomerInput({ onClose }) {
             width={400}
           />
         </div>
-        <form className="customer-details">
+        <form
+          className="customer-details"
+          onSubmit={(e) => {
+            e.preventDefault();
+            // handle form submission
+          }}
+        >
           <div className="customer-input">
-            <input type="text" placeholder="Enter Username" id="" />
-            <input type="email" placeholder="Example@example.com" id="" />
+            <input type="text" placeholder="Enter Username" id="username" />
+            <input type="email" placeholder="Example@example.com" id="email" />
             <input
               type="tel"
               placeholder="Momo Number (+237) 6xx xxx xxx"
-              id=""
+              id="phone"
             />
+            <select name="service-fee" id="service-fee" required>
+              <option value="" disabled selected>
+                Platform charges
+              </option>
+              <option value="1-frs">1 frs</option>
+            </select>
           </div>
 
-          <div className="input-form-actsions">
-            <button className="cancel-button" onClick={()=>{
-              // onClose
-               navigate(-1);
-              }}>
+          <div className="input-form-actions">
+            <button
+              className="cancel-button"
+              type="button"
+              onClick={handleCloseModal}
+            >
               Cancel
             </button>
-            <button className="submit-button">Submit</button>
+            <button className="submit-button" type="submit">
+              Next
+            </button>
           </div>
         </form>
       </div>
