@@ -1,10 +1,7 @@
-<<<<<<< HEAD:app/src/components/customerInput/CustomerInput.jsx
-import React from "react";
-import "./CustomerInput.css";
-=======
+
 import React, { useState } from "react";
 import "../styles/CustomerInput.css";
->>>>>>> main:app/src/components/CustomerInput.jsx
+
 import PropTypes from "prop-types";
 
 CustomerInput.propTypes = {

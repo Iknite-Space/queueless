@@ -1,13 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD:app/src/pages/servicePage/ServicesPage.jsx
-import "./ServicesPage.css";
-import { useNavigate, useParams } from "react-router";
-=======
+
 import "../styles/ServicesPage.css";
 import { useNavigate, useParams, useLocation } from "react-router";
->>>>>>> main:app/src/components/ServicesPage.jsx
+
 ServiceCard.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
