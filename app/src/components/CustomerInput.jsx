@@ -1,6 +1,7 @@
 import React from "react";
 import "../styles/CustomerInput.css";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router";
 
 
 CustomerInput.propTypes = {
@@ -9,6 +10,8 @@ CustomerInput.propTypes = {
 
 
 function CustomerInput({ onClose }) {
+  const navigate = useNavigate()
+  
   return (
     <div className="input-background">
       <div className="input-form-container">
@@ -19,7 +22,7 @@ function CustomerInput({ onClose }) {
             width={400}
           />
         </div>
-        <div className="customer-details">
+        <form className="customer-details">
           <div className="customer-input">
             <input type="text" placeholder="Enter Username" id="" />
             <input type="email" placeholder="Example@example.com" id="" />
@@ -30,13 +33,16 @@ function CustomerInput({ onClose }) {
             />
           </div>
 
-          <div className="input-form-actions">
-            <button className="cancel-button" onClick={onClose}>
+          <div className="input-form-actsions">
+            <button className="cancel-button" onClick={()=>{
+              // onClose
+               navigate(-1);
+              }}>
               Cancel
             </button>
             <button className="submit-button">Submit</button>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
