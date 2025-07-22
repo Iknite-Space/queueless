@@ -1,8 +1,11 @@
 .week-header-container {
-  padding: 16px;
+  padding: 0;
   border-radius: 8px;
-  width: 100%;
+  width: 50%;
   box-sizing: border-box;
+  background-color: white;
+  margin: 35px auto;
+  border-radius: 15px;
 }
 
  .week-header-controls {
@@ -10,10 +13,17 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  padding: 16px;
+}
+
+.week-header-controls {
+  font-weight: bolder;
+  text-align: center;
+  margin-bottom: 16px;
 }
 
 .nav-button {
-  background-color: #fe6901; 
+  background-color: var(--accent-orange); 
   color: white;
   padding: 8px 16px;
   border: none;
@@ -66,3 +76,35 @@
   border-radius: 4px;
   padding: 5px;
 } 
+
+/* Blur effect for past days */
+.past-day .slot-button {
+  /* filter: blur(1px); */
+  /* opacity: 0.4; */
+  /* pointer-events: blocked; */
+  cursor: not-allowed;
+}
+
+/* Optionally, dim the background of past days */
+.past-day .slot-button button {
+  color: #777;
+  border-color: #ccc;
+  
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.slot-info {
+  background-color: var(--primary-blue);
+  border-radius: 15px 15px 0 0;
+  padding: 16px;
+  margin-bottom: 15px;
+  text-align: center;
+  color: white;
+  line-height: 35px;
+}
+
+.service {
+  color: #ccc;
+}
+
