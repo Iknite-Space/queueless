@@ -1,9 +1,9 @@
 import React from "react";
 
 
-import { WeekHeader } from "./WeekHeader";
+import { WeekHeader } from "../../components/weekHeaders/WeekHeader";
 // import {DatePicker} from './DatePicker'
-import Header from './Header'
+import Header from '../../components/header/Header'
 import "./ServiceSlotsPage.css";
 
 import Modal from "../../components/customerInputModal/Modal";

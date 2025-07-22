@@ -1,6 +1,6 @@
 import React from 'react'
 import './Header.css'
-import SearchInput from './SearchInput';
+import SearchInput from '../searchInput/SearchInput';
 
 function Header() {
 
