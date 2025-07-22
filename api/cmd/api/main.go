@@ -92,6 +92,7 @@ func run() error {
 // LoadConfig reads configuration from file or environment variables.
 func LoadConfig(cfg *Config) error {
 	if _, err := os.Stat(".env"); err == nil {
+		
 		err = godotenv.Load()
 		if err != nil {
 			return fmt.Errorf("failed to load env file: %w", err)

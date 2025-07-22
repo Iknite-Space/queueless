@@ -1,8 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
+
 import "../styles/ServicesPage.css";
 import { useNavigate, useParams, useLocation } from "react-router";
+
 ServiceCard.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,

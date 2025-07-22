@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+
 import { useLocation } from "react-router";
 import {
   format,
@@ -9,6 +10,7 @@ import {
   subWeeks,
   isToday,
 } from "date-fns";
+
 import { ServiceSlots } from "./ServiceSlots";
 import "./WeekHeader.css";
 
@@ -40,6 +42,7 @@ export function WeekHeader() {
     setCurrentWeekStart((prev) => subWeeks(prev, 1));
 
   return (
+
     <>
       <div className="week-header-container">
         <div className="slot-info">

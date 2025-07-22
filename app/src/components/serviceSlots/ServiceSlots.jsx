@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 import "./ServiceSlots.css";
 import { useParams } from "react-router";
+
 import Modal from "./Modal";
 
 ServiceSlots.propTypes = {
@@ -14,6 +15,7 @@ ServiceSlots.propTypes = {
 };
 
 export function ServiceSlots({ org, service, date}) {
+
   const { serviceId } = useParams();
 
   const [showModal, setShowModal] = useState(false);
@@ -39,6 +41,7 @@ export function ServiceSlots({ org, service, date}) {
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
   // const navigate = useNavigate();
+
 
   // const handleClickSlot = () => {
   //   navigate("/input");
@@ -75,6 +78,7 @@ const handleOpenModal = (slot) => {
 
   const handleCloseModal = () => setShowModal(false);
 
+
   return (
     <div className="slots-container">
       {slots.map((slot) => (
@@ -84,6 +88,7 @@ const handleOpenModal = (slot) => {
           </button>
         </div>
       ))}
+
 
       <Modal
         showModal={showModal}
