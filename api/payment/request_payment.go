@@ -7,9 +7,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
-
-	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 )
 
 type PaymentRequest struct {
@@ -28,7 +27,7 @@ type PaymentResponse struct {
 }
 
 func RequestPayment(momoNumber, amount, currency, description, ref string) (*PaymentResponse, error) {
-	token := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_API_KEY")
+	token := os.Getenv("CAMPAY_API_KEY") //utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_API_KEY")
 	if token == "" {
 		return nil, fmt.Errorf("missing CAMPAY_API_KEY in environment")
 	}
