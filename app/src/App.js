@@ -10,6 +10,7 @@ import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
 
+
 function App() {
   return (
     <>
@@ -34,6 +35,7 @@ function App() {
           <Route path="/contact" element={<ContactUs />} />
         </Routes>
       </Router>
+      <Footer />
     </>
   );
 }
