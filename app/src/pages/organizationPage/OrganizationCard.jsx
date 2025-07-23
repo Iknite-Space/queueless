@@ -21,21 +21,27 @@ function OrganizationCard() {
   const navigate = useNavigate();
   const [organizations, setOrganizations] = useState([]);
 
-  useEffect(() => {
-    fetch(
-      "https://api.queueless.xyz/api/v1/organizations"
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Network response was not ok");
+    useEffect(() => {
+      const fetchOrganizations = async () => {
+        try {
+          const res = await fetch(
+            "https://api.queueless.xyz/api/v1/organizations"
+          );
+
+          if (!res.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await res.json();
+          setOrganizations(data.organizations);
+        } catch (error) {
+          console.error("Failed to fetch organizations:", error);
         }
-        return res.json();
-      })
-      .then((data) => setOrganizations(data.organizations))
-      .catch((error) => {
-        console.error("Failed to fetch organizations:", error);
-      });
-  }, []);
+      };
+
+      fetchOrganizations();
+    }, []);
+
 
   return (
     <div className="organization-grid">
