@@ -45,6 +45,8 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.POST("/api/v1/:id/services", h.handleCreateService)
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 
+	// Added slot ticket endpoint
+    r.GET("/api/slot-ticket/:id", h.handleGetSlotTicket)
 	return r
 }
 
@@ -191,4 +193,19 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 		"status":   "success",
 		"services": "Service successfully created",
 	})
+}
+
+// Handler function for GET /api/slot-ticket/:id
+func (h *MessageHandler) handleGetSlotTicket(c *gin.Context) {
+    // slotID := c.Param("id") // currently not used
+
+    // Static ticket data for now
+    ticket := map[string]string{
+        "serviceType":  "Passport Application",
+        "dateTime":     "July 24, 2025 — 10:30 AM",
+        "organization": "Ministry of Foreign Affairs",
+    }
+
+
+    c.JSON(http.StatusOK, ticket)
 }
