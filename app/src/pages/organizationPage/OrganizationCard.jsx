@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import "./OrganizationCard.css";
 import { useNavigate } from "react-router";
+import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation";
 
 Cards.propTypes = {
   name: PropTypes.string.isRequired,
@@ -17,35 +18,38 @@ function Cards({ name, location }) {
   );
 }
 
-function OrganizationCard() {
+function OrganizationCard(name) {
   const navigate = useNavigate();
-  const [organizations, setOrganizations] = useState([]);
+const [organizations, setOrganizations] = useState([]);
+const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-      const fetchOrganizations = async () => {
-        try {
-          const res = await fetch(
-            "https://api.queueless.xyz/api/v1/organizations"
-          );
+useEffect(() => {
+  const fetchOrganizations = async () => {
+    try {
+      const res = await fetch("https://api.queueless.xyz/api/v1/organizations");
 
-          if (!res.ok) {
-            throw new Error("Network response was not ok");
-          }
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
 
-          const data = await res.json();
-          setOrganizations(data.organizations);
-        } catch (error) {
-          console.error("Failed to fetch organizations:", error);
-        }
-      };
+      const data = await res.json();
+      setOrganizations(data.organizations);
+    } catch (error) {
+      console.error("Failed to fetch organizations:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      fetchOrganizations();
-    }, []);
+  fetchOrganizations();
+}, []);
+
 
 
   return (
     <div className="organization-grid">
-      {organizations.length > 0 ? (
+      {isLoading ?( < LoadingAnimation name='organizations' />):
+      organizations.length > 0 ? (
         organizations.map((org) => (
           //  <div key={org.organization_id}>
           //     <h2>{org.name}</h2>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import "./ServicesPage.css";
 import { useNavigate, useParams, useLocation } from "react-router";
+import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation";
 
 ServiceCard.propTypes = {
   name: PropTypes.string.isRequired,
@@ -39,19 +40,19 @@ function ServicesPage() {
 
   // useEffect runs once when the component mounts
   useEffect(() => {
-    // Fetch service data from the backend
+            // Fetch service data from the backend
     fetch(`https://api.queueless.xyz/api/v1/organizations/${orgId}/services`)
       .then((response) => {
-        // If the response is not OK, throw an error to catch it later
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        // Parse the response body as JSON
+            // If the response is not OK, throw an error to catch it later
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            // Parse the response body as JSON
         return response.json();
       })
       .then((data) => {
         // Set the fetched data into the services state
-        setServices(data.services);
+            setServices(data.services);
       })
       .catch((err) => {
         // Log any error that occurs during the fetch process
@@ -62,7 +63,9 @@ function ServicesPage() {
   // Render the service cards inside a responsive container
   return (
     <div className="services-grid">
-      {services.map((service) => (
+
+    {services.length > 0 ? (
+      services.map((service) => (
         // Pass each service's data to the ServiceCard component
         <div
           key={service.service_id}
@@ -74,7 +77,10 @@ function ServicesPage() {
             duration={service.duration}
           />
         </div>
-      ))}
+      ))
+    ):(<>
+      <LoadingAnimation name={services}/>
+   </> )}
     </div>
   );
 }

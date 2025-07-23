@@ -1,0 +1,23 @@
+.spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 4rem;
+  font-family: 'Segoe UI', sans-serif;
+  color: #444;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #e0e0e0;
+  border-top: 5px solid var(--accent-orange); /* ✅ Queue theme: orange for progress */
+  border-radius: 50%;
+  animation: spin 0.9s ease-in-out infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
