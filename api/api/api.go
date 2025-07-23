@@ -206,17 +206,11 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
     // Define request struct (use consistent JSON tags)
     var requestBody struct {
         PhoneNumber string `json:"phone_number"`
-        Amount      float64 `json:"amount"`
+        Amount      string `json:"amount"`
         Currency    string `json:"currency"`
         Description string `json:"description"`
         Reference   string `json:"reference"`
-				Date        string  `json:"date" binding:"required"` 
- 				CusName     string  `json:"cus_name" binding:"required"` 
-				CusEmail    string  `json:"cus_email"` 
-				ServiceID   string  `json:"service_id" binding:"required"`
-        SlotID      string  `json:"slot_id" binding:"required"`
     }
-
 
     // Bind and validate request
     if err := c.ShouldBindJSON(&requestBody); err != nil {
@@ -232,50 +226,11 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
         })
         return
     }
-		
 
-
-		parsedDate, err := time.Parse("2006-01-02", requestBody.Date)
-if err != nil {
-    c.JSON(http.StatusBadRequest, gin.H{
-        "error": "Invalid date format. Expected YYYY-MM-DD",
-    })
-    return
-}
-
-pgDate := pgtype.Date{
-    Time:  parsedDate,
-    Valid: true,
-}
-
-
-		    // 2. Create payment record
-    paymentID := "pay_" + time.Now().Format("20060102-150405") // Format: pay_YYYYMMDD-HHMMSS
-    
-    err = h.querier.CreatePayment(c, repo.CreatePaymentParams{
-        PaymentID:   paymentID,
-        CusName:     requestBody.CusName,
-				 CusEmail:    pgtype.Text{String: requestBody.CusEmail, Valid: requestBody.CusEmail != ""},
-        PhoneNumber: requestBody.PhoneNumber,
-        Date:       pgDate,
-        ServiceID:   requestBody.ServiceID,
-        SlotID:      requestBody.SlotID,
-        Amount:      requestBody.Amount,
-        Status:      "pending",
-    })
-    if err != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save payment"})
-        return
-    }
-
-
-		
-		amountStr := fmt.Sprintf("%.2f", requestBody.Amount)
-		
     // Call Campay package
     resp, err := campay.RequestPayment(
         requestBody.PhoneNumber,
-        amountStr,
+        requestBody.Amount,
         requestBody.Currency,
         requestBody.Description,
         requestBody.Reference,
@@ -286,6 +241,8 @@ pgDate := pgtype.Date{
 			c.JSON(http.StatusInternalServerError, gin.H{
 				"error": "Failed to initiate payment",
 				"details": err.Error(),
+
+
 			})
 			return
     }
@@ -324,57 +281,14 @@ if err != nil || !token.Valid {
     return
 }
 
+	// 2. Log everything (for debugging)
+	log.Println("\n=== NEW WEBHOOK ===")
+	log.Println("Status:", status)
+	log.Println("Reference:", reference)
+	log.Println("Amount:", amount, currency)
+	log.Println("Phone:", phone)
+	log.Println("Signature:", signature)
 
-    log.Println("Received webhook with status:", status)
-    if status == "SUCCESSFUL" {
-        // 1. Update payment status
-        err := h.querier.UpdatePaymentStatus(c, repo.UpdatePaymentStatusParams{
-            PaymentID:      reference,
-            Status:         "completed",
-            TransactionRef: reference, // assuming reference matches transaction_ref
-        })
-        if err != nil {
-            log.Printf("UpdatePaymentStatus failed: %v", err)
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "Update failed"})
-            return
-        }
-
-        // 2. Retrieve payment info for booking date
-        payment, err := h.querier.GetPaymentByID(c, reference)
-        if err != nil {
-            log.Printf("Payment lookup failed: %v", err)
-            c.JSON(http.StatusNotFound, gin.H{"error": "Payment not found"})
-            return
-        }
-
-        // 3. Create booking
-        bookingID := "book_" + time.Now().Format("20060102-150405")
-        err = h.querier.CreateBooking(c, repo.CreateBookingParams{
-            BookingID:   bookingID,
-            PaymentID:   payment.PaymentID,
-            BookingDate: payment.Date,
-            Status:      "booked",
-        })
-        if err != nil {
-            log.Printf("CreateBooking failed: %v", err)
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "Booking creation failed"})
-            return
-        }
-
-        log.Println("Booking confirmed for payment:", reference)
-				// 2. Log everything (for debugging)
-				log.Println("\n=== NEW WEBHOOK ===")
-				log.Println("Status:", status)
-				log.Println("Reference:", reference)
-				log.Println("Amount:", amount, currency)
-				log.Println("Phone:", phone)
-				log.Println("Signature:", signature)
-    }
-
-		// Just respond with "OK" for now
-    c.String(http.StatusOK, "Webhook processed")
+	// 3. Just respond with "OK" for now
+	c.String(http.StatusOK, "Webhook received!")
 }
-
-
-
-
