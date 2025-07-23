@@ -211,8 +211,8 @@ func (h *MessageHandler) handleGetSlotTicket(c *gin.Context) {
 	// 	return
 	// }
 
-	// Static ticket data for now
-	// ticketx := map[string]string{
+	//Static ticket data for now
+	// ticket := map[string]string{
 	// 	"serviceType":  "Passport Application",
 	// 	"dateTime":     "July 24, 2025 — 10:30 AM",
 	// 	"organization": "Ministry of Foreign Affairs",
