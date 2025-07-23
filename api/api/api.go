@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/Iknite-Space/c4-project-boilerplate/api/api/handlers"
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -46,7 +47,7 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 
 	// Added slot ticket endpoint
-    r.GET("/api/slot-ticket/:id", h.handleGetSlotTicket)
+	r.GET("/api/slot-ticket/", h.handleGetSlotTicket)
 	return r
 }
 
@@ -197,15 +198,25 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 
 // Handler function for GET /api/slot-ticket/:id
 func (h *MessageHandler) handleGetSlotTicket(c *gin.Context) {
-    // slotID := c.Param("id") // currently not used
+	// slotID := c.Param("id") // currently not used
 
-    // Static ticket data for now
-    ticket := map[string]string{
-        "serviceType":  "Passport Application",
-        "dateTime":     "July 24, 2025 — 10:30 AM",
-        "organization": "Ministry of Foreign Affairs",
-    }
+	ticket := handlers.Ticket{
+		ServiceType:  "Passport Application",
+		DateTime:     "July 24, 2025 — 10:30 AM",
+		Organization: "Ministry of Foreign Affairs",
+	}
 
+	// if err := json.Unmarshal([]byte(ticketStr), &ticket); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H("error", "Passport Application", err.Error()))\
+	// 	return
+	// }
 
-    c.JSON(http.StatusOK, ticket)
+	// Static ticket data for now
+	// ticketx := map[string]string{
+	// 	"serviceType":  "Passport Application",
+	// 	"dateTime":     "July 24, 2025 — 10:30 AM",
+	// 	"organization": "Ministry of Foreign Affairs",
+	// }
+
+	c.JSON(http.StatusOK, ticket)
 }
