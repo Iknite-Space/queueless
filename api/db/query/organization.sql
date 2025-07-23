@@ -36,3 +36,25 @@ FROM service_slot_templates
 WHERE service_id = $1
 ORDER BY start_time;
 
+-- name: CreatePayment :exec
+INSERT INTO payments (
+    payment_id, cus_name, cus_email, phone_number,
+    date, service_id, slot_id, amount, status
+) VALUES (
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
+);
+
+-- name: GetPaymentByID :one
+SELECT * FROM payments WHERE payment_id = $1;
+
+-- name: UpdatePaymentStatus :exec
+UPDATE payments 
+SET 
+    status = $2,
+    transaction_ref = $3
+WHERE payment_id = $1;
+
+-- name: CreateBooking :exec
+INSERT INTO bookings (
+    booking_id, payment_id, booking_date, status
+) VALUES ($1, $2, $3, $4);

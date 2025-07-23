@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
-import "../styles/CustomerInput.css";
 
+import "./CustomerInput.css";
 import PropTypes from "prop-types";
 
 CustomerInput.propTypes = {

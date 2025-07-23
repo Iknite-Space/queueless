@@ -5,7 +5,8 @@ import { useEffect, useState } from "react";
 import "./ServiceSlots.css";
 import { useParams } from "react-router";
 
-import Modal from "./Modal";
+
+import Modal from "../customerInputModal/Modal";
 
 ServiceSlots.propTypes = {
   org: PropTypes.string.isRequired,
@@ -97,6 +98,7 @@ const handleOpenModal = (slot) => {
         service={service}
         slot={selectedSlot}
       />
+
 
     </div>
   );

@@ -3,9 +3,9 @@ import "./ComingSoonPage.css";
 import React from "react";
 import { useNavigate } from "react-router";
 
-import Footer from "./Footer";
+import Footer from "../../components/footer/Footer";
 
-import Header from "./Header";
+import Header from "../../components/header/Header";
 
 
 

@@ -1,10 +1,10 @@
 import React from "react";
 
-import CustomerInput from "./CustomerInput";
+
+import CustomerInput from "../customerInput/CustomerInput";
 import './Modal.css'
 
 import PropTypes from 'prop-types';
-
 
 Modal.propTypes = {
   handleCloseModal: PropTypes.func.isRequired, 

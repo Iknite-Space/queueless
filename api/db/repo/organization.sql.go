@@ -11,6 +11,65 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const createBooking = `-- name: CreateBooking :exec
+INSERT INTO bookings (
+    booking_id, payment_id, booking_date, status
+) VALUES ($1, $2, $3, $4)
+`
+
+type CreateBookingParams struct {
+	BookingID   string      `json:"booking_id"`
+	PaymentID   string      `json:"payment_id"`
+	BookingDate pgtype.Date `json:"booking_date"`
+	Status      string      `json:"status"`
+}
+
+func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) error {
+	_, err := q.db.Exec(ctx, createBooking,
+		arg.BookingID,
+		arg.PaymentID,
+		arg.BookingDate,
+		arg.Status,
+	)
+	return err
+}
+
+const createPayment = `-- name: CreatePayment :exec
+INSERT INTO payments (
+    payment_id, cus_name, cus_email, phone_number,
+    date, service_id, slot_id, amount, status
+) VALUES (
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
+)
+`
+
+type CreatePaymentParams struct {
+	PaymentID   string      `json:"payment_id"`
+	CusName     string      `json:"cus_name"`
+	CusEmail    pgtype.Text      `json:"cus_email"`
+	PhoneNumber string      `json:"phone_number"`
+	Date        pgtype.Date `json:"date"`
+	ServiceID   string      `json:"service_id"`
+	SlotID      string      `json:"slot_id"`
+	Amount      float64     `json:"amount"`
+	Status      string      `json:"status"`
+}
+
+func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) error {
+	_, err := q.db.Exec(ctx, createPayment,
+		arg.PaymentID,
+		arg.CusName,
+		arg.CusEmail,
+		arg.PhoneNumber,
+		arg.Date,
+		arg.ServiceID,
+		arg.SlotID,
+		arg.Amount,
+		arg.Status,
+	)
+	return err
+}
+
 const createService = `-- name: CreateService :one
 INSERT INTO services (
     organization_id, service_name, service_description, duration
@@ -67,6 +126,29 @@ func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) 
 		return nil, err
 	}
 	return items, nil
+}
+
+const getPaymentByID = `-- name: GetPaymentByID :one
+SELECT payment_id, cus_name, cus_email, phone_number, date, service_id, slot_id, amount, status, transaction_ref, created_at FROM payments WHERE payment_id = $1
+`
+
+func (q *Queries) GetPaymentByID(ctx context.Context, paymentID string) (Payment, error) {
+	row := q.db.QueryRow(ctx, getPaymentByID, paymentID)
+	var i Payment
+	err := row.Scan(
+		&i.PaymentID,
+		&i.CusName,
+		&i.CusEmail,
+		&i.PhoneNumber,
+		&i.Date,
+		&i.ServiceID,
+		&i.SlotID,
+		&i.Amount,
+		&i.Status,
+		&i.TransactionRef,
+		&i.CreatedAt,
+	)
+	return i, err
 }
 
 const getServiceSlots = `-- name: GetServiceSlots :many
@@ -177,5 +259,24 @@ type InsertSlotTemplateParams struct {
 
 func (q *Queries) InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error {
 	_, err := q.db.Exec(ctx, insertSlotTemplate, arg.ServiceID, arg.StartTime, arg.EndTime)
+	return err
+}
+
+const updatePaymentStatus = `-- name: UpdatePaymentStatus :exec
+UPDATE payments 
+SET 
+    status = $2,
+    transaction_ref = $3
+WHERE payment_id = $1
+`
+
+type UpdatePaymentStatusParams struct {
+	PaymentID      string `json:"payment_id"`
+	Status         string `json:"status"`
+	TransactionRef string `json:"transaction_ref"`
+}
+
+func (q *Queries) UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error {
+	_, err := q.db.Exec(ctx, updatePaymentStatus, arg.PaymentID, arg.Status, arg.TransactionRef)
 	return err
 }

@@ -9,12 +9,16 @@ import (
 )
 
 type Querier interface {
+	CreateBooking(ctx context.Context, arg CreateBookingParams) error
+	CreatePayment(ctx context.Context, arg CreatePaymentParams) error
 	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
 	GetOrganizations(ctx context.Context) ([]Organization, error)
+	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
 	GetServiceSlots(ctx context.Context, serviceID string) ([]ServiceSlotTemplate, error)
 	GetServiceWithOrgTimes(ctx context.Context, serviceID string) (GetServiceWithOrgTimesRow, error)
 	GetServicesByOrganization(ctx context.Context, organizationID string) ([]Service, error)
 	InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error
+	UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error
 }
 
 var _ Querier = (*Queries)(nil)
