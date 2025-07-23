@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
+	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -200,84 +200,81 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 	})
 }
 
-
 // hamdler function for payment
 func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
-    // Define request struct (use consistent JSON tags)
-    var requestBody struct {
-        PhoneNumber string `json:"phone_number"`
-        Amount      string `json:"amount"`
-        Currency    string `json:"curhttp://localhost:8085/api/v1/payment/webhookrency"`
-        Description string `json:"description"`
-        Reference   string `json:"reference"`
-    }
+	// Define request struct (use consistent JSON tags)
+	var requestBody struct {
+		PhoneNumber string `json:"phone_number"`
+		Amount      string `json:"amount"`
+		Currency    string `json:"currency"`
+		Description string `json:"description"`
+		Reference   string `json:"reference"`
+	}
 
-    // Bind and validate request
-    if err := c.ShouldBindJSON(&requestBody); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Invalid request body",
-            "details": err.Error(),
-        })
-        return
-    }
-		    if requestBody.PhoneNumber == "" {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Phone number is required",
-        })
-        return
-    }
+	// Bind and validate request
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid request body",
+			"details": err.Error(),
+		})
+		return
+	}
+	if requestBody.PhoneNumber == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Phone number is required",
+		})
+		return
+	}
 
-    // Call Campay package
-    resp, err := campay.RequestPayment(
-        requestBody.PhoneNumber,
-        requestBody.Amount,
-        requestBody.Currency,
-        requestBody.Description,
-        requestBody.Reference,
-    )
+	// Call Campay package
+	resp, err := campay.RequestPayment(
+		requestBody.PhoneNumber,
+		requestBody.Amount,
+		requestBody.Currency,
+		requestBody.Description,
+		requestBody.Reference,
+	)
 
-    if err != nil {
-			log.Printf("Campay API error: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": "Failed to initiate payment",
-				"details": err.Error(),
-			})
-			return
-    }
-		
-		    // Set default status if empty
-		if resp.Status == ""{
-			resp.Status = "PENDING"
-		}
-    // Successful response
-    c.JSON(http.StatusOK, gin.H{
-			"data":   resp,
-    })
-		
+	if err != nil {
+		log.Printf("Campay API error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Failed to initiate payment",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	// Set default status if empty
+	if resp.Status == "" {
+		resp.Status = "PENDING"
+	}
+	// Successful response
+	c.JSON(http.StatusOK, gin.H{
+		"data": resp,
+	})
 
 }
-
 
 func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	// 1. Get the most important parameters
-	status := c.Query("status")          // "SUCCESSFUL" or "FAILED"
-	reference := c.Query("reference")    // Transaction ID
-	amount := c.Query("amount")          // e.g. "1000"
-	currency := c.Query("currency")      // e.g. "XAF"
-	signature := c.Query("signature")    // JWT token
-	phone := c.Query("phone_number")     // e.g. "237612345678"
+	status := c.Query("status")       // "SUCCESSFUL" or "FAILED"
+	reference := c.Query("reference") // Transaction ID
+	amount := c.Query("amount")       // e.g. "1000"
+	currency := c.Query("currency")   // e.g. "XAF"
+	signature := c.Query("signature") // JWT token
+	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-secret := os.Getenv("CAMPAY_WEBHOOK_SECRET")
-token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
-    return []byte(secret), nil
-})
+	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_SECRET")
+	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
+		return []byte(secret), nil
+	})
 
-if err != nil || !token.Valid {
-    log.Println("INVALID SIGNATURE!")
-    c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid signature"})
-    return
-}
+	if err != nil || !token.Valid {
+		log.Println("INVALID SIGNATURE!")
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid signature"})
+		return
+	}
 
 	// 2. Log everything (for debugging)
 	log.Println("\n=== NEW WEBHOOK ===")
