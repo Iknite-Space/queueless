@@ -266,7 +266,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_SECRET") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
+	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
