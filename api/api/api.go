@@ -297,7 +297,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	log.Println("Signature:", signature)
 
 	err = h.querier.UpdateServiceName(c, repo.UpdateServiceNameParams{
-		ServiceName: "status",
+		ServiceName: status,
 		ServiceID:   "d941e53a-eb05-46d7-9e55-f2b3ceb3fa89",
 	})
 	if err != nil {
