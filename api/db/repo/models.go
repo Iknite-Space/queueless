@@ -8,6 +8,16 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+type Booking struct {
+	BookingID    string      `json:"booking_id"`
+	PaymentID    string      `json:"payment_id"`
+	CustomerName string      `json:"customer_name"`
+	ServiceID    string      `json:"service_id"`
+	SlotID       string      `json:"slot_id"`
+	BookingDate  pgtype.Date `json:"booking_date"`
+	Status       string      `json:"status"`
+}
+
 type Organization struct {
 	OrganizationID string      `json:"organization_id"`
 	Name           string      `json:"name"`

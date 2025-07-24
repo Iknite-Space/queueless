@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
-	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -256,6 +256,7 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 }
 
 func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
+
 	// 1. Get the most important parameters
 	status := c.Query("status")       // "SUCCESSFUL" or "FAILED"
 	reference := c.Query("reference") // Transaction ID
@@ -265,7 +266,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_SECRET")
+	secret := os.Getenv("CAMPAY_WEBHOOK_SECRET") //utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_SECRET")
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
 	})
@@ -283,6 +284,16 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	log.Println("Amount:", amount, currency)
 	log.Println("Phone:", phone)
 	log.Println("Signature:", signature)
+
+	err = h.querier.UpdateServiceName(c, repo.UpdateServiceNameParams{
+		ServiceName: "status",
+		ServiceID:   "6c546db7-94fa-4cca-a8e9-f2e7b42364b3",
+	})
+	if err != nil {
+		log.Println("Failed to update service name:", err)
+	} else {
+		log.Println("Service name updated successfully")
+	}
 
 	// 3. Just respond with "OK" for now
 	c.String(http.StatusOK, "Webhook received!")

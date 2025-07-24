@@ -69,6 +69,48 @@ func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) 
 	return items, nil
 }
 
+const getSearchResults = `-- name: GetSearchResults :many
+
+SELECT 'services' AS source, service_id, service_name AS value
+FROM services
+WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
+
+UNION ALL
+
+SELECT 'organizations' AS source, organization_id, name AS value
+FROM organizations
+WHERE to_tsvector(name) @@ websearch_to_tsquery($1)
+`
+
+type GetSearchResultsRow struct {
+	Source    string `json:"source"`
+	ServiceID string `json:"service_id"`
+	Value     string `json:"value"`
+}
+
+// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
+// Search services.name
+// Search organisations.email
+func (q *Queries) GetSearchResults(ctx context.Context, websearchToTsquery string) ([]GetSearchResultsRow, error) {
+	rows, err := q.db.Query(ctx, getSearchResults, websearchToTsquery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetSearchResultsRow{}
+	for rows.Next() {
+		var i GetSearchResultsRow
+		if err := rows.Scan(&i.Source, &i.ServiceID, &i.Value); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getServiceSlots = `-- name: GetServiceSlots :many
 SELECT 
     id,
@@ -177,5 +219,21 @@ type InsertSlotTemplateParams struct {
 
 func (q *Queries) InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error {
 	_, err := q.db.Exec(ctx, insertSlotTemplate, arg.ServiceID, arg.StartTime, arg.EndTime)
+	return err
+}
+
+const updateServiceName = `-- name: UpdateServiceName :exec
+UPDATE services
+SET service_name = $1
+WHERE service_id = $2
+`
+
+type UpdateServiceNameParams struct {
+	ServiceName string `json:"service_name"`
+	ServiceID   string `json:"service_id"`
+}
+
+func (q *Queries) UpdateServiceName(ctx context.Context, arg UpdateServiceNameParams) error {
+	_, err := q.db.Exec(ctx, updateServiceName, arg.ServiceName, arg.ServiceID)
 	return err
 }
