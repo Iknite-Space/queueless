@@ -18,7 +18,7 @@ function Cards({ name, location }) {
   );
 }
 
-function OrganizationCard(name) {
+function OrganizationCard() {
   const navigate = useNavigate();
 const [organizations, setOrganizations] = useState([]);
 const [isLoading, setIsLoading] = useState(true);
