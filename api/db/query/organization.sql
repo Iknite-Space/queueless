@@ -36,3 +36,24 @@ FROM service_slot_templates
 WHERE service_id = $1
 ORDER BY start_time;
 
+-- name: GetSearchResults :many
+-- SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
+
+-- Search services.name
+SELECT 'services' AS source, service_id, service_name AS value
+FROM services
+WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
+
+UNION ALL
+
+-- Search organisations.email
+SELECT 'organizations' AS source, organization_id, name AS value
+FROM organizations
+WHERE to_tsvector(name) @@ websearch_to_tsquery($1);
+
+-- name: UpdateServiceName :exec
+UPDATE services
+SET service_name = $1
+WHERE service_id = $2;
+
+
