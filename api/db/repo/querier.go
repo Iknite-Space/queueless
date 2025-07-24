@@ -11,10 +11,15 @@ import (
 type Querier interface {
 	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
 	GetOrganizations(ctx context.Context) ([]Organization, error)
+	// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
+	// Search services.name
+	// Search organisations.email
+	GetSearchResults(ctx context.Context, websearchToTsquery string) ([]GetSearchResultsRow, error)
 	GetServiceSlots(ctx context.Context, serviceID string) ([]ServiceSlotTemplate, error)
 	GetServiceWithOrgTimes(ctx context.Context, serviceID string) (GetServiceWithOrgTimesRow, error)
 	GetServicesByOrganization(ctx context.Context, organizationID string) ([]Service, error)
 	InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error
+	UpdateServiceName(ctx context.Context, arg UpdateServiceNameParams) error
 }
 
 var _ Querier = (*Queries)(nil)
