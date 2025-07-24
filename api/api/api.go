@@ -269,9 +269,9 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-
 	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
 	// 3. Parse and verify JWT
+
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
 		// Ensure token uses HMAC signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
