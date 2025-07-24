@@ -287,7 +287,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 
 	err = h.querier.UpdateServiceName(c, repo.UpdateServiceNameParams{
 		ServiceName: "status",
-		ServiceID:   "6c546db7-94fa-4cca-a8e9-f2e7b42364b3",
+		ServiceID:   "d941e53a-eb05-46d7-9e55-f2b3ceb3fa89",
 	})
 	if err != nil {
 		log.Println("Failed to update service name:", err)
