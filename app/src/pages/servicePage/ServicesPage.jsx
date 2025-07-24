@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useEffect, useState } from "react";
 
+
 import "./ServicesPage.css";
+
 import { useNavigate, useParams, useLocation } from "react-router";
 import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation";
 

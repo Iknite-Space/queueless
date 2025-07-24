@@ -9,8 +9,11 @@ import (
 )
 
 type Querier interface {
+	CreateBooking(ctx context.Context, arg CreateBookingParams) error
+	CreatePayment(ctx context.Context, arg CreatePaymentParams) error
 	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
 	GetOrganizations(ctx context.Context) ([]Organization, error)
+	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
 	// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
 	// Search services.name
 	// Search organisations.email
@@ -19,6 +22,7 @@ type Querier interface {
 	GetServiceWithOrgTimes(ctx context.Context, serviceID string) (GetServiceWithOrgTimesRow, error)
 	GetServicesByOrganization(ctx context.Context, organizationID string) ([]Service, error)
 	InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error
+	UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error
 	UpdateServiceName(ctx context.Context, arg UpdateServiceNameParams) error
 }
 

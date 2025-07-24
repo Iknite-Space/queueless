@@ -28,7 +28,7 @@ type PaymentResponse struct {
 }
 
 func RequestPayment(momoNumber, amount, currency, description, ref string) (*PaymentResponse, error) {
-	token := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_API_KEY") //os.Getenv("CAMPAY_API_KEY")
+	token := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_API_KEY")// os.Getenv("CAMPAY_API_KEY")
 	if token == "" {
 		return nil, fmt.Errorf("missing CAMPAY_API_KEY in environment")
 	}
@@ -45,6 +45,8 @@ func RequestPayment(momoNumber, amount, currency, description, ref string) (*Pay
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %v", err)
 	}
+
+
 
 	req, err := http.NewRequest(
 		"POST",

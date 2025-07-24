@@ -1,5 +1,6 @@
 import React from "react";
 
+
 import CustomerInput from "../customerInput/CustomerInput";
 import './Modal.css'
 

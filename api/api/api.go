@@ -202,6 +202,7 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 
 // hamdler function for payment
 func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
+
 	// Define request struct (use consistent JSON tags)
 	var requestBody struct {
 		PhoneNumber string `json:"phone_number"`
@@ -235,6 +236,8 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 		requestBody.Reference,
 	)
 
+
+	fmt.Println(resp)
 	if err != nil {
 		log.Printf("Campay API error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
@@ -268,6 +271,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	// Verify JWT signature (add this after getting the parameters)
 	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
 	// 3. Parse and verify JWT
+
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
 		// Ensure token uses HMAC signing method
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
