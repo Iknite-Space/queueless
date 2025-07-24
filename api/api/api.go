@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
+	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -269,15 +269,27 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-	secret := os.Getenv("CAMPAY_WEBHOOK_KEY") //utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY")
+
+	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
+	// 3. Parse and verify JWT
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
+		// Ensure token uses HMAC signing method
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
 		return []byte(secret), nil
 	})
 
+	// 4. If verification fails, reject the request
 	if err != nil || !token.Valid {
-		log.Println("INVALID SIGNATURE!")
+		log.Println("INVALID SIGNATURE!", err)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid signature"})
-		return
+		// return
+	}
+
+	// 5. Optionally: Read claims from token
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		log.Println("Verified token claims:", claims)
 	}
 
 	// 2. Log everything (for debugging)
