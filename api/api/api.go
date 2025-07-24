@@ -280,7 +280,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	if err != nil || !token.Valid {
 		log.Println("INVALID SIGNATURE!", err)
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid signature"})
-		return
+		// return
 	}
 
 	// 5. Optionally: Read claims from token
