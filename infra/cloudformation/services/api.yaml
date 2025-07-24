@@ -133,6 +133,8 @@ Resources:
               ValueFrom: !Sub "${DbAdminSecretArn}:port::"
             - Name: DB_PASSWORD
               ValueFrom: !Sub "${AppDatabaseSecret}:password::"
+            - Name: CAMPAY_CONFIG
+              ValueFrom: arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/campay-bxpvAM
 
     # A role needed by ECS to Start the Ecs Service
   ExecutionRole:
@@ -162,6 +164,7 @@ Resources:
                 Resource:
                   - !Ref AppDatabaseSecret
                   - !Ref DbAdminSecretArn
+                  - "arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/campay-bxpvAM"
 
   # A role for the containers
   TaskRole:

@@ -1,4 +1,3 @@
-
 package campay
 
 import (
@@ -13,31 +12,31 @@ import (
 )
 
 type PaymentRequest struct {
-	From             string `json:"from"`
-	Amount           string `json:"amount"`
-	Currency         string `json:"currency"`
-	Description      string `json:"description"`
+	From              string `json:"from"`
+	Amount            string `json:"amount"`
+	Currency          string `json:"currency"`
+	Description       string `json:"description"`
 	ExternalReference string `json:"external_reference"`
 }
 
 type PaymentResponse struct {
 	Reference string `json:"reference"`
-	UssdCode  string `json:"ussd_code"`  // Changed from Ussd_Code to match JSON tag
+	UssdCode  string `json:"ussd_code"` // Changed from Ussd_Code to match JSON tag
 	Operator  string `json:"operator"`
-	Status    string `json:"status"`     // Campay often includes status
+	Status    string `json:"status"` // Campay often includes status
 }
 
 func RequestPayment(momoNumber, amount, currency, description, ref string) (*PaymentResponse, error) {
-	token := os.Getenv("CAMPAY_API_KEY")
+	token := os.Getenv("CAMPAY_API_KEY")//utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_API_KEY") 
 	if token == "" {
 		return nil, fmt.Errorf("missing CAMPAY_API_KEY in environment")
 	}
 
 	requestBody := PaymentRequest{
-		From:             momoNumber,
-		Amount:           amount,
-		Currency:         currency,
-		Description:      description,
+		From:              momoNumber,
+		Amount:            amount,
+		Currency:          currency,
+		Description:       description,
 		ExternalReference: ref,
 	}
 
@@ -46,9 +45,11 @@ func RequestPayment(momoNumber, amount, currency, description, ref string) (*Pay
 		return nil, fmt.Errorf("failed to marshal request: %v", err)
 	}
 
+
+
 	req, err := http.NewRequest(
-		"POST", 
-		"https://demo.campay.net/api/collect/", 
+		"POST",
+		"https://demo.campay.net/api/collect/",
 		bytes.NewBuffer(jsonBody),
 	)
 	if err != nil {
@@ -69,11 +70,11 @@ func RequestPayment(momoNumber, amount, currency, description, ref string) (*Pay
 	//	defer resp.Body.Close()
 
 	defer func() {
-    err := resp.Body.Close()
-    if err != nil {
-        log.Fatal(err)
-    }
-}()
+		err := resp.Body.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	// Read response once
 	bodyBytes, err := io.ReadAll(resp.Body)

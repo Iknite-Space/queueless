@@ -36,6 +36,7 @@ FROM service_slot_templates
 WHERE service_id = $1
 ORDER BY start_time;
 
+
 -- name: CreatePayment :exec
 INSERT INTO payments (
     payment_id, cus_name, cus_email, phone_number,
@@ -58,3 +59,25 @@ WHERE payment_id = $1;
 INSERT INTO bookings (
     booking_id, payment_id, booking_date, status
 ) VALUES ($1, $2, $3, $4);
+
+-- name: GetSearchResults :many
+-- SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
+
+-- Search services.name
+SELECT 'services' AS source, service_id, service_name AS value
+FROM services
+WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
+
+UNION ALL
+
+-- Search organisations.email
+SELECT 'organizations' AS source, organization_id, name AS value
+FROM organizations
+WHERE to_tsvector(name) @@ websearch_to_tsquery($1);
+
+-- name: UpdateServiceName :exec
+UPDATE services
+SET service_name = $1
+WHERE service_id = $2;
+
+
