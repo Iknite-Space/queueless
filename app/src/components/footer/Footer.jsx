@@ -9,8 +9,8 @@ export default function Footer() {
       <div className="footer-section">
         <h3>Quick Links</h3>
         <ul>
-        <li><a href="#">About Us</a></li>
-        <li><a href="#">Contact Us</a></li>
+        <li><a href="home.com">About Us</a></li>
+        <li><a href="home.com">Contact Us</a></li>
         </ul>
       </div>
 
@@ -38,11 +38,11 @@ export default function Footer() {
       <div className="footer-section">
         <h3>Legal</h3>
         <ul>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Pricing</a></li>
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Cookie Policy</a></li>
-          <li><a href="#">FAQ</a></li>
+          <li><a href="home.com">Terms of Service</a></li>
+          <li><a href="home.com">Pricing</a></li>
+          <li><a href="home.com">Privacy Policy</a></li>
+          <li><a href="home.com">Cookie Policy</a></li>
+          <li><a href="home.com">FAQ</a></li>
         </ul>
       </div>
 
