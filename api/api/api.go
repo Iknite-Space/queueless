@@ -52,6 +52,7 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 	r.POST("/api/v1/payment/initiate", h.handleInitiatePayment)
 	r.GET("/api/v1/payment/webhook", h.handleCampayWebhook)
+	r.GET("/api/v1/payment/:id/status", h.handleGetPaymentStatus)
 
 	return r
 }
@@ -374,4 +375,25 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 
 	// 3. Just respond with "OK" for now
 	c.String(http.StatusOK, "Webhook received!")
+}
+
+// Endpoint to get payment status by id
+func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+		return
+	}
+
+	payment, err := h.querier.GetPaymentByID(c, id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":        "success",
+		"payment_status": payment.Status,
+		"payment":        payment,
+	})
 }
