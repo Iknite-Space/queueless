@@ -12,3 +12,17 @@
   color: white;
   border-color: var(--primary-blue);
 }
+
+
+.past-day button{
+  color: #777;
+  border-color: #ccc;
+  
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+
+.past-day .slot-button {
+  cursor: not-allowed;
+}
