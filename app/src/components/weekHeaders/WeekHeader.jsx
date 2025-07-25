@@ -66,15 +66,13 @@ export function WeekHeader() {
         <div className="div">
         <div className="week-grid">
           {weekDates.map((d, i) => {
-            const isPast = d.fullDate < new Date() && !isToday(d.fullDate);
+            // const isPast = d.fullDate < new Date() && !isToday(d.fullDate);
             console.log(d.fullDate)
 
             return (
               <div
                 key={i}
-                className={`week-day ${isToday(d.fullDate) ? "today" : ""} ${
-                  isPast ? "past-day" : ""
-                }`}
+                className={`week-day ${isToday(d.fullDate) ? "today" : ""}`}
               >
                 <div className="date-name">
                   <div className="day-name">{d.day}</div>

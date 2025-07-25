@@ -82,13 +82,30 @@ const handleOpenModal = (slot) => {
 
   return (
     <div className="slots-container">
-      {slots.map((slot) => (
-        <div key={slot.id} className="slot-button">
-          <button onClick={() => handleOpenModal(slot)}>
+      {slots.map((slot) => {
+        const [time, description] = formatTime(slot.start_time.Microseconds).split(" ");
+        let [hour, minute] = time.split(":").map(Number);
+
+        if (description === 'PM')
+          if (hour < 12) hour += 12
+
+        
+        //create full datetime for the slot
+        const slotDateTime = new Date(date)
+        slotDateTime.setHours(hour, minute, 0, 0)
+
+        const isPast = slotDateTime < new Date();
+        return(
+        <div key={slot.id} className={`${
+                  isPast ? "past-day" : ""
+                }`}>
+          <div className="slot-button">
+          <button  onClick={() => handleOpenModal(slot)}>
             {formatTime(slot.start_time.Microseconds)}
           </button>
-        </div>
-      ))}
+          </div>
+        </div>)
+})}
 
 
       <Modal
