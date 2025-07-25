@@ -9,8 +9,14 @@ import (
 )
 
 type Querier interface {
+	// -- name: UpdatePaymentStatus :exec
+	// UPDATE payments
+	// SET
+	//     status = $2,
+	//     transaction_ref = $3
+	// WHERE payment_id = $1;
 	CreateBooking(ctx context.Context, arg CreateBookingParams) error
-	CreatePayment(ctx context.Context, arg CreatePaymentParams) error
+	CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error)
 	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
 	GetOrganizations(ctx context.Context) ([]Organization, error)
 	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
@@ -23,7 +29,6 @@ type Querier interface {
 	GetServicesByOrganization(ctx context.Context, organizationID string) ([]Service, error)
 	InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error
 	UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error
-	UpdateServiceName(ctx context.Context, arg UpdateServiceNameParams) error
 }
 
 var _ Querier = (*Queries)(nil)
