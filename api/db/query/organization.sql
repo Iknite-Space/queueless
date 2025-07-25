@@ -36,24 +36,15 @@ FROM service_slot_templates
 WHERE service_id = $1
 ORDER BY start_time;
 
-
--- name: CreatePayment :exec
-INSERT INTO payments (
-    payment_id, cus_name, cus_email, phone_number,
-    date, service_id, slot_id, amount, status
-) VALUES (
-    $1, $2, $3, $4, $5, $6, $7, $8, $9
-);
-
 -- name: GetPaymentByID :one
 SELECT * FROM payments WHERE payment_id = $1;
 
--- name: UpdatePaymentStatus :exec
-UPDATE payments 
-SET 
-    status = $2,
-    transaction_ref = $3
-WHERE payment_id = $1;
+-- -- name: UpdatePaymentStatus :exec
+-- UPDATE payments 
+-- SET 
+--     status = $2,
+--     transaction_ref = $3
+-- WHERE payment_id = $1;
 
 -- name: CreateBooking :exec
 INSERT INTO bookings (
@@ -75,9 +66,27 @@ SELECT 'organizations' AS source, organization_id, name AS value
 FROM organizations
 WHERE to_tsvector(name) @@ websearch_to_tsquery($1);
 
--- name: UpdateServiceName :exec
-UPDATE services
-SET service_name = $1
-WHERE service_id = $2;
+-- name: CreatePayment :one
+INSERT INTO payments (
+    cus_name,
+    cus_email,
+    phone_number,
+    date,
+    service_id,
+    slot_id,
+    amount,
+    status,
+    transaction_ref
+) VALUES (
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
+)
+RETURNING *;
+
+
+-- name: UpdatePaymentStatus :exec
+UPDATE payments
+SET status = $1
+WHERE transaction_ref = $2;
+
 
 

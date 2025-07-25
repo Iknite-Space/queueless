@@ -12,6 +12,7 @@ import (
 )
 
 const createBooking = `-- name: CreateBooking :exec
+
 INSERT INTO bookings (
     booking_id, payment_id, booking_date, status
 ) VALUES ($1, $2, $3, $4)
@@ -24,6 +25,14 @@ type CreateBookingParams struct {
 	Status      string      `json:"status"`
 }
 
+// -- name: UpdatePaymentStatus :exec
+// UPDATE payments
+// SET
+//
+//	status = $2,
+//	transaction_ref = $3
+//
+// WHERE payment_id = $1;
 func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) error {
 	_, err := q.db.Exec(ctx, createBooking,
 		arg.BookingID,
@@ -34,30 +43,37 @@ func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) er
 	return err
 }
 
-const createPayment = `-- name: CreatePayment :exec
+const createPayment = `-- name: CreatePayment :one
 INSERT INTO payments (
-    payment_id, cus_name, cus_email, phone_number,
-    date, service_id, slot_id, amount, status
+    cus_name,
+    cus_email,
+    phone_number,
+    date,
+    service_id,
+    slot_id,
+    amount,
+    status,
+    transaction_ref
 ) VALUES (
     $1, $2, $3, $4, $5, $6, $7, $8, $9
 )
+RETURNING payment_id, cus_name, cus_email, phone_number, date, service_id, slot_id, amount, status, transaction_ref, created_at
 `
 
 type CreatePaymentParams struct {
-	PaymentID   string      `json:"payment_id"`
-	CusName     string      `json:"cus_name"`
-	CusEmail    string      `json:"cus_email"`
-	PhoneNumber string      `json:"phone_number"`
-	Date        pgtype.Date `json:"date"`
-	ServiceID   string      `json:"service_id"`
-	SlotID      string      `json:"slot_id"`
-	Amount      float64     `json:"amount"`
-	Status      string      `json:"status"`
+	CusName        string      `json:"cus_name"`
+	CusEmail       string      `json:"cus_email"`
+	PhoneNumber    string      `json:"phone_number"`
+	Date           pgtype.Date `json:"date"`
+	ServiceID      string      `json:"service_id"`
+	SlotID         string      `json:"slot_id"`
+	Amount         float64     `json:"amount"`
+	Status         string      `json:"status"`
+	TransactionRef string      `json:"transaction_ref"`
 }
 
-func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) error {
-	_, err := q.db.Exec(ctx, createPayment,
-		arg.PaymentID,
+func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error) {
+	row := q.db.QueryRow(ctx, createPayment,
 		arg.CusName,
 		arg.CusEmail,
 		arg.PhoneNumber,
@@ -66,8 +82,23 @@ func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) er
 		arg.SlotID,
 		arg.Amount,
 		arg.Status,
+		arg.TransactionRef,
 	)
-	return err
+	var i Payment
+	err := row.Scan(
+		&i.PaymentID,
+		&i.CusName,
+		&i.CusEmail,
+		&i.PhoneNumber,
+		&i.Date,
+		&i.ServiceID,
+		&i.SlotID,
+		&i.Amount,
+		&i.Status,
+		&i.TransactionRef,
+		&i.CreatedAt,
+	)
+	return i, err
 }
 
 const createService = `-- name: CreateService :one
@@ -305,36 +336,17 @@ func (q *Queries) InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplate
 }
 
 const updatePaymentStatus = `-- name: UpdatePaymentStatus :exec
-UPDATE payments 
-SET 
-    status = $2,
-    transaction_ref = $3
-WHERE payment_id = $1
+UPDATE payments
+SET status = $1
+WHERE transaction_ref = $2
 `
 
 type UpdatePaymentStatusParams struct {
-	PaymentID      string `json:"payment_id"`
 	Status         string `json:"status"`
 	TransactionRef string `json:"transaction_ref"`
 }
 
 func (q *Queries) UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error {
-	_, err := q.db.Exec(ctx, updatePaymentStatus, arg.PaymentID, arg.Status, arg.TransactionRef)
-	return err
-}
-
-const updateServiceName = `-- name: UpdateServiceName :exec
-UPDATE services
-SET service_name = $1
-WHERE service_id = $2
-`
-
-type UpdateServiceNameParams struct {
-	ServiceName string `json:"service_name"`
-	ServiceID   string `json:"service_id"`
-}
-
-func (q *Queries) UpdateServiceName(ctx context.Context, arg UpdateServiceNameParams) error {
-	_, err := q.db.Exec(ctx, updateServiceName, arg.ServiceName, arg.ServiceID)
+	_, err := q.db.Exec(ctx, updatePaymentStatus, arg.Status, arg.TransactionRef)
 	return err
 }

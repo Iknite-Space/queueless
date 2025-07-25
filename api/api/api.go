@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
@@ -200,17 +201,38 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 	})
 }
 
+// variable to store the transaction reference for each payment request.
+var ref string
+
 // hamdler function for payment
 func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 
 	// Define request struct (use consistent JSON tags)
-	var requestBody struct {
-		PhoneNumber string `json:"phone_number"`
-		Amount      string `json:"amount"`
-		Currency    string `json:"currency"`
-		Description string `json:"description"`
-		Reference   string `json:"reference"`
+	type data struct {
+		CustomerName   string      `json:"cus_name,omitempty"`
+		CustomerEmail  string      `json:"cus_email,omitempty"`
+		PhoneNumber    string      `json:"phone_number,omitempty"`
+		Date           pgtype.Date `json:"date,omitempty"`
+		ServiceID      string      `json:"service_id,omitempty"`
+		SlotID         string      `json:"slot_id,omitempty"`
+		Amount         string      `json:"amount,omitempty"`
+		Currency       string      `json:"currency,omitempty"`
+		Description    string      `json:"description,omitempty"`
+		Reference      string      `json:"reference,omitempty"`
+		Status         string      `json:"status,omitempty"`
+		TransactionRef string      `json:"transaction_ref,omitempty"`
 	}
+
+	//test data
+	cus_name := "customer1"
+	cus_email := "email@gmail.com"
+	pgDate := pgtype.Date{
+		Time:  time.Now(),
+		Valid: true,
+	}
+
+	//payment request body
+	requestBody := data{}
 
 	// Bind and validate request
 	if err := c.ShouldBindJSON(&requestBody); err != nil {
@@ -236,7 +258,6 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 		requestBody.Reference,
 	)
 
-
 	fmt.Println(resp)
 	if err != nil {
 		log.Printf("Campay API error: %v", err)
@@ -251,11 +272,49 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 	if resp.Status == "" {
 		resp.Status = "PENDING"
 	}
+
+	//convert amount(string) to float 32
+	amount, err := strconv.ParseFloat(requestBody.Amount, 32)
+
+	if err != nil {
+		log.Printf("Can not convert amount to float32: %v", err)
+		return
+	}
+
+	responseBody := repo.CreatePaymentParams{
+		CusName:        cus_name,
+		CusEmail:       cus_email,
+		PhoneNumber:    requestBody.PhoneNumber,
+		Date:           pgDate,
+		ServiceID:      "",
+		SlotID:         "",
+		Amount:         amount,
+		Status:         resp.Status,
+		TransactionRef: resp.Reference,
+	}
+
+	// Bind and validate response
+	// if err := c.ShouldBindJSON(&responseBody); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error":   "Invalid response body",
+	// 		"details": err.Error(),
+	// 	})
+	// 	return
+	// }
+
+	payment, err := h.querier.CreatePayment(c, responseBody)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
 	// Successful response
 	c.JSON(http.StatusOK, gin.H{
-		"data": resp,
+		"payment": payment,
 	})
 
+	ref = resp.Reference
 }
 
 func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
@@ -296,18 +355,21 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	log.Println("\n=== NEW WEBHOOK ===")
 	log.Println("Status:", status)
 	log.Println("Reference:", reference)
+	log.Println("Ref:", ref)
 	log.Println("Amount:", amount, currency)
 	log.Println("Phone:", phone)
 	log.Println("Signature:", signature)
 
-	err = h.querier.UpdateServiceName(c, repo.UpdateServiceNameParams{
-		ServiceName: status,
-		ServiceID:   "d941e53a-eb05-46d7-9e55-f2b3ceb3fa89",
-	})
-	if err != nil {
-		log.Println("Failed to update service name:", err)
-	} else {
-		log.Println("Service name updated successfully")
+	if ref == reference {
+		err = h.querier.UpdatePaymentStatus(c, repo.UpdatePaymentStatusParams{
+			Status:         status,
+			TransactionRef: reference,
+		})
+		if err != nil {
+			log.Println("Failed to update payment status:", err)
+		} else {
+			log.Println("payment status updated successfully")
+		}
 	}
 
 	// 3. Just respond with "OK" for now
