@@ -1,8 +1,9 @@
 
 import React, { useState } from "react";
-
+import axios from 'axios'
 import "./CustomerInput.css";
 import PropTypes from "prop-types";
+import {v4 as uuidv4} from 'uuid';
 
 CustomerInput.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
@@ -33,9 +34,34 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
     setStep(2);
   };
 
-  const handleSubmit = () => {
+  //handler for the confirm button that submits form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const appPayload = {
+      cus_name: formData.username,
+      cus_email: formData.email,
+      phone_number: "+237"+formData.phone ,
+      amount: formData.serviceFee.trim(),
+      currency: "XAF",
+      description: "Service Payment",
+      reference: uuidv4()
+    }
+    console.log(appPayload)
     // handle final form submission here (e.g. POST request)
-    console.log("Submitted:", formData);
+    try{
+
+      const response = await axios.post(
+        "http://localhost:8085/api/v1/payment/initiate",
+        appPayload,{
+          headers: {
+            "content-type": "application/json",
+          }
+        }
+      );
+      console.log("Submitted:", response);
+    } catch(err){
+      console.log("submission failed", err)
+    }
     handleCloseModal(); // close the modal after submit
   };
 
@@ -97,7 +123,7 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
                 <option value="" disabled>
                   Platform charges
                 </option>
-                <option value="1-frs">1 frs</option>
+                <option value=" 2 "> 2 XAF </option>
               </select>
             </div>
 
