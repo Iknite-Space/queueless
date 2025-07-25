@@ -37,7 +37,9 @@ WHERE service_id = $1
 ORDER BY start_time;
 
 -- name: GetPaymentByID :one
-SELECT * FROM payments WHERE payment_id = $1;
+SELECT * 
+FROM payments 
+WHERE payment_id = $1;
 
 -- -- name: UpdatePaymentStatus :exec
 -- UPDATE payments 
@@ -87,6 +89,11 @@ RETURNING *;
 UPDATE payments
 SET status = $1
 WHERE transaction_ref = $2;
+
+-- -- name: GetPaymentStatusByID :one
+-- SELECT status
+-- FROM payments
+-- WHERE payment_id = $1;
 
 
 

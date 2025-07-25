@@ -160,7 +160,9 @@ func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) 
 }
 
 const getPaymentByID = `-- name: GetPaymentByID :one
-SELECT payment_id, cus_name, cus_email, phone_number, date, service_id, slot_id, amount, status, transaction_ref, created_at FROM payments WHERE payment_id = $1
+SELECT payment_id, cus_name, cus_email, phone_number, date, service_id, slot_id, amount, status, transaction_ref, created_at 
+FROM payments 
+WHERE payment_id = $1
 `
 
 func (q *Queries) GetPaymentByID(ctx context.Context, paymentID string) (Payment, error) {
