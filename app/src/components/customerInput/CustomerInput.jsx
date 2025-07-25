@@ -51,7 +51,7 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
     try{
 
       const response = await axios.post(
-        "http://localhost:8085/api/v1/payment/initiate",
+        "https://api.queueless.xyz/api/v1/payment/initiate",
         appPayload,{
           headers: {
             "content-type": "application/json",
