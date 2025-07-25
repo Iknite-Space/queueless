@@ -225,8 +225,6 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 	}
 
 	//test data
-	cus_name := "customer1"
-	cus_email := "email@gmail.com"
 	pgDate := pgtype.Date{
 		Time:  time.Now(),
 		Valid: true,
@@ -279,12 +277,17 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 
 	if err != nil {
 		log.Printf("Can not convert amount to float32: %v", err)
-		return
+		c.JSON(http.StatusBadRequest, gin.H{
+    "error": "Invalid amount format",
+    "details": err.Error(),
+})
+return
+
 	}
 
 	responseBody := repo.CreatePaymentParams{
-		CusName:        cus_name,
-		CusEmail:       cus_email,
+		CusName:        requestBody.CustomerName,
+		CusEmail:       requestBody.CustomerEmail,
 		PhoneNumber:    requestBody.PhoneNumber,
 		Date:           pgDate,
 		ServiceID:      "",
@@ -329,7 +332,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
+	secret :=   utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY")//os.Getenv("CAMPAY_WEBHOOK_SECRET")
 	// 3. Parse and verify JWT
 
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
