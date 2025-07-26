@@ -1,18 +1,20 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
-	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -52,7 +54,8 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 	r.POST("/api/v1/payment/initiate", h.handleInitiatePayment)
 	r.GET("/api/v1/payment/webhook", h.handleCampayWebhook)
-	r.GET("/api/v1/payment/:id/status", h.handleGetPaymentStatus)
+	// r.GET("/api/v1/payment/:id/status", h.handleGetPaymentStatus)
+	r.GET("api/v1/payment/:id/statusSocket", h.handlePaymentStatusSocket)
 
 	return r
 }
@@ -332,7 +335,7 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-	secret :=   utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY")//os.Getenv("CAMPAY_WEBHOOK_SECRET")
+	secret :=   os.Getenv("CAMPAY_WEBHOOK_SECRET")//utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY")
 	// 3. Parse and verify JWT
 
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
@@ -399,4 +402,57 @@ func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
 		"payment_status": payment.Status,
 		"payment":        payment,
 	})
+}
+
+// upgrading the http connection to a socket conn
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool{
+		return true
+	},}
+
+func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (string, error) {
+    payment, err := h.querier.GetPaymentByID(ctx, id)
+    if err != nil {
+        return "", err
+    }
+    return payment.Status, nil
+}
+
+
+	func (h *MessageHandler) handlePaymentStatusSocket(c *gin.Context) {
+		payment_id := c.Param("id")
+		
+    conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+    if err != nil {
+        log.Println("WebSocket upgrade failed:", err)
+        return
+    }
+		//validate id
+		if payment_id == "" {
+    log.Println("Missing ID in query params")
+    conn.WriteJSON(map[string]string{"status": "error"})
+    return
+}
+    defer conn.Close()
+
+		 prevStatus := ""
+
+    for {
+        status,err := h.GetPaymentStatusByID(c,payment_id) // You fetch from DB or queue
+				 if err != nil {
+        log.Println("Error fetching status:", err)
+        conn.WriteJSON(map[string]string{"status": "error"})
+        continue
+    }
+		if status != prevStatus {
+			conn.WriteJSON(map[string]string{"status": status})
+			prevStatus = status
+		}
+
+		// if (prevStatus == "Failed" || prevStatus == "Success"){
+		// 	continue
+		// }
+        // conn.WriteJSON(map[string]string{"status": status})
+        time.Sleep(2 * time.Second)
+    }
 }

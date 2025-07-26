@@ -4,6 +4,7 @@ import axios from 'axios'
 import "./CustomerInput.css";
 import PropTypes from "prop-types";
 import {v4 as uuidv4} from 'uuid';
+import PollingStatus from "../pollingStatus/StatusSocket";
 
 CustomerInput.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
@@ -20,6 +21,9 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
     phone: "",
     serviceFee: "",
   });
+
+  //state to hold payment id 
+  const [paymentId, setPaymentId] = useState(null);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -49,24 +53,26 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
     console.log(appPayload)
     // handle final form submission here (e.g. POST request)
     try{
-
       const response = await axios.post(
-        "https://api.queueless.xyz/api/v1/payment/initiate",
-        appPayload,{
+        "http://localhost:8085/api/v1/payment/initiate",
+        appPayload,
+        {
           headers: {
             "content-type": "application/json",
-          }
+          },
         }
       );
       console.log("Submitted:", response);
-      const paymentId = response.data.payment.payment_id
-      localStorage.setItem("paymentId", paymentId)
+      const paymentId = response.data.payment.payment_id;
+      localStorage.setItem("paymentId", paymentId);
       console.log("created payment id", paymentId);
-      // extracted payment id is is saved to the browser
-      const savedPaymentId = localStorage.setItem("paymentId")
-      console.log("saved payment is:", savedPaymentId);
-      
-      
+
+      // extracted payment id is is saved to the browser to use
+      // const savedPaymentId = localStorage.setItem("paymentId");
+      localStorage.setItem("paymentId", paymentId); // saves it
+      setPaymentId(paymentId); // allows UI to use it
+
+      // console.log("saved payment is:", savedPaymentId);
     } catch(err){
       console.log("submission failed", err)
     }
@@ -162,7 +168,7 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
                 <p className="confirm-label">Service:</p>
                 <p className="confirm-value">{service.service_name}</p>
               </div>
-              
+
               <hr />
               <br />
               <div className="confirm-row">
@@ -186,6 +192,8 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
                 <p className="confirm-value">{formData.serviceFee}</p>
               </div>
             </div>
+
+            {paymentId && <PollingStatus paymentId={paymentId} />}
 
             <div className="input-form-actions">
               <button
