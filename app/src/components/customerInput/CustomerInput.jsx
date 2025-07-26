@@ -11,9 +11,10 @@ CustomerInput.propTypes = {
   org: PropTypes.func.isRequired,
   service: PropTypes.func.isRequired,
   slot: PropTypes.func.isRequired,
+  date: PropTypes.func.isRequired,
 };
 
-function CustomerInput({ handleCloseModal, org, service, slot }) {
+function CustomerInput({ handleCloseModal, org, service, slot, date }) {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     username: "",
@@ -48,13 +49,16 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
       amount: formData.serviceFee.trim(),
       currency: "XAF",
       description: "Service Payment",
-      reference: uuidv4()
+      reference: uuidv4(),
+      service_id: service.service_id,
+      slot_id: slot.id,
+      date: date
     }
     console.log(appPayload)
     // handle final form submission here (e.g. POST request)
     try{
       const response = await axios.post(
-        "http://localhost:8085/api/v1/payment/initiate",
+        "https://api.queueless.xyz/api/v1/payment/initiate",
         appPayload,
         {
           headers: {

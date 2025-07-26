@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"os"
 	"strconv"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
+	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -227,12 +227,6 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 		TransactionRef string      `json:"transaction_ref,omitempty"`
 	}
 
-	//test data
-	pgDate := pgtype.Date{
-		Time:  time.Now(),
-		Valid: true,
-	}
-
 	//payment request body
 	requestBody := data{}
 
@@ -281,10 +275,10 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 	if err != nil {
 		log.Printf("Can not convert amount to float32: %v", err)
 		c.JSON(http.StatusBadRequest, gin.H{
-    "error": "Invalid amount format",
-    "details": err.Error(),
-})
-return
+			"error":   "Invalid amount format",
+			"details": err.Error(),
+		})
+		return
 
 	}
 
@@ -292,9 +286,9 @@ return
 		CusName:        requestBody.CustomerName,
 		CusEmail:       requestBody.CustomerEmail,
 		PhoneNumber:    requestBody.PhoneNumber,
-		Date:           pgDate,
-		ServiceID:      "",
-		SlotID:         "",
+		Date:           requestBody.Date,
+		ServiceID:      requestBody.ServiceID,
+		SlotID:         requestBody.SlotID,
 		Amount:         amount,
 		Status:         resp.Status,
 		TransactionRef: resp.Reference,
@@ -335,7 +329,9 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-	secret :=   os.Getenv("CAMPAY_WEBHOOK_SECRET")//utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY")
+
+	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
+
 	// 3. Parse and verify JWT
 
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
@@ -384,25 +380,25 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 }
 
 // Endpoint to get payment status by id
-func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
-		return
-	}
+// func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
+// 	id := c.Param("id")
+// 	if id == "" {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+// 		return
+// 	}
 
-	payment, err := h.querier.GetPaymentByID(c, id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+// 	payment, err := h.querier.GetPaymentByID(c, id)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message":        "success",
-		"payment_status": payment.Status,
-		"payment":        payment,
-	})
-}
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"message":        "success",
+// 		"payment_status": payment.Status,
+// 		"payment":        payment,
+// 	})
+// }
 
 // upgrading the http connection to a socket conn
 var upgrader = websocket.Upgrader{

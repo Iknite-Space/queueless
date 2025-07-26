@@ -39,7 +39,7 @@ function StatusSocket({ paymentId }) {
     // return () => clearInterval(interval); // cleanup if user leaves
 
     const socket = new WebSocket(
-      `ws://localhost:8085/api/v1/payment/${paymentId}/statusSocket`
+      `wss://localhost:8085/api/v1/payment/${paymentId}/statusSocket`
     );
 
     socket.onmessage = (event) => {
