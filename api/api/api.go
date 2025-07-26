@@ -426,10 +426,19 @@ func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (s
 		//validate id
 		if payment_id == "" {
     log.Println("Missing ID in query params")
-    conn.WriteJSON(map[string]string{"status": "error"})
+    // conn.WriteJSON(map[string]string{"status": "error"})
+
+		if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
+    log.Println("WriteJSON failed:", err)
+}
     return
 }
-    defer conn.Close()
+    defer func (){
+			if err := conn.Close(); err != nil{
+				log.Println("WebSocket close failed:", err)
+			}
+		}()
+
 
 		 prevStatus := ""
 
@@ -437,11 +446,19 @@ func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (s
         status,err := h.GetPaymentStatusByID(c,payment_id) // You fetch from DB or queue
 				 if err != nil {
         log.Println("Error fetching status:", err)
-        conn.WriteJSON(map[string]string{"status": "error"})
+        // conn.WriteJSON(map[string]string{"status": "error"})
+				if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
+    log.Println("WriteJSON failed:", err)
+}
         continue
     }
 		if status != prevStatus {
-			conn.WriteJSON(map[string]string{"status": status})
+			// conn.WriteJSON(map[string]string{"status": status})
+			if err := conn.WriteJSON(map[string]string{"status": status}); err != nil{
+
+				log.Println("WriteJSON failed:", err)
+			}
+
 			prevStatus = status
 		}
 
