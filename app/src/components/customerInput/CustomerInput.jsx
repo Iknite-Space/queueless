@@ -1,9 +1,10 @@
-
 import React, { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 import "./CustomerInput.css";
 import PropTypes from "prop-types";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
+import LoadingAnimation from "../loadingAnimation/LoadingAnimation";
+import DownloadTicket from "../DownloadTicket/DownloadTicket";
 
 CustomerInput.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
@@ -22,6 +23,14 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     serviceFee: "",
   });
 
+  const resetFormData = () => {
+    setFormData({
+      username: "",
+      email: "",
+      phone: "",
+      serviceFee: "",
+    });
+  };
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -41,32 +50,46 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     const appPayload = {
       cus_name: formData.username,
       cus_email: formData.email,
-      phone_number: "+237"+formData.phone ,
+      phone_number: "+237" + formData.phone,
       amount: formData.serviceFee.trim(),
       currency: "XAF",
       description: "Service Payment",
       reference: uuidv4(),
       service_id: service.service_id,
       slot_id: slot.id,
-      date: date
-    }
-    console.log(appPayload)
-    // handle final form submission here (e.g. POST request)
-    try{
+      date: date,
+    };
 
+    setStep(3); // show payment pending screen
+
+    //simulate dummy payment processing
+    setTimeout(() => {
+      const success = Math.random() > 0.5; //50% chance of success or failure
+
+      if (success) {
+        setStep(4); // Payment successful
+      } else {
+        setStep(5); // payment failed
+      }
+    }, 4000); // 4 seconds to simulate delay
+
+    console.log(appPayload);
+    // handle final form submission here (e.g. POST request)
+    try {
       const response = await axios.post(
         "https://api.queueless.xyz/api/v1/payment/initiate",
-        appPayload,{
+        appPayload,
+        {
           headers: {
             "content-type": "application/json",
-          }
+          },
         }
       );
       console.log("Submitted:", response);
-    } catch(err){
-      console.log("submission failed", err)
+    } catch (err) {
+      console.log("submission failed", err);
     }
-    handleCloseModal(); // close the modal after submit
+    // handleCloseModal(); // close the modal after submit
   };
 
   return (
@@ -74,7 +97,15 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       <h2 className="form-header">
         {step === 1
           ? "Fill in your details to confirm your slot"
-          : "Confirm Appointment Details"}
+          : step === 2
+          ? "Confirm Appointment Details"
+          : step === 3
+          ? "Processing Payment"
+          : step === 4
+          ? "Payment Successful"
+          : step === 5
+          ? "Payment Failed"
+          : "Download Ticket"}
       </h2>
 
       <div
@@ -112,7 +143,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               <input
                 type="tel"
                 name="phone"
-                placeholder="Momo Number (+237) 6xx xxx xxx"
+                placeholder="Momo Number 6xx xxx xxx"
                 value={formData.phone}
                 onChange={handleChange}
                 required
@@ -135,7 +166,10 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               <button
                 className="cancel-button"
                 type="button"
-                onClick={handleCloseModal}
+                onClick={() => {
+                  handleCloseModal();
+                  resetFormData();
+                }}
               >
                 Cancel
               </button>
@@ -158,7 +192,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
                 <p className="confirm-label">Service:</p>
                 <p className="confirm-value">{service.service_name}</p>
               </div>
-              
+
               <hr />
               <br />
               <div className="confirm-row">
@@ -198,6 +232,61 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               >
                 Confirm
               </button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* <h3>Processing your payment...</h3> */}
+              <LoadingAnimation name="...waiting for confirmation" />
+            </div>
+          </div>
+        )}
+
+        {step === 4 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* <h3>Payment Successful!</h3> */}
+              <p>Your Appointment has been confirmed.</p>
+              <div className="input-form-actions">
+              <button className="submit-button" onClick={() => setStep(6)}>
+                View ticket
+              </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* <h3>Payment Failed</h3> */}
+              <p>There was an issue with your payment. Please try again.</p>
+              <div className="input-form-actions">
+              <button className="cancel-button" onClick={() => setStep(2)}>
+                Try Again
+              </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 6 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* Downlaod ticket */}
+              <DownloadTicket
+                handleCloseModal={handleCloseModal}
+                org={org}
+                service={service}
+                slot={slot}
+                date={date}
+                formData={formData}
+                setStep={setStep}
+                resetFormData={resetFormData}
+              />
             </div>
           </div>
         )}
