@@ -28,7 +28,7 @@ type PaymentResponse struct {
 }
 
 func RequestPayment(momoNumber, amount, currency, description, ref string) (*PaymentResponse, error) {
-	token :=  utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_API_KEY")//os.Getenv("CAMPAY_API_KEY")
+	token := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_API_KEY") //os.Getenv("CAMPAY_API_KEY")
 	if token == "" {
 		return nil, fmt.Errorf("missing CAMPAY_API_KEY in environment")
 	}

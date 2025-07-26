@@ -3,8 +3,11 @@ import axios from "axios";
 import "./CustomerInput.css";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
+import PollingStatus from "../pollingStatus/StatusSocket";
+
 import LoadingAnimation from "../loadingAnimation/LoadingAnimation";
 import DownloadTicket from "../DownloadTicket/DownloadTicket";
+
 
 CustomerInput.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
@@ -22,6 +25,9 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     phone: "",
     serviceFee: "",
   });
+
+
+  const [paymentId, setPaymentId] = useState(null);
 
   const resetFormData = () => {
     setFormData({
@@ -59,6 +65,9 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       slot_id: slot.id,
       date: date,
     };
+    console.log(appPayload);
+    // handle final form submission here (e.g. POST request)
+
 
     setStep(3); // show payment pending screen
 
@@ -86,10 +95,20 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
         }
       );
       console.log("Submitted:", response);
+      const paymentId = response.data.payment.payment_id;
+        // extracted payment id is is saved to the browser to use
+      localStorage.setItem("paymentId", paymentId); // saves it
+      
+      console.log("created payment id", paymentId);
+
+      setPaymentId(paymentId); // allows UI to use it
+
+      // console.log("saved payment is:", savedPaymentId);
     } catch (err) {
       console.log("submission failed", err);
+
     }
-    // handleCloseModal(); // close the modal after submit
+     handleCloseModal(); // close the modal after submit
   };
 
   return (
@@ -216,6 +235,8 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
                 <p className="confirm-value">{formData.serviceFee}</p>
               </div>
             </div>
+
+            {paymentId && <PollingStatus paymentId={paymentId} />}
 
             <div className="input-form-actions">
               <button

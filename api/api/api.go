@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -13,6 +14,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -52,7 +54,8 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 	r.POST("/api/v1/payment/initiate", h.handleInitiatePayment)
 	r.GET("/api/v1/payment/webhook", h.handleCampayWebhook)
-	r.GET("/api/v1/payment/:id/status", h.handleGetPaymentStatus)
+	// r.GET("/api/v1/payment/:id/status", h.handleGetPaymentStatus)
+	r.GET("api/v1/payment/:id/statusSocket", h.handlePaymentStatusSocket)
 
 	return r
 }
@@ -326,7 +329,9 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
+
 	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
+
 	// 3. Parse and verify JWT
 
 	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
@@ -375,22 +380,92 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 }
 
 // Endpoint to get payment status by id
-func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
-	id := c.Param("id")
-	if id == "" {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
-		return
-	}
+// func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
+// 	id := c.Param("id")
+// 	if id == "" {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+// 		return
+// 	}
 
-	payment, err := h.querier.GetPaymentByID(c, id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
+// 	payment, err := h.querier.GetPaymentByID(c, id)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		return
+// 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"message":        "success",
-		"payment_status": payment.Status,
-		"payment":        payment,
-	})
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"message":        "success",
+// 		"payment_status": payment.Status,
+// 		"payment":        payment,
+// 	})
+// }
+
+// upgrading the http connection to a socket conn
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool{
+		return true
+	},}
+
+func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (string, error) {
+    payment, err := h.querier.GetPaymentByID(ctx, id)
+    if err != nil {
+        return "", err
+    }
+    return payment.Status, nil
+}
+
+
+	func (h *MessageHandler) handlePaymentStatusSocket(c *gin.Context) {
+		payment_id := c.Param("id")
+		
+    conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+    if err != nil {
+        log.Println("WebSocket upgrade failed:", err)
+        return
+    }
+		//validate id
+		if payment_id == "" {
+    log.Println("Missing ID in query params")
+    // conn.WriteJSON(map[string]string{"status": "error"})
+
+		if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
+    log.Println("WriteJSON failed:", err)
+}
+    return
+}
+    defer func (){
+			if err := conn.Close(); err != nil{
+				log.Println("WebSocket close failed:", err)
+			}
+		}()
+
+
+		 prevStatus := ""
+
+    for {
+        status,err := h.GetPaymentStatusByID(c,payment_id) // You fetch from DB or queue
+				 if err != nil {
+        log.Println("Error fetching status:", err)
+        // conn.WriteJSON(map[string]string{"status": "error"})
+				if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
+    log.Println("WriteJSON failed:", err)
+}
+        continue
+    }
+		if status != prevStatus {
+			// conn.WriteJSON(map[string]string{"status": status})
+			if err := conn.WriteJSON(map[string]string{"status": status}); err != nil{
+
+				log.Println("WriteJSON failed:", err)
+			}
+
+			prevStatus = status
+		}
+
+		// if (prevStatus == "Failed" || prevStatus == "Success"){
+		// 	continue
+		// }
+        // conn.WriteJSON(map[string]string{"status": status})
+        time.Sleep(2 * time.Second)
+    }
 }
