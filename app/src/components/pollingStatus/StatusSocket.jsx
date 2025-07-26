@@ -1,6 +1,6 @@
-import { React, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import PollingSpinner from "./PollingSpinner";
+
 
 StatusSocket.propTypes = {
   paymentId: PropTypes.string.isRequired,
@@ -9,10 +9,7 @@ function StatusSocket({ paymentId }) {
   const [status, setStatus] = useState("PENDING");
 
   useEffect(() => {
-    
     if (!paymentId) return; // exits of no payment is provided
-
-
 
     // let attempts = 0;
     // const maxAttempts = 10; // 5 seconds × 10 = almost 1 minutes
@@ -60,29 +57,7 @@ function StatusSocket({ paymentId }) {
     return () => socket.close(); // cleanup on unmount
   }, [paymentId]);
 
-
-
-  // return status;
-  return (
-    <>
-      <div className="polling-status">
-        {status === "PENDING" && (
-          <div className="status-loading">
-            <PollingSpinner />
-            <p>Waiting for payment confirmation...</p>
-          </div>
-        )}
-
-        {status === "SUCCESSFUL" && (
-          <p className="status-success">✅ Payment confirmed!</p>
-        )}
-
-        {status === "FAILED" && (
-          <p className="status-failed">❌ Payment failed. Please try again.</p>
-        )}
-      </div>
-    </>
-  );
+  return status;
 }
 
 export default StatusSocket;
