@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
-import axios from 'axios'
+import axios from "axios";
 import "./CustomerInput.css";
 import PropTypes from "prop-types";
-import {v4 as uuidv4} from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import PollingStatus from "../pollingStatus/StatusSocket";
 
 CustomerInput.propTypes = {
@@ -23,7 +22,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     serviceFee: "",
   });
 
-  //state to hold payment id 
+  //state to hold payment id
   const [paymentId, setPaymentId] = useState(null);
 
   const handleChange = (e) => {
@@ -45,18 +44,18 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     const appPayload = {
       cus_name: formData.username,
       cus_email: formData.email,
-      phone_number: "+237"+formData.phone ,
+      phone_number: "+237" + formData.phone,
       amount: formData.serviceFee.trim(),
       currency: "XAF",
       description: "Service Payment",
       reference: uuidv4(),
       service_id: service.service_id,
       slot_id: slot.id,
-      date: date
-    }
-    console.log(appPayload)
+      date: date,
+    };
+    console.log(appPayload);
     // handle final form submission here (e.g. POST request)
-    try{
+    try {
       const response = await axios.post(
         "https://api.queueless.xyz/api/v1/payment/initiate",
         appPayload,
@@ -77,8 +76,8 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       setPaymentId(paymentId); // allows UI to use it
 
       // console.log("saved payment is:", savedPaymentId);
-    } catch(err){
-      console.log("submission failed", err)
+    } catch (err) {
+      console.log("submission failed", err);
     }
     handleCloseModal(); // close the modal after submit
   };
