@@ -68,9 +68,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     console.log(appPayload);
     // handle final form submission here (e.g. POST request)
 
-    try{
-      date: date,
-    };
 
     setStep(3); // show payment pending screen
 
