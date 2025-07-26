@@ -5,6 +5,10 @@ import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
 import PollingStatus from "../pollingStatus/StatusSocket";
 
+import LoadingAnimation from "../loadingAnimation/LoadingAnimation";
+import DownloadTicket from "../DownloadTicket/DownloadTicket";
+
+
 CustomerInput.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
   org: PropTypes.func.isRequired,
@@ -22,9 +26,17 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     serviceFee: "",
   });
 
-  //state to hold payment id
+
   const [paymentId, setPaymentId] = useState(null);
 
+  const resetFormData = () => {
+    setFormData({
+      username: "",
+      email: "",
+      phone: "",
+      serviceFee: "",
+    });
+  };
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -55,6 +67,26 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     };
     console.log(appPayload);
     // handle final form submission here (e.g. POST request)
+
+    try{
+      date: date,
+    };
+
+    setStep(3); // show payment pending screen
+
+    //simulate dummy payment processing
+    setTimeout(() => {
+      const success = Math.random() > 0.5; //50% chance of success or failure
+
+      if (success) {
+        setStep(4); // Payment successful
+      } else {
+        setStep(5); // payment failed
+      }
+    }, 4000); // 4 seconds to simulate delay
+
+    console.log(appPayload);
+    // handle final form submission here (e.g. POST request)
     try {
       const response = await axios.post(
         "https://api.queueless.xyz/api/v1/payment/initiate",
@@ -67,19 +99,19 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       );
       console.log("Submitted:", response);
       const paymentId = response.data.payment.payment_id;
-      localStorage.setItem("paymentId", paymentId);
+        // extracted payment id is is saved to the browser to use
+      localStorage.setItem("paymentId", paymentId); // saves it
+      
       console.log("created payment id", paymentId);
 
-      // extracted payment id is is saved to the browser to use
-      // const savedPaymentId = localStorage.setItem("paymentId");
-      localStorage.setItem("paymentId", paymentId); // saves it
       setPaymentId(paymentId); // allows UI to use it
 
       // console.log("saved payment is:", savedPaymentId);
     } catch (err) {
       console.log("submission failed", err);
+
     }
-    handleCloseModal(); // close the modal after submit
+     handleCloseModal(); // close the modal after submit
   };
 
   return (
@@ -87,7 +119,15 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       <h2 className="form-header">
         {step === 1
           ? "Fill in your details to confirm your slot"
-          : "Confirm Appointment Details"}
+          : step === 2
+          ? "Confirm Appointment Details"
+          : step === 3
+          ? "Processing Payment"
+          : step === 4
+          ? "Payment Successful"
+          : step === 5
+          ? "Payment Failed"
+          : "Download Ticket"}
       </h2>
 
       <div
@@ -125,7 +165,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               <input
                 type="tel"
                 name="phone"
-                placeholder="Momo Number (+237) 6xx xxx xxx"
+                placeholder="Momo Number 6xx xxx xxx"
                 value={formData.phone}
                 onChange={handleChange}
                 required
@@ -148,7 +188,10 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               <button
                 className="cancel-button"
                 type="button"
-                onClick={handleCloseModal}
+                onClick={() => {
+                  handleCloseModal();
+                  resetFormData();
+                }}
               >
                 Cancel
               </button>
@@ -213,6 +256,61 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               >
                 Confirm
               </button>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* <h3>Processing your payment...</h3> */}
+              <LoadingAnimation name="...waiting for confirmation" />
+            </div>
+          </div>
+        )}
+
+        {step === 4 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* <h3>Payment Successful!</h3> */}
+              <p>Your Appointment has been confirmed.</p>
+              <div className="input-form-actions">
+              <button className="submit-button" onClick={() => setStep(6)}>
+                View ticket
+              </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 5 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* <h3>Payment Failed</h3> */}
+              <p>There was an issue with your payment. Please try again.</p>
+              <div className="input-form-actions">
+              <button className="cancel-button" onClick={() => setStep(2)}>
+                Try Again
+              </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {step === 6 && (
+          <div className="customer-details">
+            <div className="confirmation-page">
+              {/* Downlaod ticket */}
+              <DownloadTicket
+                handleCloseModal={handleCloseModal}
+                org={org}
+                service={service}
+                slot={slot}
+                date={date}
+                formData={formData}
+                setStep={setStep}
+                resetFormData={resetFormData}
+              />
             </div>
           </div>
         )}
