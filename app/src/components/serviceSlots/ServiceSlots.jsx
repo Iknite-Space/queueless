@@ -5,18 +5,15 @@ import { useEffect, useState } from "react";
 import "./ServiceSlots.css";
 import { useParams } from "react-router";
 
-
 import Modal from "../customerInputModal/Modal";
 
 ServiceSlots.propTypes = {
   org: PropTypes.string.isRequired,
   service: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  
 };
 
-export function ServiceSlots({ org, service, date}) {
-
+export function ServiceSlots({ org, service, date }) {
   const { serviceId } = useParams();
 
   const [showModal, setShowModal] = useState(false);
@@ -43,70 +40,79 @@ export function ServiceSlots({ org, service, date}) {
   };
   // const navigate = useNavigate();
 
-
   // const handleClickSlot = () => {
   //   navigate("/input");
   //   setShowModal(true);
 
   // };
 
-const handleOpenModal = (slot) => {
-  const ms = slot.start_time.Microseconds / 1000;
-  const timeOnly = new Date(ms).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const handleOpenModal = (slot) => {
+    const ms = slot.start_time.Microseconds / 1000;
+    const timeOnly = new Date(ms).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
-  // Format the full date this slot belongs to (from props.date)
-  const dateObj = new Date(date); // `date` is already a prop
-  const formattedDate = dateObj.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+    // Format the full date this slot belongs to (from props.date)
+    const dateObj = new Date(date); // `date` is already a prop
+    const formattedDate = dateObj.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
 
-  const slotWithFormattedDate = {
-    ...slot,
-    formattedDate: `${formattedDate} at ${timeOnly}`,
+    const slotWithFormattedDate = {
+      ...slot,
+      formattedDate: `${formattedDate} at ${timeOnly}`,
+    };
+
+    setSelectedSlot(slotWithFormattedDate);
+    setShowModal(true);
   };
-
-  setSelectedSlot(slotWithFormattedDate);
-  setShowModal(true);
-};
-
-
 
   const handleCloseModal = () => setShowModal(false);
 
+  function extractPgDate(dateObj) {
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+      throw new Error("Invalid Date object");
+    }
+
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+    const day = String(dateObj.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
   return (
     <div className="slots-container">
       {slots.map((slot) => {
-        const [time, description] = formatTime(slot.start_time.Microseconds).split(" ");
+        const [time, description] = formatTime(
+          slot.start_time.Microseconds
+        ).split(" ");
         let [hour, minute] = time.split(":").map(Number);
 
-        if (description === 'PM')
-          if (hour < 12) hour += 12
+        if (description === "PM" && hour < 12) hour += 12;
 
-        
         //create full datetime for the slot
-        const slotDateTime = new Date(date)
-        slotDateTime.setHours(hour, minute, 0, 0)
+        const slotDateTime = new Date(date);
+        slotDateTime.setHours(hour, minute, 0, 0);
+
+        // save the pgDate and send as prop
+        const pgDate = extractPgDate(slotDateTime);
 
         const isPast = slotDateTime < new Date();
-        return(
-        <div key={slot.id} className={`${
-                  isPast ? "past-day" : ""
-                }`}>
-          <div className="slot-button">
-          <button  onClick={() => handleOpenModal(slot)}>
-            {formatTime(slot.start_time.Microseconds)}
-          </button>
-          </div>
-        </div>)
-})}
+        return (
+          <div key={slot.id} className={`${isPast ? "past-day" : ""}`}>
+            <div className="slot-button">
+              <button onClick={() => handleOpenModal({...slot, pgDate})}>
+                {formatTime(slot.start_time.Microseconds)}
 
+              </button>
+            </div>
+          </div>
+        );
+      })}
 
       <Modal
         showModal={showModal}
@@ -114,9 +120,8 @@ const handleOpenModal = (slot) => {
         org={org}
         service={service}
         slot={selectedSlot}
+        date={selectedSlot?.pgDate}
       />
-
-
     </div>
   );
 }
