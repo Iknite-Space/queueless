@@ -59,6 +59,14 @@ function CustomerInput({ handleCloseModal, org, service, slot }) {
         }
       );
       console.log("Submitted:", response);
+      const paymentId = response.data.payment.payment_id
+      localStorage.setItem("paymentId", paymentId)
+      console.log("created payment id", paymentId);
+      // extracted payment id is is saved to the browser
+      const savedPaymentId = localStorage.setItem("paymentId")
+      console.log("saved payment is:", savedPaymentId);
+      
+      
     } catch(err){
       console.log("submission failed", err)
     }
