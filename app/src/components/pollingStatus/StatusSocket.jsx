@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 StatusSocket.propTypes = {
   paymentId: PropTypes.string.isRequired,
-  onStatusUpdate: PropTypes.func.isRequired
+  onStatusUpdate: PropTypes.func.isRequired,
 };
 function StatusSocket({ paymentId, onStatusUpdate }) {
   const [status, setStatus] = useState("PENDING");
@@ -39,6 +39,11 @@ function StatusSocket({ paymentId, onStatusUpdate }) {
       `wss://api.queueless.xyz/api/v1/payment/${paymentId}/statusSocket`
     );
 
+    //make sure connection is established
+    socket.onopen = () => {
+      console.log("WebSocket connection established");
+    };
+
     socket.onmessage = (event) => {
       const data = JSON.parse(event.data);
       console.log("WebSocket received:", data);
@@ -58,7 +63,7 @@ function StatusSocket({ paymentId, onStatusUpdate }) {
     return () => socket.close(); // cleanup on unmount
   }, [paymentId, onStatusUpdate]);
 
-  console.log("current status:", status)
+  console.log("current status:", status);
   return null;
 }
 
