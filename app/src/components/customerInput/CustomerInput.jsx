@@ -108,7 +108,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       setStep(3); // Show "Processing Payment"
 
       // console.log("saved payment is:", savedPaymentId);
-      handleCloseModal(); // close the modal after submit
     } catch (err) {
       console.log("submission failed", err);
     }
