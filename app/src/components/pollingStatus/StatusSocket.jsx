@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 
-
 StatusSocket.propTypes = {
   paymentId: PropTypes.string.isRequired,
+  onStatusUpdate: PropTypes.func.isRequired
 };
-function StatusSocket({ paymentId }) {
+function StatusSocket({ paymentId, onStatusUpdate }) {
   const [status, setStatus] = useState("PENDING");
 
   useEffect(() => {
@@ -43,6 +43,7 @@ function StatusSocket({ paymentId }) {
       const data = JSON.parse(event.data);
       console.log("WebSocket received:", data);
       setStatus(data.status);
+      onStatusUpdate(data.status); // 👈 Notify parent
     };
 
     socket.onerror = (err) => {
@@ -57,7 +58,8 @@ function StatusSocket({ paymentId }) {
     return () => socket.close(); // cleanup on unmount
   }, [paymentId]);
 
-  return status;
+  console.log("current status:", status)
+  return null;
 }
 
 export default StatusSocket;

@@ -50,6 +50,12 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     setStep(2);
   };
 
+  const handleStatusChange = (newStatus) => {
+    if (newStatus === "PENDING") setStep(3);
+    else if (newStatus === "SUCCESSFUL") setStep(4);
+    else if (newStatus === "FAILED") setStep(5);
+  };
+
   //handler for the confirm button that submits form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,12 +102,13 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       );
       console.log("Submitted:", response);
       const paymentId = response.data.payment.payment_id;
-        // extracted payment id is is saved to the browser to use
+      // extracted payment id is is saved to the browser to use
       localStorage.setItem("paymentId", paymentId); // saves it
-      
+
       console.log("created payment id", paymentId);
 
       setPaymentId(paymentId); // allows UI to use it
+      setStep(3); // Show "Processing Payment"
 
       // console.log("saved payment is:", savedPaymentId);
       handleCloseModal(); // close the modal after submit
@@ -236,7 +243,13 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               </div>
             </div>
 
-            {paymentId && <PollingStatus paymentId={paymentId} />}
+            {/* {paymentId && <PollingStatus paymentId={paymentId} />} */}
+            {paymentId && (
+              <PollingStatus
+                paymentId={paymentId}
+                onStatusUpdate={handleStatusChange}
+              />
+            )}
 
             <div className="input-form-actions">
               <button
@@ -272,9 +285,9 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               {/* <h3>Payment Successful!</h3> */}
               <p>Your Appointment has been confirmed.</p>
               <div className="input-form-actions">
-              <button className="submit-button" onClick={() => setStep(6)}>
-                View ticket
-              </button>
+                <button className="submit-button" onClick={() => setStep(6)}>
+                  View ticket
+                </button>
               </div>
             </div>
           </div>
@@ -286,9 +299,9 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               {/* <h3>Payment Failed</h3> */}
               <p>There was an issue with your payment. Please try again.</p>
               <div className="input-form-actions">
-              <button className="cancel-button" onClick={() => setStep(2)}>
-                Try Again
-              </button>
+                <button className="cancel-button" onClick={() => setStep(2)}>
+                  Try Again
+                </button>
               </div>
             </div>
           </div>
