@@ -7,7 +7,7 @@ import PollingStatus from "../pollingStatus/StatusSocket";
 
 import LoadingAnimation from "../loadingAnimation/LoadingAnimation";
 import DownloadTicket from "../DownloadTicket/DownloadTicket";
-
+import StatusSocket from "../pollingStatus/StatusSocket";
 
 CustomerInput.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
@@ -25,7 +25,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     phone: "",
     serviceFee: "",
   });
-
 
   const [paymentId, setPaymentId] = useState(null);
 
@@ -65,11 +64,10 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       slot_id: slot.id,
       date: date,
     };
-   
+
     // handle final form submission here (e.g. POST request)
 
-
-    // setStep(3); // show payment pending screen
+    setStep(3); // show payment pending screen
 
     // //simulate dummy payment processing
     // setTimeout(() => {
@@ -96,9 +94,10 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       );
       console.log("Submitted:", response);
       const paymentId = response.data.payment.payment_id;
-        // extracted payment id is is saved to the browser to use
+
+      // extracted payment id is is saved to the browser to use
       localStorage.setItem("paymentId", paymentId); // saves it
-      
+
       console.log("created payment id", paymentId);
 
       setPaymentId(paymentId); // allows UI to use it
@@ -107,7 +106,18 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       handleCloseModal(); // close the modal after submit
     } catch (err) {
       console.log("submission failed", err);
+    }
 
+    // store the transaction status in a variable
+    const status = StatusSocket(paymentId);
+
+    // check the status and update the ui
+    if (status === "PENDING") {
+      setStep(3); // payment pending
+    } else if (status === "SUCCESSFUL") {
+      setStep(4); // payment successful
+    } else {
+      setStep(5); //payment failed
     }
   };
 
@@ -272,9 +282,9 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               {/* <h3>Payment Successful!</h3> */}
               <p>Your Appointment has been confirmed.</p>
               <div className="input-form-actions">
-              <button className="submit-button" onClick={() => setStep(6)}>
-                View ticket
-              </button>
+                <button className="submit-button" onClick={() => setStep(6)}>
+                  View ticket
+                </button>
               </div>
             </div>
           </div>
@@ -286,9 +296,9 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               {/* <h3>Payment Failed</h3> */}
               <p>There was an issue with your payment. Please try again.</p>
               <div className="input-form-actions">
-              <button className="cancel-button" onClick={() => setStep(2)}>
-                Try Again
-              </button>
+                <button className="cancel-button" onClick={() => setStep(2)}>
+                  Try Again
+                </button>
               </div>
             </div>
           </div>
