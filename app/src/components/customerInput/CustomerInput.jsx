@@ -3,7 +3,6 @@ import axios from "axios";
 import "./CustomerInput.css";
 import PropTypes from "prop-types";
 import { v4 as uuidv4 } from "uuid";
-import PollingStatus from "../pollingStatus/StatusSocket";
 
 import LoadingAnimation from "../loadingAnimation/LoadingAnimation";
 import DownloadTicket from "../DownloadTicket/DownloadTicket";
@@ -73,7 +72,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
 
     // handle final form submission here (e.g. POST request)
 
-    setStep(3); // show payment pending screen
+    // setStep(3); // show payment pending screen
 
     // //simulate dummy payment processing
     // setTimeout(() => {
@@ -112,18 +111,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       handleCloseModal(); // close the modal after submit
     } catch (err) {
       console.log("submission failed", err);
-    }
-
-    // store the transaction status in a variable
-    const status = StatusSocket(paymentId);
-
-    // check the status and update the ui
-    if (status === "PENDING") {
-      setStep(3); // payment pending
-    } else if (status === "SUCCESSFUL") {
-      setStep(4); // payment successful
-    } else {
-      setStep(5); //payment failed
     }
   };
 
@@ -251,15 +238,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
                 <p className="confirm-value">{formData.serviceFee}</p>
               </div>
             </div>
-
-            {/* {paymentId && <PollingStatus paymentId={paymentId} />} */}
-            {paymentId && (
-              <PollingStatus
-                paymentId={paymentId}
-                onStatusUpdate={handleStatusChange}
-              />
-            )}
-
             <div className="input-form-actions">
               <button
                 className="cancel-button"
@@ -284,6 +262,14 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
             <div className="confirmation-page">
               {/* <h3>Processing your payment...</h3> */}
               <LoadingAnimation name="...waiting for confirmation" />
+              {/* {paymentId && <PollingStatus paymentId={paymentId} />} */}
+            {paymentId && (
+              <StatusSocket
+                paymentId={paymentId}
+                onStatusUpdate={handleStatusChange}
+              />
+            )}
+
             </div>
           </div>
         )}
