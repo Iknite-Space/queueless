@@ -65,22 +65,22 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       slot_id: slot.id,
       date: date,
     };
-    console.log(appPayload);
+   
     // handle final form submission here (e.g. POST request)
 
 
-    setStep(3); // show payment pending screen
+    // setStep(3); // show payment pending screen
 
-    //simulate dummy payment processing
-    setTimeout(() => {
-      const success = Math.random() > 0.5; //50% chance of success or failure
+    // //simulate dummy payment processing
+    // setTimeout(() => {
+    //   const success = Math.random() > 0.5; //50% chance of success or failure
 
-      if (success) {
-        setStep(4); // Payment successful
-      } else {
-        setStep(5); // payment failed
-      }
-    }, 4000); // 4 seconds to simulate delay
+    //   if (success) {
+    //     setStep(4); // Payment successful
+    //   } else {
+    //     setStep(5); // payment failed
+    //   }
+    // }, 4000); // 4 seconds to simulate delay
 
     console.log(appPayload);
     // handle final form submission here (e.g. POST request)
@@ -104,11 +104,11 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       setPaymentId(paymentId); // allows UI to use it
 
       // console.log("saved payment is:", savedPaymentId);
+      handleCloseModal(); // close the modal after submit
     } catch (err) {
       console.log("submission failed", err);
 
     }
-     handleCloseModal(); // close the modal after submit
   };
 
   return (
