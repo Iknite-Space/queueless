@@ -7,7 +7,7 @@ import PollingStatus from "../pollingStatus/StatusSocket";
 
 import LoadingAnimation from "../loadingAnimation/LoadingAnimation";
 import DownloadTicket from "../DownloadTicket/DownloadTicket";
-
+import StatusSocket from "../pollingStatus/StatusSocket";
 
 CustomerInput.propTypes = {
   handleCloseModal: PropTypes.func.isRequired,
@@ -25,7 +25,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     phone: "",
     serviceFee: "",
   });
-
 
   const [paymentId, setPaymentId] = useState(null);
 
@@ -71,11 +70,10 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       slot_id: slot.id,
       date: date,
     };
-   
+
     // handle final form submission here (e.g. POST request)
 
-
-    // setStep(3); // show payment pending screen
+    setStep(3); // show payment pending screen
 
     // //simulate dummy payment processing
     // setTimeout(() => {
@@ -114,7 +112,18 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       handleCloseModal(); // close the modal after submit
     } catch (err) {
       console.log("submission failed", err);
+    }
 
+    // store the transaction status in a variable
+    const status = StatusSocket(paymentId);
+
+    // check the status and update the ui
+    if (status === "PENDING") {
+      setStep(3); // payment pending
+    } else if (status === "SUCCESSFUL") {
+      setStep(4); // payment successful
+    } else {
+      setStep(5); //payment failed
     }
   };
 
