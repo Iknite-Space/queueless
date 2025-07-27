@@ -48,7 +48,7 @@ function StatusSocket({ paymentId, onStatusUpdate }) {
 
     socket.onerror = (err) => {
       console.error("WebSocket error:", err);
-      setStatus("FAILED"); // optional fallback
+      setStatus("FAILED"); // optional fallbacka
     };
 
     socket.onclose = () => {
