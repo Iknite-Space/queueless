@@ -49,6 +49,12 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
     setStep(2);
   };
 
+  const handleStatusChange = (newStatus) => {
+    if (newStatus === "PENDING") setStep(3);
+    else if (newStatus === "SUCCESSFUL") setStep(4);
+    else if (newStatus === "FAILED") setStep(5);
+  };
+
   //handler for the confirm button that submits form
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -94,13 +100,13 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       );
       console.log("Submitted:", response);
       const paymentId = response.data.payment.payment_id;
-
       // extracted payment id is is saved to the browser to use
       localStorage.setItem("paymentId", paymentId); // saves it
 
       console.log("created payment id", paymentId);
 
       setPaymentId(paymentId); // allows UI to use it
+      setStep(3); // Show "Processing Payment"
 
       // console.log("saved payment is:", savedPaymentId);
       handleCloseModal(); // close the modal after submit
@@ -246,7 +252,13 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               </div>
             </div>
 
-            {paymentId && <PollingStatus paymentId={paymentId} />}
+            {/* {paymentId && <PollingStatus paymentId={paymentId} />} */}
+            {paymentId && (
+              <PollingStatus
+                paymentId={paymentId}
+                onStatusUpdate={handleStatusChange}
+              />
+            )}
 
             <div className="input-form-actions">
               <button
