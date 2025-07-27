@@ -56,7 +56,7 @@ function StatusSocket({ paymentId, onStatusUpdate }) {
     };
 
     return () => socket.close(); // cleanup on unmount
-  }, [paymentId]);
+  }, [paymentId, onStatusUpdate]);
 
   console.log("current status:", status)
   return null;
