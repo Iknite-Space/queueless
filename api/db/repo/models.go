@@ -14,6 +14,8 @@ type Booking struct {
 	BookingDate pgtype.Date        `json:"booking_date"`
 	Status      string             `json:"status"`
 	CreatedAt   pgtype.Timestamptz `json:"created_at"`
+	ServiceID   *string            `json:"service_id"`
+	SlotID      *string            `json:"slot_id"`
 }
 
 type Organization struct {

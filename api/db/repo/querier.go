@@ -9,17 +9,22 @@ import (
 )
 
 type Querier interface {
+	CreateBooking(ctx context.Context, arg CreateBookingParams) (Booking, error)
+	CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error)
+	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
+	// -- name: GetPaymentStatusByID :one
+	// SELECT status
+	// FROM payments
+	// WHERE payment_id = $1;
+	GetBookingsInDateRange(ctx context.Context, arg GetBookingsInDateRangeParams) ([]GetBookingsInDateRangeRow, error)
+	GetOrganizations(ctx context.Context) ([]Organization, error)
+	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
 	// -- name: UpdatePaymentStatus :exec
 	// UPDATE payments
 	// SET
 	//     status = $2,
 	//     transaction_ref = $3
 	// WHERE payment_id = $1;
-	CreateBooking(ctx context.Context, arg CreateBookingParams) error
-	CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error)
-	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
-	GetOrganizations(ctx context.Context) ([]Organization, error)
-	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
 	// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
 	// Search services.name
 	// Search organisations.email
