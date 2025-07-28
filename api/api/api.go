@@ -486,18 +486,22 @@ func (h *MessageHandler) handlePaymentStatusSocket(c *gin.Context) {
 			})
 			if err != nil {
 				log.Println("Error inserting booking:", err)
-				conn.WriteJSON(map[string]string{"status": "booking_failed"})
+				if err := conn.WriteJSON(map[string]string{"status": "booking_failed"}); err != nil {
+					log.Println("writeJSON failed:", err)
+				}
 			} else {
-				conn.WriteJSON(map[string]string{"status": "booking_success"})
+				if err := conn.WriteJSON(map[string]string{"status": "booking_success"}); err != nil {
+					log.Println("writeJSON failed:", err)
+				}
+				break
 			}
-			break
-		}
 
-		if prevStatus == "FAILED" {
-			break
+			if prevStatus == "FAILED" {
+				break
+			}
+			// conn.WriteJSON(map[string]string{"status": status})
+			time.Sleep(2 * time.Second)
 		}
-		// conn.WriteJSON(map[string]string{"status": status})
-		time.Sleep(2 * time.Second)
 	}
 }
 
