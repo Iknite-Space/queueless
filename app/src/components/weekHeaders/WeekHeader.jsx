@@ -80,12 +80,6 @@ export function WeekHeader() {
     .then((response) => {
       setWeeklyBookings(response.data.bookings);
 
-      //Reset paymentStaus after successful refresh
-      if (paymentStatus === "SUCCESSFUL") {
-        localStorage.removeItem("paymentStatus")
-        setPaymentStatus(null)
-      }
-
     })
     .catch((error) => {
       console.error("Error fetching bookings:", error);
@@ -142,7 +136,7 @@ const bookingsByDate = React.useMemo(() => {
                   <div className="day-date">{d.date}</div>
                 </div>
                 <div className="time-slots">
-                  <ServiceSlots org={org} service={service} date={d.fullDate.toISOString()} bookedSlotIds={bookingsByDate[format(d.fullDate, "yyyy-MM-dd")] || []} /> 
+                  <ServiceSlots org={org} service={service} date={d.fullDate.toISOString()} bookedSlotIds={bookingsByDate[format(d.fullDate, "yyyy-MM-dd")] || []} paymentStatus={paymentStatus} setPaymentStatus={setPaymentStatus} /> 
                 </div>
               </div>
             );
