@@ -39,6 +39,7 @@ export function ServiceSlots({ org, service, date, bookedSlotIds = [], paymentSt
         setPaymentStatus(null)
       }
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serviceId, paymentStatus]);
 
   // helper function to convert microseconds to readable time
