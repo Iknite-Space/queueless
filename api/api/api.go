@@ -56,7 +56,8 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/payment/webhook", h.handleCampayWebhook)
 	// r.GET("/api/v1/payment/:id/status", h.handleGetPaymentStatus)
 	r.GET("api/v1/payment/:id/statusSocket", h.handlePaymentStatusSocket)
-
+	// r.POST("/api/v1/bookings", h.handleCreateBooking)
+	r.GET("/api/v1/service/:id/bookings", h.handleGetServiceBookings)
 	return r
 }
 
@@ -402,59 +403,71 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 
 // upgrading the http connection to a socket conn
 var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool{
+	CheckOrigin: func(r *http.Request) bool {
 		return true
-	},}
+	}}
 
-func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (string, error) {
-    payment, err := h.querier.GetPaymentByID(ctx, id)
-    if err != nil {
-        return "", err
-    }
-    return payment.Status, nil
+func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (repo.Payment, error) {
+	payment, err := h.querier.GetPaymentByID(ctx, id)
+	if err != nil {
+		log.Println("Failed to get status:", err)
+		return repo.Payment{PaymentID: payment.PaymentID}, err
+	}
+	return payment, nil
 }
 
+func (h *MessageHandler) CreateBookings(c *gin.Context, req repo.CreateBookingParams) error {
 
-	func (h *MessageHandler) handlePaymentStatusSocket(c *gin.Context) {
-		payment_id := c.Param("id")
-		
-    conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
-    if err != nil {
-        log.Println("WebSocket upgrade failed:", err)
-        return
-    }
-		//validate id
-		if payment_id == "" {
-    log.Println("Missing ID in query params")
-    // conn.WriteJSON(map[string]string{"status": "error"})
+	_, err := h.querier.CreateBooking(c, req)
+	if err != nil {
+		log.Println("Failed to create booking:", err)
+		return err
+	}
+	return err
+}
+
+func (h *MessageHandler) handlePaymentStatusSocket(c *gin.Context) {
+	payment_id := c.Param("id")
+
+	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		log.Println("WebSocket upgrade failed:", err)
+		return
+	}
+	//validate id
+	if payment_id == "" {
+		log.Println("Missing ID in query params")
+		// conn.WriteJSON(map[string]string{"status": "error"})
 
 		if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
-    log.Println("WriteJSON failed:", err)
-}
-    return
-}
-    defer func (){
-			if err := conn.Close(); err != nil{
-				log.Println("WebSocket close failed:", err)
+			log.Println("WriteJSON failed:", err)
+		}
+		return
+	}
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Println("WebSocket close failed:", err)
+		}
+	}()
+
+	prevStatus := ""
+
+	for {
+		payment, err := h.GetPaymentStatusByID(c, payment_id) // You fetch from DB or queue
+		if err != nil {
+			log.Println("Error fetching status:", err)
+			// conn.WriteJSON(map[string]string{"status": "error"})
+			if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
+				log.Println("WriteJSON failed:", err)
 			}
-		}()
+			continue
+		}
 
+		status := payment.Status
 
-		 prevStatus := ""
-
-    for {
-        status,err := h.GetPaymentStatusByID(c,payment_id) // You fetch from DB or queue
-				 if err != nil {
-        log.Println("Error fetching status:", err)
-        // conn.WriteJSON(map[string]string{"status": "error"})
-				if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
-    log.Println("WriteJSON failed:", err)
-}
-        continue
-    }
 		if status != prevStatus {
 			// conn.WriteJSON(map[string]string{"status": status})
-			if err := conn.WriteJSON(map[string]string{"status": status}); err != nil{
+			if err := conn.WriteJSON(map[string]string{"status": status}); err != nil {
 
 				log.Println("WriteJSON failed:", err)
 			}
@@ -462,10 +475,69 @@ func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (s
 			prevStatus = status
 		}
 
-		// if (prevStatus == "Failed" || prevStatus == "Success"){
-		// 	continue
-		// }
-        // conn.WriteJSON(map[string]string{"status": status})
-        time.Sleep(2 * time.Second)
-    }
+		if prevStatus == "SUCCESSFUL" {
+			// Insert booking into database
+			err := h.CreateBookings(c, repo.CreateBookingParams{
+				PaymentID:   payment.PaymentID,
+				ServiceID:   &payment.ServiceID,
+				SlotID:      &payment.SlotID,
+				BookingDate: payment.Date,
+				Status:      payment.Status,
+			})
+			if err != nil {
+				log.Println("Error inserting booking:", err)
+				if err := conn.WriteJSON(map[string]string{"status": "booking_failed"}); err != nil {
+					log.Println("writeJSON failed:", err)
+				}
+			} else {
+				if err := conn.WriteJSON(map[string]string{"status": "booking_success"}); err != nil {
+					log.Println("writeJSON failed:", err)
+				}
+				break
+			}
+
+			if prevStatus == "FAILED" {
+				break
+			}
+			// conn.WriteJSON(map[string]string{"status": status})
+			time.Sleep(2 * time.Second)
+		}
+	}
+}
+
+func (h *MessageHandler) handleGetServiceBookings(c *gin.Context) {
+	serviceID := c.Param("id")
+	start := c.Query("start")
+	end := c.Query("end")
+
+	if serviceID == "" || start == "" || end == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required query parameters"})
+		return
+	}
+
+	startDate, err := time.Parse("2006-01-02", start)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid start date"})
+		return
+	}
+
+	endDate, err := time.Parse("2006-01-02", end)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid end date"})
+		return
+	}
+
+	bookings, err := h.querier.GetBookingsInDateRange(c, repo.GetBookingsInDateRangeParams{
+		ServiceID:     &serviceID,
+		BookingDate:   pgtype.Date{Time: startDate, Valid: true},
+		BookingDate_2: pgtype.Date{Time: endDate, Valid: true},
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not fetch bookings"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"bookings": bookings,
+	})
 }

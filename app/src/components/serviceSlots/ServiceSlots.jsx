@@ -11,9 +11,10 @@ ServiceSlots.propTypes = {
   org: PropTypes.string.isRequired,
   service: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
+  bookedSlotIds: PropTypes.arrayOf(PropTypes.number),
 };
 
-export function ServiceSlots({ org, service, date }) {
+export function ServiceSlots({ org, service, date, bookedSlotIds = [] }) {
   const { serviceId } = useParams();
 
   const [showModal, setShowModal] = useState(false);
@@ -102,8 +103,10 @@ export function ServiceSlots({ org, service, date }) {
         const pgDate = extractPgDate(slotDateTime);
 
         const isPast = slotDateTime < new Date();
+        const isBooked = bookedSlotIds.includes(slot.id);
+
         return (
-          <div key={slot.id} className={`${isPast ? "past-day" : ""}`}>
+          <div key={slot.id} className={`${isPast ? "past-day" : ""} ${isBooked ? "past-day" : ""}`}>
             <div className="slot-button">
               <button onClick={() => handleOpenModal({...slot, pgDate})}>
                 {formatTime(slot.start_time.Microseconds)}

@@ -48,11 +48,6 @@ WHERE payment_id = $1;
 --     transaction_ref = $3
 -- WHERE payment_id = $1;
 
--- name: CreateBooking :exec
-INSERT INTO bookings (
-    booking_id, payment_id, booking_date, status
-) VALUES ($1, $2, $3, $4);
-
 -- name: GetSearchResults :many
 -- SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
 
@@ -95,5 +90,12 @@ WHERE transaction_ref = $2;
 -- FROM payments
 -- WHERE payment_id = $1;
 
+-- name: GetBookingsInDateRange :many
+SELECT slot_id, booking_date
+FROM bookings
+WHERE service_id = $1
+  AND booking_date BETWEEN $2 AND $3;
 
-
+-- name: CreateBooking :one
+INSERT INTO bookings (payment_id, service_id, slot_id, booking_date, status) VALUES ($1,$2,$3,$4,$5)
+RETURNING *;

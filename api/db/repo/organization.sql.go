@@ -11,36 +11,38 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
-const createBooking = `-- name: CreateBooking :exec
-
-INSERT INTO bookings (
-    booking_id, payment_id, booking_date, status
-) VALUES ($1, $2, $3, $4)
+const createBooking = `-- name: CreateBooking :one
+INSERT INTO bookings (payment_id, service_id, slot_id, booking_date, status) VALUES ($1,$2,$3,$4,$5)
+RETURNING booking_id, payment_id, booking_date, status, created_at, service_id, slot_id
 `
 
 type CreateBookingParams struct {
-	BookingID   string      `json:"booking_id"`
 	PaymentID   string      `json:"payment_id"`
+	ServiceID   *string     `json:"service_id"`
+	SlotID      *string     `json:"slot_id"`
 	BookingDate pgtype.Date `json:"booking_date"`
 	Status      string      `json:"status"`
 }
 
-// -- name: UpdatePaymentStatus :exec
-// UPDATE payments
-// SET
-//
-//	status = $2,
-//	transaction_ref = $3
-//
-// WHERE payment_id = $1;
-func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) error {
-	_, err := q.db.Exec(ctx, createBooking,
-		arg.BookingID,
+func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) (Booking, error) {
+	row := q.db.QueryRow(ctx, createBooking,
 		arg.PaymentID,
+		arg.ServiceID,
+		arg.SlotID,
 		arg.BookingDate,
 		arg.Status,
 	)
-	return err
+	var i Booking
+	err := row.Scan(
+		&i.BookingID,
+		&i.PaymentID,
+		&i.BookingDate,
+		&i.Status,
+		&i.CreatedAt,
+		&i.ServiceID,
+		&i.SlotID,
+	)
+	return i, err
 }
 
 const createPayment = `-- name: CreatePayment :one
@@ -129,6 +131,49 @@ func (q *Queries) CreateService(ctx context.Context, arg CreateServiceParams) (s
 	return service_id, err
 }
 
+const getBookingsInDateRange = `-- name: GetBookingsInDateRange :many
+
+SELECT slot_id, booking_date
+FROM bookings
+WHERE service_id = $1
+  AND booking_date BETWEEN $2 AND $3
+`
+
+type GetBookingsInDateRangeParams struct {
+	ServiceID     *string     `json:"service_id"`
+	BookingDate   pgtype.Date `json:"booking_date"`
+	BookingDate_2 pgtype.Date `json:"booking_date_2"`
+}
+
+type GetBookingsInDateRangeRow struct {
+	SlotID      *string     `json:"slot_id"`
+	BookingDate pgtype.Date `json:"booking_date"`
+}
+
+// -- name: GetPaymentStatusByID :one
+// SELECT status
+// FROM payments
+// WHERE payment_id = $1;
+func (q *Queries) GetBookingsInDateRange(ctx context.Context, arg GetBookingsInDateRangeParams) ([]GetBookingsInDateRangeRow, error) {
+	rows, err := q.db.Query(ctx, getBookingsInDateRange, arg.ServiceID, arg.BookingDate, arg.BookingDate_2)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetBookingsInDateRangeRow{}
+	for rows.Next() {
+		var i GetBookingsInDateRangeRow
+		if err := rows.Scan(&i.SlotID, &i.BookingDate); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getOrganizations = `-- name: GetOrganizations :many
 SELECT organization_id, name, location, start_time, end_time FROM organizations
 `
@@ -186,6 +231,7 @@ func (q *Queries) GetPaymentByID(ctx context.Context, paymentID string) (Payment
 
 const getSearchResults = `-- name: GetSearchResults :many
 
+
 SELECT 'services' AS source, service_id, service_name AS value
 FROM services
 WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
@@ -203,6 +249,14 @@ type GetSearchResultsRow struct {
 	Value     string `json:"value"`
 }
 
+// -- name: UpdatePaymentStatus :exec
+// UPDATE payments
+// SET
+//
+//	status = $2,
+//	transaction_ref = $3
+//
+// WHERE payment_id = $1;
 // SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
 // Search services.name
 // Search organisations.email
