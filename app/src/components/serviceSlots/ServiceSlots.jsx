@@ -12,9 +12,11 @@ ServiceSlots.propTypes = {
   service: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   bookedSlotIds: PropTypes.arrayOf(PropTypes.number),
+  paymentStatus: PropTypes.string.isRequired,
+  setPaymentStatus: PropTypes.func.isRequired,
 };
 
-export function ServiceSlots({ org, service, date, bookedSlotIds = [] }) {
+export function ServiceSlots({ org, service, date, bookedSlotIds = [], paymentStatus, setPaymentStatus }) {
   const { serviceId } = useParams();
 
   const [showModal, setShowModal] = useState(false);
@@ -30,8 +32,14 @@ export function ServiceSlots({ org, service, date, bookedSlotIds = [] }) {
       .get(`https://api.queueless.xyz/api/v1/service/${serviceId}/slots`)
       .then((response) => {
         setSlots(response.data.slots);
+
+        //Reset paymentStaus after successful refresh
+      if (paymentStatus === "SUCCESSFUL") {
+        localStorage.removeItem("paymentStatus")
+        setPaymentStatus(null)
+      }
       });
-  }, [serviceId]);
+  }, [serviceId, paymentStatus]);
 
   // helper function to convert microseconds to readable time
   const formatTime = (microseconds) => {
