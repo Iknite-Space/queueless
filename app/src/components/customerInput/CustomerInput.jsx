@@ -50,7 +50,10 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
 
   const handleStatusChange = (newStatus) => {
     if (newStatus === "PENDING") setStep(3);
-    else if (newStatus === "SUCCESSFUL") setStep(4);
+    else if (newStatus === "SUCCESSFUL") {
+      // save to localstorage
+      localStorage.setItem("paymentStatus", "SUCCESSFUL")
+      setStep(4);}
     else if (newStatus === "FAILED") setStep(5);
   };
 
