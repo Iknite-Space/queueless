@@ -24,9 +24,28 @@ export function WeekHeader() {
   );
   const [weekDates, setWeekDates] = useState([]);
 
+    // Get payment status saved in localstorage
+  const [paymentStatus, setPaymentStatus] = useState(() =>
+  localStorage.getItem("paymentStatus")
+);
+
     // extract the state elements sent via navigate
   const location = useLocation();
   const { org, service } = location.state || {};
+
+  // Setup listener for localStorage changes (optional if not across tabs)
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const newStatus = localStorage.getItem("paymentStatus");
+      setPaymentStatus(newStatus);
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
 
   useEffect(() => {
     const days = [];
@@ -51,8 +70,6 @@ export function WeekHeader() {
 
   if (!service.service_id) return;
 
-
-
   axios
     .get(`https://api.queueless.xyz/api/v1/service/${service.service_id}/bookings`, {
       params: {
@@ -63,11 +80,17 @@ export function WeekHeader() {
     .then((response) => {
       setWeeklyBookings(response.data.bookings);
 
+      //Reset paymentStaus after successful refresh
+      if (paymentStatus === "SUCCESSFUL") {
+        localStorage.removeItem("paymentStatus")
+        setPaymentStatus(null)
+      }
+
     })
     .catch((error) => {
       console.error("Error fetching bookings:", error);
     });
-}, [currentWeekStart, service]);
+}, [currentWeekStart, service.service_id, paymentStatus]);
 
 const bookingsByDate = React.useMemo(() => {
   return weeklyBookings.reduce((acc, booking) => {
