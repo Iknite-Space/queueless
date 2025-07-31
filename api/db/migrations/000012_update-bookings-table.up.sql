@@ -1,0 +1,2 @@
+ALTER TABLE bookings ADD COLUMN service_id VARCHAR;
+ALTER TABLE bookings ADD COLUMN slot_id VARCHAR;

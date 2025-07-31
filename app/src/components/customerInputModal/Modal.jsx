@@ -1,5 +1,6 @@
 import React from "react";
 
+
 import CustomerInput from "../customerInput/CustomerInput";
 import './Modal.css'
 
@@ -10,10 +11,11 @@ Modal.propTypes = {
   showModal: PropTypes.func.isRequired, 
   org: PropTypes.func.isRequired, 
   service: PropTypes.func.isRequired, 
-  slot: PropTypes.func.isRequired, 
+  slot: PropTypes.func.isRequired,
+  date: PropTypes.func.isRequired, 
 };
 
-function Modal({showModal, handleCloseModal, org, service, slot}) {
+function Modal({showModal, handleCloseModal, org, service, slot, date}) {
   return (
     <>
       <div 
@@ -23,7 +25,7 @@ function Modal({showModal, handleCloseModal, org, service, slot}) {
         <div className="modal-content"
          onClick={(e) => e.stopPropagation()}
         >
-          <CustomerInput handleCloseModal={handleCloseModal} org={org} service={service} slot={slot} />
+          <CustomerInput handleCloseModal={handleCloseModal} org={org} service={service} slot={slot} date={date}/>
         </div>
       </div>
     </>

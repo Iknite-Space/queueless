@@ -9,12 +9,31 @@ import (
 )
 
 type Querier interface {
+	CreateBooking(ctx context.Context, arg CreateBookingParams) (Booking, error)
+	CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error)
 	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
+	// -- name: GetPaymentStatusByID :one
+	// SELECT status
+	// FROM payments
+	// WHERE payment_id = $1;
+	GetBookingsInDateRange(ctx context.Context, arg GetBookingsInDateRangeParams) ([]GetBookingsInDateRangeRow, error)
 	GetOrganizations(ctx context.Context) ([]Organization, error)
+	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
+	// -- name: UpdatePaymentStatus :exec
+	// UPDATE payments
+	// SET
+	//     status = $2,
+	//     transaction_ref = $3
+	// WHERE payment_id = $1;
+	// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
+	// Search services.name
+	// Search organisations.email
+	GetSearchResults(ctx context.Context, websearchToTsquery string) ([]GetSearchResultsRow, error)
 	GetServiceSlots(ctx context.Context, serviceID string) ([]ServiceSlotTemplate, error)
 	GetServiceWithOrgTimes(ctx context.Context, serviceID string) (GetServiceWithOrgTimesRow, error)
 	GetServicesByOrganization(ctx context.Context, organizationID string) ([]Service, error)
 	InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error
+	UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error
 }
 
 var _ Querier = (*Queries)(nil)

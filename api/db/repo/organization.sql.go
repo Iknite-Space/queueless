@@ -11,6 +11,98 @@ import (
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
+const createBooking = `-- name: CreateBooking :one
+INSERT INTO bookings (payment_id, service_id, slot_id, booking_date, status) VALUES ($1,$2,$3,$4,$5)
+RETURNING booking_id, payment_id, booking_date, status, created_at, service_id, slot_id
+`
+
+type CreateBookingParams struct {
+	PaymentID   string      `json:"payment_id"`
+	ServiceID   *string     `json:"service_id"`
+	SlotID      *string     `json:"slot_id"`
+	BookingDate pgtype.Date `json:"booking_date"`
+	Status      string      `json:"status"`
+}
+
+func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) (Booking, error) {
+	row := q.db.QueryRow(ctx, createBooking,
+		arg.PaymentID,
+		arg.ServiceID,
+		arg.SlotID,
+		arg.BookingDate,
+		arg.Status,
+	)
+	var i Booking
+	err := row.Scan(
+		&i.BookingID,
+		&i.PaymentID,
+		&i.BookingDate,
+		&i.Status,
+		&i.CreatedAt,
+		&i.ServiceID,
+		&i.SlotID,
+	)
+	return i, err
+}
+
+const createPayment = `-- name: CreatePayment :one
+INSERT INTO payments (
+    cus_name,
+    cus_email,
+    phone_number,
+    date,
+    service_id,
+    slot_id,
+    amount,
+    status,
+    transaction_ref
+) VALUES (
+    $1, $2, $3, $4, $5, $6, $7, $8, $9
+)
+RETURNING payment_id, cus_name, cus_email, phone_number, date, service_id, slot_id, amount, status, transaction_ref, created_at
+`
+
+type CreatePaymentParams struct {
+	CusName        string      `json:"cus_name"`
+	CusEmail       string      `json:"cus_email"`
+	PhoneNumber    string      `json:"phone_number"`
+	Date           pgtype.Date `json:"date"`
+	ServiceID      string      `json:"service_id"`
+	SlotID         string      `json:"slot_id"`
+	Amount         float64     `json:"amount"`
+	Status         string      `json:"status"`
+	TransactionRef string      `json:"transaction_ref"`
+}
+
+func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error) {
+	row := q.db.QueryRow(ctx, createPayment,
+		arg.CusName,
+		arg.CusEmail,
+		arg.PhoneNumber,
+		arg.Date,
+		arg.ServiceID,
+		arg.SlotID,
+		arg.Amount,
+		arg.Status,
+		arg.TransactionRef,
+	)
+	var i Payment
+	err := row.Scan(
+		&i.PaymentID,
+		&i.CusName,
+		&i.CusEmail,
+		&i.PhoneNumber,
+		&i.Date,
+		&i.ServiceID,
+		&i.SlotID,
+		&i.Amount,
+		&i.Status,
+		&i.TransactionRef,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const createService = `-- name: CreateService :one
 INSERT INTO services (
     organization_id, service_name, service_description, duration
@@ -39,6 +131,49 @@ func (q *Queries) CreateService(ctx context.Context, arg CreateServiceParams) (s
 	return service_id, err
 }
 
+const getBookingsInDateRange = `-- name: GetBookingsInDateRange :many
+
+SELECT slot_id, booking_date
+FROM bookings
+WHERE service_id = $1
+  AND booking_date BETWEEN $2 AND $3
+`
+
+type GetBookingsInDateRangeParams struct {
+	ServiceID     *string     `json:"service_id"`
+	BookingDate   pgtype.Date `json:"booking_date"`
+	BookingDate_2 pgtype.Date `json:"booking_date_2"`
+}
+
+type GetBookingsInDateRangeRow struct {
+	SlotID      *string     `json:"slot_id"`
+	BookingDate pgtype.Date `json:"booking_date"`
+}
+
+// -- name: GetPaymentStatusByID :one
+// SELECT status
+// FROM payments
+// WHERE payment_id = $1;
+func (q *Queries) GetBookingsInDateRange(ctx context.Context, arg GetBookingsInDateRangeParams) ([]GetBookingsInDateRangeRow, error) {
+	rows, err := q.db.Query(ctx, getBookingsInDateRange, arg.ServiceID, arg.BookingDate, arg.BookingDate_2)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetBookingsInDateRangeRow{}
+	for rows.Next() {
+		var i GetBookingsInDateRangeRow
+		if err := rows.Scan(&i.SlotID, &i.BookingDate); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getOrganizations = `-- name: GetOrganizations :many
 SELECT organization_id, name, location, start_time, end_time FROM organizations
 `
@@ -59,6 +194,82 @@ func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) 
 			&i.StartTime,
 			&i.EndTime,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getPaymentByID = `-- name: GetPaymentByID :one
+SELECT payment_id, cus_name, cus_email, phone_number, date, service_id, slot_id, amount, status, transaction_ref, created_at 
+FROM payments 
+WHERE payment_id = $1
+`
+
+func (q *Queries) GetPaymentByID(ctx context.Context, paymentID string) (Payment, error) {
+	row := q.db.QueryRow(ctx, getPaymentByID, paymentID)
+	var i Payment
+	err := row.Scan(
+		&i.PaymentID,
+		&i.CusName,
+		&i.CusEmail,
+		&i.PhoneNumber,
+		&i.Date,
+		&i.ServiceID,
+		&i.SlotID,
+		&i.Amount,
+		&i.Status,
+		&i.TransactionRef,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const getSearchResults = `-- name: GetSearchResults :many
+
+
+SELECT 'services' AS source, service_id, service_name AS value
+FROM services
+WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
+
+UNION ALL
+
+SELECT 'organizations' AS source, organization_id, name AS value
+FROM organizations
+WHERE to_tsvector(name) @@ websearch_to_tsquery($1)
+`
+
+type GetSearchResultsRow struct {
+	Source    string `json:"source"`
+	ServiceID string `json:"service_id"`
+	Value     string `json:"value"`
+}
+
+// -- name: UpdatePaymentStatus :exec
+// UPDATE payments
+// SET
+//
+//	status = $2,
+//	transaction_ref = $3
+//
+// WHERE payment_id = $1;
+// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
+// Search services.name
+// Search organisations.email
+func (q *Queries) GetSearchResults(ctx context.Context, websearchToTsquery string) ([]GetSearchResultsRow, error) {
+	rows, err := q.db.Query(ctx, getSearchResults, websearchToTsquery)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetSearchResultsRow{}
+	for rows.Next() {
+		var i GetSearchResultsRow
+		if err := rows.Scan(&i.Source, &i.ServiceID, &i.Value); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -177,5 +388,21 @@ type InsertSlotTemplateParams struct {
 
 func (q *Queries) InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error {
 	_, err := q.db.Exec(ctx, insertSlotTemplate, arg.ServiceID, arg.StartTime, arg.EndTime)
+	return err
+}
+
+const updatePaymentStatus = `-- name: UpdatePaymentStatus :exec
+UPDATE payments
+SET status = $1
+WHERE transaction_ref = $2
+`
+
+type UpdatePaymentStatusParams struct {
+	Status         string `json:"status"`
+	TransactionRef string `json:"transaction_ref"`
+}
+
+func (q *Queries) UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error {
+	_, err := q.db.Exec(ctx, updatePaymentStatus, arg.Status, arg.TransactionRef)
 	return err
 }

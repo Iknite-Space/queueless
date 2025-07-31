@@ -1,17 +1,20 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
-	"os"
+	"strconv"
 	"time"
 
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
+	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
+	"github.com/gorilla/websocket"
 	"github.com/jackc/pgx/v5/pgtype"
 )
 
@@ -51,7 +54,10 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("/api/v1/service/:id/slots", h.handleGetServiceSlots)
 	r.POST("/api/v1/payment/initiate", h.handleInitiatePayment)
 	r.GET("/api/v1/payment/webhook", h.handleCampayWebhook)
-
+	// r.GET("/api/v1/payment/:id/status", h.handleGetPaymentStatus)
+	r.GET("api/v1/payment/:id/statusSocket", h.handlePaymentStatusSocket)
+	// r.POST("/api/v1/bookings", h.handleCreateBooking)
+	r.GET("/api/v1/service/:id/bookings", h.handleGetServiceBookings)
 	return r
 }
 
@@ -200,93 +206,338 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 	})
 }
 
+// variable to store the transaction reference for each payment request.
+var ref string
 
 // hamdler function for payment
 func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
-    // Define request struct (use consistent JSON tags)
-    var requestBody struct {
-        PhoneNumber string `json:"phone_number"`
-        Amount      string `json:"amount"`
-        Currency    string `json:"curhttp://localhost:8085/api/v1/payment/webhookrency"`
-        Description string `json:"description"`
-        Reference   string `json:"reference"`
-    }
 
-    // Bind and validate request
-    if err := c.ShouldBindJSON(&requestBody); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Invalid request body",
-            "details": err.Error(),
-        })
-        return
-    }
-		    if requestBody.PhoneNumber == "" {
-        c.JSON(http.StatusBadRequest, gin.H{
-            "error": "Phone number is required",
-        })
-        return
-    }
+	// Define request struct (use consistent JSON tags)
+	type data struct {
+		CustomerName   string      `json:"cus_name,omitempty"`
+		CustomerEmail  string      `json:"cus_email,omitempty"`
+		PhoneNumber    string      `json:"phone_number,omitempty"`
+		Date           pgtype.Date `json:"date,omitempty"`
+		ServiceID      string      `json:"service_id,omitempty"`
+		SlotID         string      `json:"slot_id,omitempty"`
+		Amount         string      `json:"amount,omitempty"`
+		Currency       string      `json:"currency,omitempty"`
+		Description    string      `json:"description,omitempty"`
+		Reference      string      `json:"reference,omitempty"`
+		Status         string      `json:"status,omitempty"`
+		TransactionRef string      `json:"transaction_ref,omitempty"`
+	}
 
-    // Call Campay package
-    resp, err := campay.RequestPayment(
-        requestBody.PhoneNumber,
-        requestBody.Amount,
-        requestBody.Currency,
-        requestBody.Description,
-        requestBody.Reference,
-    )
+	//payment request body
+	requestBody := data{}
 
-    if err != nil {
-			log.Printf("Campay API error: %v", err)
-			c.JSON(http.StatusInternalServerError, gin.H{
-				"error": "Failed to initiate payment",
-				"details": err.Error(),
-			})
-			return
-    }
-		
-		    // Set default status if empty
-		if resp.Status == ""{
-			resp.Status = "PENDING"
-		}
-    // Successful response
-    c.JSON(http.StatusOK, gin.H{
-			"data":   resp,
-    })
-		
+	// Bind and validate request
+	if err := c.ShouldBindJSON(&requestBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid request body",
+			"details": err.Error(),
+		})
+		return
+	}
+	if requestBody.PhoneNumber == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Phone number is required",
+		})
+		return
+	}
 
+	// Call Campay package
+	resp, err := campay.RequestPayment(
+		requestBody.PhoneNumber,
+		requestBody.Amount,
+		requestBody.Currency,
+		requestBody.Description,
+		requestBody.Reference,
+	)
+
+	fmt.Println(resp)
+	if err != nil {
+		log.Printf("Campay API error: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Failed to initiate payment",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	// Set default status if empty
+	if resp.Status == "" {
+		resp.Status = "PENDING"
+	}
+
+	//convert amount(string) to float 32
+	amount, err := strconv.ParseFloat(requestBody.Amount, 32)
+
+	if err != nil {
+		log.Printf("Can not convert amount to float32: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid amount format",
+			"details": err.Error(),
+		})
+		return
+
+	}
+
+	responseBody := repo.CreatePaymentParams{
+		CusName:        requestBody.CustomerName,
+		CusEmail:       requestBody.CustomerEmail,
+		PhoneNumber:    requestBody.PhoneNumber,
+		Date:           requestBody.Date,
+		ServiceID:      requestBody.ServiceID,
+		SlotID:         requestBody.SlotID,
+		Amount:         amount,
+		Status:         resp.Status,
+		TransactionRef: resp.Reference,
+	}
+
+	// Bind and validate response
+	// if err := c.ShouldBindJSON(&responseBody); err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error":   "Invalid response body",
+	// 		"details": err.Error(),
+	// 	})
+	// 	return
+	// }
+
+	payment, err := h.querier.CreatePayment(c, responseBody)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	// Successful response
+	c.JSON(http.StatusOK, gin.H{
+		"payment": payment,
+	})
+
+	ref = resp.Reference
 }
-
 
 func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
+
 	// 1. Get the most important parameters
-	status := c.Query("status")          // "SUCCESSFUL" or "FAILED"
-	reference := c.Query("reference")    // Transaction ID
-	amount := c.Query("amount")          // e.g. "1000"
-	currency := c.Query("currency")      // e.g. "XAF"
-	signature := c.Query("signature")    // JWT token
-	phone := c.Query("phone_number")     // e.g. "237612345678"
+	status := c.Query("status")       // "SUCCESSFUL" or "FAILED"
+	reference := c.Query("reference") // Transaction ID
+	amount := c.Query("amount")       // e.g. "1000"
+	currency := c.Query("currency")   // e.g. "XAF"
+	signature := c.Query("signature") // JWT token
+	phone := c.Query("phone_number")  // e.g. "237612345678"
 
 	// Verify JWT signature (add this after getting the parameters)
-secret := os.Getenv("CAMPAY_WEBHOOK_SECRET")
-token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
-    return []byte(secret), nil
-})
 
-if err != nil || !token.Valid {
-    log.Println("INVALID SIGNATURE!")
-    c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid signature"})
-    return
-}
+	secret := utility.LoadEnv("CAMPAY_CONFIG", "CAMPAY_WEBHOOK_KEY") //os.Getenv("CAMPAY_WEBHOOK_SECRET")
+
+	// 3. Parse and verify JWT
+
+	token, err := jwt.Parse(signature, func(token *jwt.Token) (interface{}, error) {
+		// Ensure token uses HMAC signing method
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+		return []byte(secret), nil
+	})
+
+	// 4. If verification fails, reject the request
+	if err != nil || !token.Valid {
+		log.Println("INVALID SIGNATURE!", err)
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid signature"})
+		// return
+	}
+
+	// 5. Optionally: Read claims from token
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		log.Println("Verified token claims:", claims)
+	}
 
 	// 2. Log everything (for debugging)
 	log.Println("\n=== NEW WEBHOOK ===")
 	log.Println("Status:", status)
 	log.Println("Reference:", reference)
+	log.Println("Ref:", ref)
 	log.Println("Amount:", amount, currency)
 	log.Println("Phone:", phone)
 	log.Println("Signature:", signature)
 
+	if ref == reference {
+		err = h.querier.UpdatePaymentStatus(c, repo.UpdatePaymentStatusParams{
+			Status:         status,
+			TransactionRef: reference,
+		})
+		if err != nil {
+			log.Println("Failed to update payment status:", err)
+		} else {
+			log.Println("payment status updated successfully")
+		}
+	}
+
 	// 3. Just respond with "OK" for now
 	c.String(http.StatusOK, "Webhook received!")
+}
+
+// Endpoint to get payment status by id
+// func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
+// 	id := c.Param("id")
+// 	if id == "" {
+// 		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+// 		return
+// 	}
+
+// 	payment, err := h.querier.GetPaymentByID(c, id)
+// 	if err != nil {
+// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+// 		return
+// 	}
+
+// 	c.JSON(http.StatusOK, gin.H{
+// 		"message":        "success",
+// 		"payment_status": payment.Status,
+// 		"payment":        payment,
+// 	})
+// }
+
+// upgrading the http connection to a socket conn
+var upgrader = websocket.Upgrader{
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	}}
+
+func (h *MessageHandler) GetPaymentStatusByID(ctx context.Context, id string) (repo.Payment, error) {
+	payment, err := h.querier.GetPaymentByID(ctx, id)
+	if err != nil {
+		log.Println("Failed to get status:", err)
+		return repo.Payment{PaymentID: payment.PaymentID}, err
+	}
+	return payment, nil
+}
+
+func (h *MessageHandler) CreateBookings(c *gin.Context, req repo.CreateBookingParams) error {
+
+	_, err := h.querier.CreateBooking(c, req)
+	if err != nil {
+		log.Println("Failed to create booking:", err)
+		return err
+	}
+	return err
+}
+
+func (h *MessageHandler) handlePaymentStatusSocket(c *gin.Context) {
+	payment_id := c.Param("id")
+
+	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
+	if err != nil {
+		log.Println("WebSocket upgrade failed:", err)
+		return
+	}
+	//validate id
+	if payment_id == "" {
+		log.Println("Missing ID in query params")
+		// conn.WriteJSON(map[string]string{"status": "error"})
+
+		if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
+			log.Println("WriteJSON failed:", err)
+		}
+		return
+	}
+	defer func() {
+		if err := conn.Close(); err != nil {
+			log.Println("WebSocket close failed:", err)
+		}
+	}()
+
+	prevStatus := ""
+
+	for {
+		payment, err := h.GetPaymentStatusByID(c, payment_id) // You fetch from DB or queue
+		if err != nil {
+			log.Println("Error fetching status:", err)
+			// conn.WriteJSON(map[string]string{"status": "error"})
+			if err := conn.WriteJSON(map[string]string{"status": "error"}); err != nil {
+				log.Println("WriteJSON failed:", err)
+			}
+			continue
+		}
+
+		status := payment.Status
+
+		if status != prevStatus {
+			// conn.WriteJSON(map[string]string{"status": status})
+			if err := conn.WriteJSON(map[string]string{"status": status}); err != nil {
+
+				log.Println("WriteJSON failed:", err)
+			}
+
+			prevStatus = status
+		}
+
+		if prevStatus == "SUCCESSFUL" {
+			// Insert booking into database
+			err := h.CreateBookings(c, repo.CreateBookingParams{
+				PaymentID:   payment.PaymentID,
+				ServiceID:   &payment.ServiceID,
+				SlotID:      &payment.SlotID,
+				BookingDate: payment.Date,
+				Status:      payment.Status,
+			})
+			if err != nil {
+				log.Println("Error inserting booking:", err)
+				if err := conn.WriteJSON(map[string]string{"status": "booking_failed"}); err != nil {
+					log.Println("writeJSON failed:", err)
+				}
+			} else {
+				if err := conn.WriteJSON(map[string]string{"status": "booking_success"}); err != nil {
+					log.Println("writeJSON failed:", err)
+				}
+				break
+			}
+
+			if prevStatus == "FAILED" {
+				break
+			}
+			// conn.WriteJSON(map[string]string{"status": status})
+			time.Sleep(2 * time.Second)
+		}
+	}
+}
+
+func (h *MessageHandler) handleGetServiceBookings(c *gin.Context) {
+	serviceID := c.Param("id")
+	start := c.Query("start")
+	end := c.Query("end")
+
+	if serviceID == "" || start == "" || end == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "missing required query parameters"})
+		return
+	}
+
+	startDate, err := time.Parse("2006-01-02", start)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid start date"})
+		return
+	}
+
+	endDate, err := time.Parse("2006-01-02", end)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid end date"})
+		return
+	}
+
+	bookings, err := h.querier.GetBookingsInDateRange(c, repo.GetBookingsInDateRangeParams{
+		ServiceID:     &serviceID,
+		BookingDate:   pgtype.Date{Time: startDate, Valid: true},
+		BookingDate_2: pgtype.Date{Time: endDate, Valid: true},
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not fetch bookings"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"bookings": bookings,
+	})
 }
