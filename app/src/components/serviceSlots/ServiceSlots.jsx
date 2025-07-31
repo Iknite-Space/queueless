@@ -27,6 +27,8 @@ export function ServiceSlots({ org, service, date, bookedSlotIds = [], paymentSt
   // state to hold selected slots
   const [selectedSlot, setSelectedSlot] = useState(null);
 
+  console.log(paymentStatus)
+
   useEffect(() => {
     axios
       .get(`https://api.queueless.xyz/api/v1/service/${serviceId}/slots`)
@@ -39,7 +41,7 @@ export function ServiceSlots({ org, service, date, bookedSlotIds = [], paymentSt
         setPaymentStatus(null)
       }
       });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [serviceId, paymentStatus]);
 
   // helper function to convert microseconds to readable time
