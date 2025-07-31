@@ -8,7 +8,7 @@ import ServicesPage from "./pages/servicePage/ServicesPage";
 
 import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
-import DownloadTicket from "./components/DownloadTicket/DownloadTicket";
+import { ContactUs } from "./pages/ContactUsPage/ContactUs";
 
 function App() {
   return (
@@ -31,8 +31,7 @@ function App() {
           {/*  input  Screen */}
           {/* <Route path="/input" element={<CustomerInput />} /> */}
 
-          {/* download sreen */}
-          <Route path="/download-ticket" element={<DownloadTicket />} />
+          <Route path="/contact" element={<ContactUs />} />
         </Routes>
       </Router>
     </>
