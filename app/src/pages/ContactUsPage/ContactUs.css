@@ -11,7 +11,7 @@
 /* .contact-details {
   background: linear-gradient(to top left, var(--primary-dark), var(--primary-blue));
 } */
-form {
+.form-container form {
   background: rgb(192, 191, 191);
   width:500px;
   margin: 20px auto;
@@ -19,14 +19,14 @@ form {
 
 }
 
-h1 {
+.form-header h1 {
   text-align:center;
   margin-bottom:5px;
   margin-top:25px;
   color: blue;
 }
 
-p {
+.form-header p {
   text-align:center;
   color: blue;
 }
