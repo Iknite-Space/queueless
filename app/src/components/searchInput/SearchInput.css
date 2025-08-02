@@ -21,6 +21,10 @@
   /* padding-left: 10px; */
 }
 
+.search-bar:focus {
+  outline: none;
+}
+
 .search-button {
   height: 40px;
   width: 66px;
