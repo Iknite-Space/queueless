@@ -10,6 +10,7 @@ import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
 import Footer from "./components/footer/Footer";
+import About from "./components/aboutUs/About";
 
 function App() {
   return (
@@ -33,6 +34,9 @@ function App() {
           {/* <Route path="/input" element={<CustomerInput />} /> */}
 
           <Route path="/contact" element={<ContactUs />} />
+
+          {/* don't delete,  Routes for testing */}
+          <Route path="/about" element={<About />} />
         </Routes>
       </Router>
       <Footer />
