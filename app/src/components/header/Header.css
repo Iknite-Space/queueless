@@ -10,13 +10,13 @@
   background-color: var(--primary-dark);
 }
 
-ul {
+.header ul {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-li, a {
+.header li, .header a {
   list-style: none;
   text-decoration: none;
   margin: 20px;
@@ -26,11 +26,11 @@ li, a {
   /* font-family: 'Montserrat', sans-serif; */
 }
 
-a:hover {
+.header a:hover {
   color: var(--accent-orange);
 }
 
-.logo {
+.header .logo {
   flex: 1;
   color: var(--accent-orange);
   font-family: 'Manrope', sans-serif;
