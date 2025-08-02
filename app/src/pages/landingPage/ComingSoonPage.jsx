@@ -3,7 +3,7 @@ import "./ComingSoonPage.css";
 import React from "react";
 import { useNavigate } from "react-router";
 
-// import Footer from "../../components/footer/Footer";
+import Footer from "../../components/footer/Footer";
 
 import Header from "../../components/header/Header";
 
@@ -62,7 +62,8 @@ export function ComingSoonPage() {
         </div>
       </main>
 
-      {/* <Footer /> */}
+      <Footer />
+
     </>
   );
 }
