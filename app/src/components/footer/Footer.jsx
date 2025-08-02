@@ -6,11 +6,13 @@ import { faFacebook, faInstagram, faLinkedin } from "@fortawesome/free-brands-sv
 export default function Footer() {
   return (
     <footer className="footer-container">
+      <div className="footer-content">
       <div className="footer-section">
         <h3>Quick Links</h3>
         <ul>
         <li><a href="home.com">About Us</a></li>
         <li><a href="home.com">Contact Us</a></li>
+        <li><a href="home.com">FAQ</a></li>
         </ul>
       </div>
 
@@ -42,10 +44,9 @@ export default function Footer() {
           <li><a href="home.com">Pricing</a></li>
           <li><a href="home.com">Privacy Policy</a></li>
           <li><a href="home.com">Cookie Policy</a></li>
-          <li><a href="home.com">FAQ</a></li>
         </ul>
       </div>
-
+</div>
       <div className="footer-bottom">
         <p>© {new Date().getFullYear()} Qless. All rights reserved.</p>
       </div>
