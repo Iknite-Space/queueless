@@ -6,19 +6,32 @@
   padding: 0% 5%;
 }
 
-.header-section {
+.about-header-section {
   text-align: center;
-  padding: 5rem 2rem 3rem;
+  /* padding: 5rem 2rem 3rem; */
+  /* background-color: lightblue; */
 }
 
-.header-section h1 {
-  font-size: 3rem;
-  color: #FFA500;
+.about-header-text {
+  font-size: 4rem;
+  color: var(--accent-orange);
+  width: 600px;
+  margin: 0 auto;
+  font-weight: 500;
 }
 
-.header-section p {
-  font-size: 1.2rem;
-  margin-top: 1rem;
+.about-description {
+  font-size: 2rem;
+  margin: 1rem auto;
+  width:720px;
+  text-align: center;
+  line-height: 1.18em ;
+}
+
+/* remember to delete this (.third-line) and do it well */
+
+.about-description .third-line{
+  margin-left: 20px;
 }
 
 .wave-divider {
@@ -29,15 +42,21 @@
 
 .audience-section {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   padding: 4rem 2rem;
-  background-color: white;
   color: #02153D;
+  width: 65%;
+  height: 400px;
+  background-color: lightpink;
+  margin: 0 auto;
+  
 }
 
 .audience-card {
+  background-color: white;
   text-align: center;
-  max-width: 300px;
+  max-width: 45%;
+  flex: 1;
 }
 
 .audience-card img {

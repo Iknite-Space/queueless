@@ -7,9 +7,10 @@ import "./About.css";
   return (
     <div className="about-container">
       {/* header Section */}
-      <section className="header-section">
-        <h1>Book Services Without the Wait</h1>
-        <p>Skip the queue. Book your slot. Save time.</p>
+      <section className="about-header-section">
+        <p className="about-header-text">Book Services Without the Wait</p>
+        {/* <p>Skip the queue. Book your slot. Save time.</p> */}
+        <p className="about-description">Our platform lets customers book slots for services at their convenience, while organizations <span className="third-line">manage time effortlessly.</span> </p>
       </section>
 
 
