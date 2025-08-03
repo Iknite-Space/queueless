@@ -1,12 +1,68 @@
 
+
 import React from "react";
+import "./About.css";
 
-function About() {
- return (<>
- <p>hello workd</p></>
+ function About() {
+  return (
+    <div className="about-container">
+      {/* header Section */}
+      <section className="header-section">
+        <h1>Book Services Without the Wait</h1>
+        <p>Skip the queue. Book your slot. Save time.</p>
+      </section>
 
- )
 
+      {/* Audience Section */}
+      <section className="audience-section">
+        <div className="audience-card">
+          <h2>For Customers</h2>
+          <p>Browse services, pick a time, and avoid waiting.</p>
+        </div>
+        <div className="audience-card">
+          <h2>For Organizations</h2>
+          <p>Register, define services, and manage bookings.</p>
+        </div>
+      </section>
+
+      {/* Flow Section */}
+      <section className="flow-section">
+        <h2>How It Works</h2>
+        <div className="flow-diagram">
+          <div className="flow-step">Register</div>
+          <span>→</span>
+          <div className="flow-step">Add Services</div>
+          <span>→</span>
+          <div className="flow-step">Set Time Spans</div>
+          <span>→</span>
+          <div className="flow-step">Slots Generated</div>
+          <span>→</span>
+          <div className="flow-step">Customer Books</div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="features-section">
+        <h2>Why It Works</h2>
+        <div className="features-grid">
+          <div className="feature-card">⏱️ Time-efficient</div>
+          <div className="feature-card">📱 Easy to use</div>
+          <div className="feature-card">🔒 Secure</div>
+          <div className="feature-card">📊 Scalable</div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <h2>Ready to streamline your service experience?</h2>
+        <div className="cta-buttons">
+          <button className="cta-org">Register Organization</button>
+          <button className="cta-user">Book a Slot</button>
+        </div>
+      </section>
+    </div>
+  );
 }
+
 
 export default About;
