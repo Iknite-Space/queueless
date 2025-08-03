@@ -1,0 +1,126 @@
+
+.about-container {
+  font-family: arial;
+  background-color: var(--bg-gray) ;
+  color: var(--text-dark);
+  padding: 0% 5%;
+}
+
+.header-section {
+  text-align: center;
+  padding: 5rem 2rem 3rem;
+}
+
+.header-section h1 {
+  font-size: 3rem;
+  color: #FFA500;
+}
+
+.header-section p {
+  font-size: 1.2rem;
+  margin-top: 1rem;
+}
+
+.wave-divider {
+  background-size: cover;
+  height: 100px;
+  margin-bottom: -5px;
+}
+
+.audience-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 4rem 2rem;
+  background-color: white;
+  color: #02153D;
+}
+
+.audience-card {
+  text-align: center;
+  max-width: 300px;
+}
+
+.audience-card img {
+  width: 60px;
+  margin-bottom: 1rem;
+}
+
+.flow-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.flow-diagram {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.flow-step {
+  background-color: white;
+  color: #02153D;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.features-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.features-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.feature-card {
+  background-color: white;
+  color: #02153D;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-weight: bold;
+  min-width: 150px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: scale(1.05);
+}
+
+.cta-section {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.cta-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.cta-org, .cta-user {
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+}
+
+.cta-org {
+  background-color: #FFA500;
+  color: white;
+}
+
+.cta-user {
+  background-color: white;
+  color: #02153D;
+}
