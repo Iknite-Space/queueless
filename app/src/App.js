@@ -11,7 +11,8 @@ import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
 import Footer from "./components/footer/Footer";
 import About from "./components/aboutUs/About";
-
+import { OrganizationHomePage } from "./pages/OrganizationHomePage/OrganizationHomePage";
+import { Authentication } from "./components/Authentication/Authentication";
 function App() {
   return (
     <>
@@ -35,9 +36,10 @@ function App() {
 
           <Route path="/contact" element={<ContactUs />} />
 
-          {/* don't delete,  Routes for testing */}
-          <Route path="/about" element={<About />} />
-        </Routes>
+          <Route path="/login" element={<Authentication />} />
+          <Route path="/home" element={<OrganizationHomePage />} />
+  </Routes>
+        
       </Router>
       <Footer />
     </>
