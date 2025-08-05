@@ -177,6 +177,7 @@ Resources:
                   - !Ref DbAdminSecretArn
                   # - !Ref FirebaseSecret
                   - "arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/campay-bxpvAM"
+                  - "arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/firebase-EpXyaE"
                   
 
   # A role for the containers
