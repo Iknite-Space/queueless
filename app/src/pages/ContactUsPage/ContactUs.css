@@ -1,67 +1,87 @@
-/* .form-container {
-  width: 700px;
-  margin: 200px auto 0 auto;
-  background-color: brown;
-} */
 
-/* .form-container label{
-  display: block;
-  margin-bottom: 6px;
-} */
-/* .contact-details {
-  background: linear-gradient(to top left, var(--primary-dark), var(--primary-blue));
-} */
-form {
-  background: rgb(192, 191, 191);
-  width:500px;
-  margin: 20px auto;
-  padding: 20px
-
+.contact-details {
+  max-width: 700px;
+  margin: 50px auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  color: #333333;
 }
 
-h1 {
-  text-align:center;
-  margin-bottom:5px;
-  margin-top:25px;
-  color: blue;
+.form-header {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-p {
-  text-align:center;
-  color: blue;
+.form-header h1 {
+  color: #007bff; 
+  font-size: 2rem;
+  margin-bottom: 10px;
 }
 
-label, .input-block {
-  display:block;
-  width: 100%;
+.form-header p {
+  font-size: 1rem;
+  color: #666666;
 }
 
-label,legend {
-  margin-top: 10px;
-  margin-bottom: 10px
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.input-block {
-  padding:9px;
-  border:none;
-  border-radius:5px;
-  margin-bottom:25px
+label {
+  font-weight: 600;
+  margin-bottom: 5px;
 }
 
+.input-block,
 textarea {
-  width:100%;
-  margin-bottom:19px;
-  border:none;
-  border-radius:5px;
-  padding: 6px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+  border: 1px solid #cccccc;
+  border-radius: 8px;
+  resize: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-block:focus,
+textarea:focus {
+  border-color: #007bff; 
+  outline: none;
+  box-shadow: 0 0 5px #007bff;
 }
 
 .submit-btn {
-  padding: 10px 17px;
-  border:none;
-  border-radius:5px;
-  background: linear-gradient(to top right, var(--accent-orange), orange);
-  font-size:16px;
-  width:100%;
+  background-color: #007bff; 
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1rem;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #ff5e2f; 
+}
+
+form div {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.95rem;
+}
+
+form div a {
+  color: #007bff; 
+  text-decoration: none;
+  font-weight: 600;
+}
+
+form div a:hover {
+  text-decoration: underline;
 }

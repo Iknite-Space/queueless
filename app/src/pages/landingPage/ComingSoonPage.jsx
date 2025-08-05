@@ -16,6 +16,9 @@ export function ComingSoonPage() {
     navigate("/organizations");
   };
 
+  const handleRedirect = () => {
+    navigate("/contact");
+  };
   return (
     <>
       <Header />
@@ -25,6 +28,9 @@ export function ComingSoonPage() {
 
       <button className="navigation-button" onClick={handleClick}>
         View Organisations
+      </button>
+      <button className="navigation-button" onClick={handleRedirect}>
+        Register Organisation
       </button>
       <Footer />
     </>
