@@ -6,9 +6,12 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
+	"firebase.google.com/go/auth"
 	"github.com/Iknite-Space/c4-project-boilerplate/api/db/repo"
+	"github.com/Iknite-Space/c4-project-boilerplate/api/firebase"
 	campay "github.com/Iknite-Space/c4-project-boilerplate/api/payment"
 	"github.com/Iknite-Space/c4-project-boilerplate/api/utility"
 	"github.com/gin-contrib/cors"
@@ -38,7 +41,7 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 		// included https://api.queueless.xyz to handle endpoint, as the access point
 		AllowOrigins:     []string{"http://localhost:3000", "https://queueless.xyz"},
 		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		AllowCredentials: true,
 	}))
 
@@ -58,6 +61,16 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.GET("api/v1/payment/:id/statusSocket", h.handlePaymentStatusSocket)
 	// r.POST("/api/v1/bookings", h.handleCreateBooking)
 	r.GET("/api/v1/service/:id/bookings", h.handleGetServiceBookings)
+	r.GET("/api/v1/services/search", h.handleGetSearchResults)
+
+	//create user in firebase
+	r.POST("/api/v1/firebase/users", h.handleCreateFirebaseUser)
+
+	//verify organization login token before fetching data
+	r.GET("/api/v1/organization/data", h.handleGetOrganizationData)
+
+	//update the organization table
+	r.PATCH("/api/v1/organization/update/profile", h.handleUpdateOrganization)
 	return r
 }
 
@@ -120,36 +133,17 @@ func (h *MessageHandler) handleGetServiceSlots(c *gin.Context) {
 	})
 }
 
-// helper functions
-func fromPGTime(t pgtype.Time) (time.Time, error) {
-	if !t.Valid {
-		return time.Time{}, fmt.Errorf("invalid pgtype.Time")
-	}
-	return time.Date(0, 1, 1, 0, 0, 0, int(t.Microseconds)*1000, time.UTC), nil
-}
-
-func toPGTime(t time.Time) pgtype.Time {
-	// Calculate microseconds since midnight
-	midnight := time.Date(0, 1, 1, 0, 0, 0, 0, time.UTC)
-	microseconds := t.Sub(midnight).Microseconds()
-
-	return pgtype.Time{
-		Microseconds: microseconds,
-		Valid:        true,
-	}
-}
-
 func (h *MessageHandler) generateSlotTemplates(c *gin.Context, serviceID string) error {
 	data, err := h.querier.GetServiceWithOrgTimes(c, serviceID)
 	if err != nil {
 		return fmt.Errorf("failed to fetch organization working hours: %w", err)
 	}
 
-	start, err := fromPGTime(data.StartTime)
+	start, err := utility.FromPGTime(data.StartTime)
 	if err != nil {
 		return err
 	}
-	end, err := fromPGTime(data.EndTime)
+	end, err := utility.FromPGTime(data.EndTime)
 	if err != nil {
 		return err
 	}
@@ -167,8 +161,8 @@ func (h *MessageHandler) generateSlotTemplates(c *gin.Context, serviceID string)
 
 		err := h.querier.InsertSlotTemplate(c, repo.InsertSlotTemplateParams{
 			ServiceID: serviceID,
-			StartTime: toPGTime(slotStart),
-			EndTime:   toPGTime(slotEnd),
+			StartTime: utility.ToPGTime(slotStart),
+			EndTime:   utility.ToPGTime(slotEnd),
 		})
 		if err != nil {
 			log.Printf("InsertslotTemplate error: %v", err)
@@ -295,15 +289,6 @@ func (h *MessageHandler) handleInitiatePayment(c *gin.Context) {
 		TransactionRef: resp.Reference,
 	}
 
-	// Bind and validate response
-	// if err := c.ShouldBindJSON(&responseBody); err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{
-	// 		"error":   "Invalid response body",
-	// 		"details": err.Error(),
-	// 	})
-	// 	return
-	// }
-
 	payment, err := h.querier.CreatePayment(c, responseBody)
 
 	if err != nil {
@@ -379,27 +364,6 @@ func (h *MessageHandler) handleCampayWebhook(c *gin.Context) {
 	// 3. Just respond with "OK" for now
 	c.String(http.StatusOK, "Webhook received!")
 }
-
-// Endpoint to get payment status by id
-// func (h *MessageHandler) handleGetPaymentStatus(c *gin.Context) {
-// 	id := c.Param("id")
-// 	if id == "" {
-// 		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
-// 		return
-// 	}
-
-// 	payment, err := h.querier.GetPaymentByID(c, id)
-// 	if err != nil {
-// 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-// 		return
-// 	}
-
-// 	c.JSON(http.StatusOK, gin.H{
-// 		"message":        "success",
-// 		"payment_status": payment.Status,
-// 		"payment":        payment,
-// 	})
-// }
 
 // upgrading the http connection to a socket conn
 var upgrader = websocket.Upgrader{
@@ -539,5 +503,157 @@ func (h *MessageHandler) handleGetServiceBookings(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"bookings": bookings,
+	})
+}
+
+// Endpoint to get all services by organization
+func (h *MessageHandler) handleGetSearchResults(c *gin.Context) {
+	term := c.Query("term")
+	// if term == "" {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+	// 	return
+	// }
+
+	results, err := h.querier.GetSearchResults(c, term)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":  "success",
+		"results": results,
+	})
+}
+
+type CreateUserRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+}
+
+func (h *MessageHandler) handleCreateFirebaseUser(c *gin.Context) {
+	var req CreateUserRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	app := firebase.InitApp()
+	client, err := app.Auth(context.Background())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	params := (&auth.UserToCreate{}).Email(req.Email).Password(req.Password)
+	user, err := client.CreateUser(context.Background(), params)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	//extract organization email
+	email := user.Email
+
+	// create new organization in the database
+	organizaton, err := h.querier.CreateOrganization(c, repo.CreateOrganizationParams{
+		Email: &email,
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Organization created", "organization": organizaton})
+}
+
+// Endpoint to get organization data
+func (h *MessageHandler) handleGetOrganizationData(c *gin.Context) {
+
+	//extract the header
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing Authorization header"})
+		return
+	}
+
+	//extract the id token
+	idToken := strings.TrimPrefix(authHeader, "Bearer ")
+
+	//authenticate the token with firebase
+	app := firebase.InitApp()
+	client, err := app.Auth(context.Background())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	token, err := client.VerifyIDToken(context.Background(), idToken)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "invalid token"})
+		return
+	}
+
+	uid := token.UID
+	email := token.Claims
+
+	// organizations, err := h.querier.GetOrganizations(c)
+	// if err != nil {
+	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	// 	return
+	// }
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":           "success",
+		"organization_uid": uid,
+		"claims":           email,
+	})
+}
+
+type UpdateOrganizationRequest struct {
+	Name      string `json:"name"`
+	Location  string `json:"location"`
+	StartTime string `json:"start_time"`
+	EndTime   string `json:"end_time"`
+	Email     string `json:"email"`
+}
+
+// Endpoint to update organization info
+func (h *MessageHandler) handleUpdateOrganization(c *gin.Context) {
+	var req UpdateOrganizationRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid requst body"})
+	}
+
+	if req.StartTime == "" || req.EndTime == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "start_time and end_time must not be empty"})
+		return
+	}
+
+	startTime, err := utility.ParsePgTime(req.StartTime)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error converting start time": err.Error()})
+	}
+	endTime, err := utility.ParsePgTime(req.EndTime)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+
+	org, err := h.querier.UpdateOrganizationData(c, repo.UpdateOrganizationDataParams{
+		Name:      req.Name,
+		Location:  &req.Location,
+		StartTime: startTime,
+		EndTime:   endTime,
+		Email:     &req.Email,
+	})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error updating organization data": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":       "success",
+		"organization": org,
 	})
 }
