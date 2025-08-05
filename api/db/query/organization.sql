@@ -1,4 +1,18 @@
 
+-- name: CreateOrganization :one
+INSERT INTO organizations (
+     name, location, start_time, end_time, email
+) VALUES (
+    $1, $2, $3, $4, $5
+)
+RETURNING *;
+
+-- name: UpdateOrganizationData :one
+UPDATE organizations
+SET name = $1, location = $2, start_time = $3, end_time = $4
+WHERE email = $5
+RETURNING *;
+
 -- name: CreateService :one
 INSERT INTO services (
     organization_id, service_name, service_description, duration
@@ -8,7 +22,8 @@ INSERT INTO services (
 RETURNING service_id;
 
 -- name: GetOrganizations :many
-SELECT * FROM organizations;
+SELECT * FROM organizations
+WHERE name <> '';
 
 -- name: GetServicesByOrganization :many
 SELECT * FROM services
@@ -49,19 +64,19 @@ WHERE payment_id = $1;
 -- WHERE payment_id = $1;
 
 -- name: GetSearchResults :many
--- SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
+SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
 
--- Search services.name
-SELECT 'services' AS source, service_id, service_name AS value
-FROM services
-WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
+-- -- Search services.name
+-- SELECT 'services' AS source, service_id, service_name AS value
+-- FROM services
+-- WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
 
-UNION ALL
+-- UNION ALL
 
--- Search organisations.email
-SELECT 'organizations' AS source, organization_id, name AS value
-FROM organizations
-WHERE to_tsvector(name) @@ websearch_to_tsquery($1);
+-- -- Search organisations.email
+-- SELECT 'organizations' AS source, organization_id, name AS value
+-- FROM organizations
+-- WHERE to_tsvector(name) @@ websearch_to_tsquery($1);
 
 -- name: CreatePayment :one
 INSERT INTO payments (
