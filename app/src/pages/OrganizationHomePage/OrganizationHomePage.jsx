@@ -11,7 +11,7 @@ export function OrganizationHomePage() {
 
     const fetchData = async () => {
       try {
-        const res = await fetch("http://localhost:8085/api/v1/organization/data", {
+        const res = await fetch("https://api.queueless.xyz/api/v1/organization/data", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${idToken}`,
