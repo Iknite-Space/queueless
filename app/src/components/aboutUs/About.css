@@ -40,26 +40,42 @@
   margin-bottom: -5px;
 }
 
-.audience-section {
+.user-section {
   display: flex;
-  justify-content: space-between;
-  padding: 4rem 2rem;
+  justify-content: center;
+  padding: 2rem 2rem;
   color: #02153D;
   width: 65%;
   height: 400px;
-  background-color: lightpink;
   margin: 0 auto;
+  column-gap: 2rem;
   
 }
 
-.audience-card {
+.user-card {
   background-color: white;
   text-align: center;
   max-width: 45%;
   flex: 1;
+  padding: 2.5rem;
 }
 
-.audience-card img {
+.user-card h2{
+  font-size: 1.5rem;
+  width: fit-content;
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5em;
+}
+.user-card li {
+ list-style-type: none;
+ /* background-color: palegoldenrod; */
+ width: fit-content;
+ font-size:1.18rem ;
+  margin-bottom: 0.5em;
+  padding: 0.4rem;
+
+}
+.user-card img {
   width: 60px;
   margin-bottom: 1rem;
 }

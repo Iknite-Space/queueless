@@ -2,7 +2,9 @@
 
 import React from "react";
 import "./About.css";
-
+import { FaRegUser} from "react-icons/fa6";
+import { GiAvoidance } from "react-icons/gi";
+import { IoAddCircleOutline } from "react-icons/io5";
  function About() {
   return (
     <div className="about-container">
@@ -10,19 +12,36 @@ import "./About.css";
       <section className="about-header-section">
         <p className="about-header-text">Book Services Without the Wait</p>
         {/* <p>Skip the queue. Book your slot. Save time.</p> */}
-        <p className="about-description">Our platform lets customers book slots for services at their convenience, while organizations <span className="third-line">manage time effortlessly.</span> </p>
+        <p className="about-description">
+          Our platform lets customers book slots for services at their
+          convenience, while organizations{" "}
+          <span className="third-line">manage time effortlessly.</span>{" "}
+        </p>
       </section>
 
-
       {/* Audience Section */}
-      <section className="audience-section">
-        <div className="audience-card">
+      <section className="user-section">
+        <div className="user-card customer-card">
           <h2>For Customers</h2>
-          <p>Browse services, pick a time, and avoid waiting.</p>
+          <ul>
+            <li>
+              <FaRegUser />
+              Browse services
+            </li>
+            <li><IoAddCircleOutline/>Pick a time</li>
+            <li>
+              <GiAvoidance />
+              Avoid waiting
+            </li>{" "}
+          </ul>
         </div>
-        <div className="audience-card">
+        <div className="user-card admin-card">
           <h2>For Organizations</h2>
-          <p>Register, define services, and manage bookings.</p>
+          <ul>
+            <li><span>&check</span>Register</li>
+            <li>Define services</li>
+            <li>Manage bookings</li>{" "}
+          </ul>
         </div>
       </section>
 
