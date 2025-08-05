@@ -45,7 +45,47 @@ func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) (B
 	return i, err
 }
 
+const createOrganization = `-- name: CreateOrganization :one
+INSERT INTO organizations (
+     name, location, start_time, end_time, email
+) VALUES (
+    $1, $2, $3, $4, $5
+)
+RETURNING organization_id, name, location, start_time, end_time, email
+`
+
+type CreateOrganizationParams struct {
+	Name      string      `json:"name"`
+	Location  *string     `json:"location"`
+	StartTime pgtype.Time `json:"start_time"`
+	EndTime   pgtype.Time `json:"end_time"`
+	Email     *string     `json:"email"`
+}
+
+func (q *Queries) CreateOrganization(ctx context.Context, arg CreateOrganizationParams) (Organization, error) {
+	row := q.db.QueryRow(ctx, createOrganization,
+		arg.Name,
+		arg.Location,
+		arg.StartTime,
+		arg.EndTime,
+		arg.Email,
+	)
+	var i Organization
+	err := row.Scan(
+		&i.OrganizationID,
+		&i.Name,
+		&i.Location,
+		&i.StartTime,
+		&i.EndTime,
+		&i.Email,
+	)
+	return i, err
+}
+
 const createPayment = `-- name: CreatePayment :one
+
+
+
 INSERT INTO payments (
     cus_name,
     cus_email,
@@ -74,6 +114,15 @@ type CreatePaymentParams struct {
 	TransactionRef string      `json:"transaction_ref"`
 }
 
+// -- Search services.name
+// SELECT 'services' AS source, service_id, service_name AS value
+// FROM services
+// WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
+// UNION ALL
+// -- Search organisations.email
+// SELECT 'organizations' AS source, organization_id, name AS value
+// FROM organizations
+// WHERE to_tsvector(name) @@ websearch_to_tsquery($1);
 func (q *Queries) CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error) {
 	row := q.db.QueryRow(ctx, createPayment,
 		arg.CusName,
@@ -175,7 +224,8 @@ func (q *Queries) GetBookingsInDateRange(ctx context.Context, arg GetBookingsInD
 }
 
 const getOrganizations = `-- name: GetOrganizations :many
-SELECT organization_id, name, location, start_time, end_time FROM organizations
+SELECT organization_id, name, location, start_time, end_time, email FROM organizations
+WHERE name <> ''
 `
 
 func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) {
@@ -193,6 +243,7 @@ func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) 
 			&i.Location,
 			&i.StartTime,
 			&i.EndTime,
+			&i.Email,
 		); err != nil {
 			return nil, err
 		}
@@ -231,23 +282,8 @@ func (q *Queries) GetPaymentByID(ctx context.Context, paymentID string) (Payment
 
 const getSearchResults = `-- name: GetSearchResults :many
 
-
-SELECT 'services' AS source, service_id, service_name AS value
-FROM services
-WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
-
-UNION ALL
-
-SELECT 'organizations' AS source, organization_id, name AS value
-FROM organizations
-WHERE to_tsvector(name) @@ websearch_to_tsquery($1)
+SELECT service_id, organization_id, service_name, service_description, duration FROM services WHERE service_name ILIKE '%' || $1 || '%'
 `
-
-type GetSearchResultsRow struct {
-	Source    string `json:"source"`
-	ServiceID string `json:"service_id"`
-	Value     string `json:"value"`
-}
 
 // -- name: UpdatePaymentStatus :exec
 // UPDATE payments
@@ -257,19 +293,22 @@ type GetSearchResultsRow struct {
 //	transaction_ref = $3
 //
 // WHERE payment_id = $1;
-// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
-// Search services.name
-// Search organisations.email
-func (q *Queries) GetSearchResults(ctx context.Context, websearchToTsquery string) ([]GetSearchResultsRow, error) {
-	rows, err := q.db.Query(ctx, getSearchResults, websearchToTsquery)
+func (q *Queries) GetSearchResults(ctx context.Context, dollar_1 string) ([]Service, error) {
+	rows, err := q.db.Query(ctx, getSearchResults, dollar_1)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []GetSearchResultsRow{}
+	items := []Service{}
 	for rows.Next() {
-		var i GetSearchResultsRow
-		if err := rows.Scan(&i.Source, &i.ServiceID, &i.Value); err != nil {
+		var i Service
+		if err := rows.Scan(
+			&i.ServiceID,
+			&i.OrganizationID,
+			&i.ServiceName,
+			&i.ServiceDescription,
+			&i.Duration,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -389,6 +428,41 @@ type InsertSlotTemplateParams struct {
 func (q *Queries) InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error {
 	_, err := q.db.Exec(ctx, insertSlotTemplate, arg.ServiceID, arg.StartTime, arg.EndTime)
 	return err
+}
+
+const updateOrganizationData = `-- name: UpdateOrganizationData :one
+UPDATE organizations
+SET name = $1, location = $2, start_time = $3, end_time = $4
+WHERE email = $5
+RETURNING organization_id, name, location, start_time, end_time, email
+`
+
+type UpdateOrganizationDataParams struct {
+	Name      string      `json:"name"`
+	Location  *string     `json:"location"`
+	StartTime pgtype.Time `json:"start_time"`
+	EndTime   pgtype.Time `json:"end_time"`
+	Email     *string     `json:"email"`
+}
+
+func (q *Queries) UpdateOrganizationData(ctx context.Context, arg UpdateOrganizationDataParams) (Organization, error) {
+	row := q.db.QueryRow(ctx, updateOrganizationData,
+		arg.Name,
+		arg.Location,
+		arg.StartTime,
+		arg.EndTime,
+		arg.Email,
+	)
+	var i Organization
+	err := row.Scan(
+		&i.OrganizationID,
+		&i.Name,
+		&i.Location,
+		&i.StartTime,
+		&i.EndTime,
+		&i.Email,
+	)
+	return i, err
 }
 
 const updatePaymentStatus = `-- name: UpdatePaymentStatus :exec
