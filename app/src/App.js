@@ -9,7 +9,7 @@ import ServicesPage from "./pages/servicePage/ServicesPage";
 import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
-
+import Footer from "./components/footer/Footer";
 
 function App() {
   return (
