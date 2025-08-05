@@ -10,6 +10,16 @@ import (
 
 type Querier interface {
 	CreateBooking(ctx context.Context, arg CreateBookingParams) (Booking, error)
+	CreateOrganization(ctx context.Context, arg CreateOrganizationParams) (Organization, error)
+	// -- Search services.name
+	// SELECT 'services' AS source, service_id, service_name AS value
+	// FROM services
+	// WHERE to_tsvector(service_name) @@ websearch_to_tsquery($1)
+	// UNION ALL
+	// -- Search organisations.email
+	// SELECT 'organizations' AS source, organization_id, name AS value
+	// FROM organizations
+	// WHERE to_tsvector(name) @@ websearch_to_tsquery($1);
 	CreatePayment(ctx context.Context, arg CreatePaymentParams) (Payment, error)
 	CreateService(ctx context.Context, arg CreateServiceParams) (string, error)
 	// -- name: GetPaymentStatusByID :one
@@ -25,14 +35,12 @@ type Querier interface {
 	//     status = $2,
 	//     transaction_ref = $3
 	// WHERE payment_id = $1;
-	// SELECT * FROM services WHERE service_name ILIKE '%' || $1 || '%';
-	// Search services.name
-	// Search organisations.email
-	GetSearchResults(ctx context.Context, websearchToTsquery string) ([]GetSearchResultsRow, error)
+	GetSearchResults(ctx context.Context, dollar_1 string) ([]Service, error)
 	GetServiceSlots(ctx context.Context, serviceID string) ([]ServiceSlotTemplate, error)
 	GetServiceWithOrgTimes(ctx context.Context, serviceID string) (GetServiceWithOrgTimesRow, error)
 	GetServicesByOrganization(ctx context.Context, organizationID string) ([]Service, error)
 	InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplateParams) error
+	UpdateOrganizationData(ctx context.Context, arg UpdateOrganizationDataParams) (Organization, error)
 	UpdatePaymentStatus(ctx context.Context, arg UpdatePaymentStatusParams) error
 }
 

@@ -24,6 +24,7 @@ type Organization struct {
 	Location       *string     `json:"location"`
 	StartTime      pgtype.Time `json:"start_time"`
 	EndTime        pgtype.Time `json:"end_time"`
+	Email          *string     `json:"email"`
 }
 
 type Payment struct {
