@@ -13,6 +13,10 @@ import Footer from "./components/footer/Footer";
 import About from "./components/aboutUs/About";
 import { OrganizationHomePage } from "./pages/OrganizationHomePage/OrganizationHomePage";
 import { Authentication } from "./components/Authentication/Authentication";
+// import { OrganizationHomePage } from "./pages/OrganizationHomePage/OrganizationHomePage";
+import { Authentication } from "./components/Authentication/Authentication";
+import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
+import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
 function App() {
   return (
     <>
@@ -38,8 +42,10 @@ function App() {
 
           <Route path="/login" element={<Authentication />} />
           <Route path="/home" element={<OrganizationHomePage />} />
-  </Routes>
-        
+          {/* <Route path="/home" element={<OrganizationHomePage />} /> */}
+          <Route path="/organization//*" element={<OrganizationDashboard />} />
+          <Route path="/create-service" element={<CreateServiceComponent />} />
+        </Routes>      
       </Router>
       <Footer />
     </>
