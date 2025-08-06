@@ -3,16 +3,19 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { ComingSoonPage } from "./pages/landingPage/ComingSoonPage";
+import { LandingPage } from "./pages/landingPage/LandingPage";
 import ServicesPage from "./pages/servicePage/ServicesPage";
 
 import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
-// import { OrganizationHomePage } from "./pages/OrganizationHomePage/OrganizationHomePage";
+
+import About from "./components/aboutUs/About";
+
 import { Authentication } from "./components/Authentication/Authentication";
 import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
 import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
+
 
 function App() {
   return (
@@ -20,7 +23,7 @@ function App() {
       <Router>
         <Routes>
           {/*  Default landing or placeholder */}
-          <Route path="/" element={<ComingSoonPage />} />
+          <Route path="/" element={<LandingPage />} />
 
           {/* organizations screen */}
           <Route path="/organizations" element={<OrganizationCard />} />
@@ -36,8 +39,11 @@ function App() {
           {/* <Route path="/input" element={<CustomerInput />} /> */}
 
           <Route path="/contact" element={<ContactUs />} />
+
+          {/* don't delete,  Routes for testing */}
+          <Route path="/about" element={<About />} />
+
           <Route path="/login" element={<Authentication />} />
-          {/* <Route path="/home" element={<OrganizationHomePage />} /> */}
           <Route path="/organization//*" element={<OrganizationDashboard />} />
           <Route path="/create-service" element={<CreateServiceComponent />} />
         </Routes>
