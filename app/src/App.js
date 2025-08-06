@@ -9,8 +9,10 @@ import ServicesPage from "./pages/servicePage/ServicesPage";
 import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
-import { OrganizationHomePage } from "./pages/OrganizationHomePage/OrganizationHomePage";
+// import { OrganizationHomePage } from "./pages/OrganizationHomePage/OrganizationHomePage";
 import { Authentication } from "./components/Authentication/Authentication";
+import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
+import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
 
 function App() {
   return (
@@ -35,7 +37,9 @@ function App() {
 
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/login" element={<Authentication />} />
-          <Route path="/home" element={<OrganizationHomePage />} />
+          {/* <Route path="/home" element={<OrganizationHomePage />} /> */}
+          <Route path="/organization//*" element={<OrganizationDashboard />} />
+          <Route path="/create-service" element={<CreateServiceComponent />} />
         </Routes>
         
       </Router>
