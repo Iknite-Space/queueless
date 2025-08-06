@@ -1,18 +1,20 @@
-import "./ComingSoonPage.css";
-
 import React from "react";
+import "./LandingPage.css";
 import { useNavigate } from "react-router";
-
+import Header from "../../components/header/Header";
+import About from "../../components/aboutUs/About";
 import Footer from "../../components/footer/Footer";
 
-import Header from "../../components/header/Header";
-
-export function ComingSoonPage() {
+export function LandingPage() {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleClickBookSlot = () => {
     navigate("/organizations");
   };
+
+    // const handleClickRegisterService = () => {
+    //   navigate("/contact");
+    // };
 
   return (
     <>
@@ -33,7 +35,7 @@ export function ComingSoonPage() {
             </div>
 
             <div className="button-container">
-              <button className="navigation-button" onClick={handleClick}>
+              <button className="navigation-button" onClick={handleClickBookSlot}>
                 Book A Service
               </button>
             </div>
@@ -44,6 +46,8 @@ export function ComingSoonPage() {
           </div>
         </div>
       </main>
+
+      <About />
 
       <Footer />
     </>

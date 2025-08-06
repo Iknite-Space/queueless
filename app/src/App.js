@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import "./App.css";
 
-import { ComingSoonPage } from "./pages/landingPage/ComingSoonPage";
+import { LandingPage } from "./pages/landingPage/LandingPage";
 import ServicesPage from "./pages/servicePage/ServicesPage";
 
 import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
@@ -17,7 +17,7 @@ function App() {
       <Router>
         <Routes>
           {/*  Default landing or placeholder */}
-          <Route path="/" element={<ComingSoonPage />} />
+          <Route path="/" element={<LandingPage />} />
 
           {/* organizations screen */}
           <Route path="/organizations" element={<OrganizationCard />} />
