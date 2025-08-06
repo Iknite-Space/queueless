@@ -28,16 +28,14 @@
   line-height: 1.18em ;
 }
 
+.brand-name{
+  font-weight: 800;
+}
+
 /* remember to delete this (.third-line) and do it well */
 
 .about-description .third-line{
   margin-left: 20px;
-}
-
-.wave-divider {
-  background-size: cover;
-  height: 100px;
-  margin-bottom: -5px;
 }
 
 .user-section {
@@ -53,11 +51,12 @@
 }
 
 .user-card {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.582);
   text-align: center;
   max-width: 45%;
   flex: 1;
   padding: 2.5rem;
+ box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.01);
 }
 
 .user-card h2{
@@ -68,21 +67,33 @@
 }
 .user-card li {
  list-style-type: none;
- /* background-color: palegoldenrod; */
  width: fit-content;
  font-size:1.18rem ;
   margin-bottom: 0.5em;
   padding: 0.4rem;
+  display: flex;
+  
 
 }
-.user-card img {
-  width: 60px;
-  margin-bottom: 1rem;
+
+.user-card-icon{
+  font-size: 24px;
+  margin-inline-end: 20px;
+}
+
+.check-icon{
+  margin-inline-end: 20px;
+}
+
+.flow-section h2{
+
+  font-size: 2rem;
 }
 
 .flow-section {
   padding: 4rem 2rem;
   text-align: center;
+  font-size: 1.4rem;
 }
 
 .flow-diagram {
@@ -99,7 +110,8 @@
   color: #02153D;
   padding: 0.8rem 1.2rem;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 500;
+  display: flex;
 }
 
 .features-section {
@@ -116,18 +128,29 @@
 }
 
 .feature-card {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.575);
   color: #02153D;
   padding: 1rem 1.5rem;
   border-radius: 10px;
-  font-weight: bold;
+  font-size: 1.5rem;
+  /* font-weight: 600; */
   min-width: 150px;
   text-align: center;
   transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  row-gap: 1.5rem;
 }
 
 .feature-card:hover {
   transform: scale(1.05);
+}
+.feature-card .feature-icons{
+  font-size: 60px;
+  font-weight: 200;
+
 }
 
 .cta-section {
@@ -140,6 +163,7 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
+  
 }
 
 .cta-org, .cta-user {
@@ -147,15 +171,24 @@
   font-size: 1rem;
   border-radius: 50px;
   border: none;
+}
+.cta-org:hover, .cta-user:hover{
   cursor: pointer;
+  box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.3);
+
+
 }
 
 .cta-org {
-  background-color: #FFA500;
-  color: white;
+  background-color: var(--alert-amber);
+  color: var(--primary-dark);
+   font-size: 24px;
+  font-weight: 800;
 }
 
 .cta-user {
-  background-color: white;
-  color: #02153D;
+  background-color: var(--info-blue);
+  color: var(--primary-white);
+  font-size: 24px;
+  font-weight: 800;
 }
