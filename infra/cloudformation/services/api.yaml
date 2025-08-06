@@ -61,6 +61,15 @@ Parameters:
 
 Resources:
 
+  # FirebaseSecret:
+  #   Type: "AWS::SecretsManager::Secret"
+  #   Properties:
+  #     Name: !Sub "/${EnvId}/firebase"
+  
+  #     Tags:
+  #       - Key: EnvId
+  #         Value: !Ref EnvId
+
   AppDatabaseSecret:
     Type: "AWS::SecretsManager::Secret"
     Properties:
@@ -133,9 +142,11 @@ Resources:
               ValueFrom: !Sub "${DbAdminSecretArn}:port::"
             - Name: DB_PASSWORD
               ValueFrom: !Sub "${AppDatabaseSecret}:password::"
+            - Name: FIREBASE_CONFIG
+              ValueFrom: arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/firebase-EpXyaE
             - Name: CAMPAY_CONFIG
               ValueFrom: arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/campay-bxpvAM
-
+    
     # A role needed by ECS to Start the Ecs Service
   ExecutionRole:
     Type: AWS::IAM::Role
@@ -164,7 +175,10 @@ Resources:
                 Resource:
                   - !Ref AppDatabaseSecret
                   - !Ref DbAdminSecretArn
+                  # - !Ref FirebaseSecret
                   - "arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/campay-bxpvAM"
+                  - "arn:aws:secretsmanager:us-east-1:957877467588:secret:/dev/firebase-EpXyaE"
+                  
 
   # A role for the containers
   TaskRole:

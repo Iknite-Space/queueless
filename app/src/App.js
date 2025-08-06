@@ -10,6 +10,9 @@ import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
 import About from "./components/aboutUs/About";
+import { OrganizationHomePage } from "./pages/OrganizationHomePage/OrganizationHomePage";
+import { Authentication } from "./components/Authentication/Authentication";
+
 
 function App() {
   return (
@@ -36,7 +39,11 @@ function App() {
 
           {/* don't delete,  Routes for testing */}
           <Route path="/about" element={<About />} />
+
+          <Route path="/login" element={<Authentication />} />
+          <Route path="/home" element={<OrganizationHomePage />} />
         </Routes>
+        
       </Router>
     </>
   );
