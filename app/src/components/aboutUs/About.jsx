@@ -1,5 +1,6 @@
 import React from "react";
 import "./About.css";
+import { useNavigate } from "react-router";
 import { FaRegUser } from "react-icons/fa6";
 import { GiAvoidance } from "react-icons/gi";
 import { IoAddCircleOutline } from "react-icons/io5";
@@ -8,17 +9,29 @@ import { LuClock2 } from "react-icons/lu";
 import { GrStatusGood } from "react-icons/gr";
 import { SlLock } from "react-icons/sl";
 import { GiProgression } from "react-icons/gi";
+import PropTypes from 'prop-types'
 
-function About() {
+
+About.propTypes = {
+  onClickBookService: PropTypes.func.isRequired
+}
+
+function About( {onClickBookService} ) {
+
+  const navigate = useNavigate();
+  const onClickRegister = () => {
+    navigate("/contact");
+  };
+
   return (
-    <div className="about-container">
+    <div id="about" className="about-container">
       {/* header Section */}
       <section className="about-header-section">
         <p className="about-header-text">Book Services Without the Wait</p>
         {/* <p>Skip the queue. Book your slot. Save time.</p> */}
         <p className="about-description">
-          <span className="brand-name">QLess</span> enables customers book slots for services at their
-          convenience, while organizations{" "}
+          <span className="brand-name">QLess</span> enables customers book slots
+          for services at their convenience, while organizations
           <span className="third-line">manage time effortlessly.</span>{" "}
         </p>
       </section>
@@ -29,22 +42,22 @@ function About() {
           <h2>For Customers</h2>
           <ul>
             <li>
-              <FaRegUser className="user-card-icon"/>
+              <FaRegUser className="user-card-icon" />
               Browse services
             </li>
             <li>
-              <IoAddCircleOutline className="user-card-icon"/>
+              <IoAddCircleOutline className="user-card-icon" />
               Pick a time
             </li>
             <li>
-              <GiAvoidance className="user-card-icon"/>
+              <GiAvoidance className="user-card-icon" />
               Avoid waiting
             </li>
           </ul>
         </div>
         <div className="user-card admin-card">
           <h2>
-            <PiBuildingOffice className="user-card-icon"/>
+            <PiBuildingOffice className="user-card-icon" />
             For Organizations
           </h2>
           <ul>
@@ -106,8 +119,10 @@ function About() {
       <section className="cta-section">
         <h2>Ready to streamline your service experience?</h2>
         <div className="cta-buttons">
-          <button className="cta-org">Register Organization</button>
-          <button className="cta-user">Book a Service</button>
+          <button className="cta-org" onClick={onClickRegister}>
+            Register Organization
+          </button>
+          <button className="cta-user" onClick={onClickBookService}>Book a Service</button>
         </div>
       </section>
     </div>
