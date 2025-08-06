@@ -45,7 +45,10 @@
   padding: 0.5rem 1.5rem;
   font-size: 1.5rem;
   font-weight: 500;
+  border: none;
   border-radius: 60px;
+  cursor: pointer;
+  margin-block-start: 60px;
   -webkit-border-radius: 60px;
   -moz-border-radius: 60px;
   -ms-border-radius: 60px;

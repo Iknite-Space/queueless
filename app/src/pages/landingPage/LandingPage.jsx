@@ -12,9 +12,6 @@ export function LandingPage() {
     navigate("/organizations");
   };
 
-    // const handleClickRegisterService = () => {
-    //   navigate("/contact");
-    // };
 
   return (
     <>
@@ -35,11 +32,13 @@ export function LandingPage() {
             </div>
 
             <div className="button-container">
-              <button className="navigation-button" onClick={handleClickBookSlot}>
+              <button
+                className="navigation-button"
+                onClick={handleClickBookSlot}
+              >
                 Book A Service
               </button>
             </div>
-            
           </div>
           <div className="hero-image">
             <img src="/assets/images/hero-image.svg" alt="hero caption" />
@@ -47,7 +46,7 @@ export function LandingPage() {
         </div>
       </main>
 
-      <About />
+      <About onClickBookService={handleClickBookSlot}/>
 
       <Footer />
     </>
