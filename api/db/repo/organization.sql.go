@@ -223,6 +223,25 @@ func (q *Queries) GetBookingsInDateRange(ctx context.Context, arg GetBookingsInD
 	return items, nil
 }
 
+const getOrganizationData = `-- name: GetOrganizationData :one
+SELECT organization_id, name, location, start_time, end_time, email FROM organizations
+WHERE email = $1
+`
+
+func (q *Queries) GetOrganizationData(ctx context.Context, email *string) (Organization, error) {
+	row := q.db.QueryRow(ctx, getOrganizationData, email)
+	var i Organization
+	err := row.Scan(
+		&i.OrganizationID,
+		&i.Name,
+		&i.Location,
+		&i.StartTime,
+		&i.EndTime,
+		&i.Email,
+	)
+	return i, err
+}
+
 const getOrganizations = `-- name: GetOrganizations :many
 SELECT organization_id, name, location, start_time, end_time, email FROM organizations
 WHERE name <> ''
