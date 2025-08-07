@@ -35,7 +35,7 @@ export function CreateServiceComponent({ org_id, onClose }) {
 
     try {
       const res = await fetch(
-        `http://localhost:8085/api/v1/${org_id}/services`,
+        `https://api.queueless.xyz/api/v1/${org_id}/services`,
         {
           method: "POST",
           headers: {
