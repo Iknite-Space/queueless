@@ -9,6 +9,7 @@ import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation
 import { CreateServiceComponent } from "../../components/CreateServiceComponent/CreateServiceComponent";
 import { OrganizationHeader } from "../../components/header/OrganizationHeader";
 import { doSignOut } from '../../firebase/auth'
+import { formatTime } from "../../utils/format_time";
 
 
 Sidebar.propTypes = {
@@ -35,18 +36,21 @@ function Sidebar({ org_name }) {
 Dashboard.propTypes = {
   org_name: PropTypes.string.isRequired,
   org_id: PropTypes.string.isRequired,
+  showModal: PropTypes.bool.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
+  handleCreateService: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  bookings: PropTypes.func.isRequired,
+  numberOfServices: PropTypes.func.isRequired,
 }
 
-function Dashboard({ org_name, org_id }) {
-  const [showModal, setShowModal] = useState(false);
+function Dashboard({ org_name, org_id, showModal, handleCloseModal, handleCreateService, bookings, numberOfServices }) {
 
-  const handleCreateService = () => {
-    setShowModal(true);
-  };
+  const navigate = useNavigate()
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-  };
+  const handleViewBookings = () => {
+    navigate("/organization/bookings")
+  }
 
   return (
     <div className="dashboard">
@@ -56,17 +60,43 @@ function Dashboard({ org_name, org_id }) {
           : `Welcome, ${org_name} admin`}
       </h1>
 
-      <div className="cards">
-        <div className="card">Total Services: 5</div>
-        <div className="card">Todays Bookings: 3</div>
-        <div className="card">Pending Requests: 2</div>
+      <div className="kpi">
+      <div className="dashboard-cards">
+        <div className="dashboard-card">
+          <div className="total-services">{numberOfServices}</div>
+          <div>Total Services</div> 
+          </div>
+        <div className="dashboard-card">
+          <div className="total-bookings">{bookings.length}</div>
+          <div>Total Bookings</div>
+          </div>
       </div>
 
-      <div className="actions">
+      <div className="dashboard-actions">
+        <div className="div">
         <button className="action-button" onClick={handleCreateService}>
           Add New Service
         </button>
-        <button className="action-button">View All Bookings</button>
+        </div>
+        <div className="div">
+        <button className="action-button" onClick={handleViewBookings}>View All Bookings</button>
+        </div>
+      </div>
+      </div>
+
+      <div className="upcoming-bookings">
+        <h2>Upcoming Bookings</h2>
+        {bookings.map((booking) => {
+          return(
+          <div key={booking.booking_id} className="card-container">
+        <h3 className="user-name">{booking.cus_name}</h3>
+        <p className="service-name">{booking.service_name}</p>
+        <p className="time">Today, {formatTime(booking.start_time.Microseconds)}</p>
+        
+      </div>
+          )
+        })}
+        
       </div>
 
       {showModal && (
@@ -81,46 +111,24 @@ function Dashboard({ org_name, org_id }) {
 }
 
 Services.propTypes = {
-  // org_name: PropTypes.string.isRequired,
   org_id: PropTypes.string.isRequired,
+  showModal: PropTypes.bool.isRequired,
+  handleCloseModal: PropTypes.func.isRequired,
+  handleCreateService: PropTypes.func.isRequired,
+  setShowModal: PropTypes.func.isRequired,
+  services: PropTypes.array.isRequired,
 }
 
-function Services({ org_id }) {
+function Services({ org_id, services, showModal, handleCloseModal, handleCreateService }) {
   // const [isLoading, setIsLoading] = useState(true)
-  const [services, setServices] = useState(null)
-
-  useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const res = await fetch(`https://api.queueless.xyz/api/v1/organizations/${org_id}/services`, {
-        // headers: {
-        //   Authorization: `Bearer ${idToken}`,
-        // },
-      });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
-      const data = await res.json();
-      setServices(data.services[0]);
-      console.log(data.services[0])
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally{
-      // setIsLoading(false)
-    }
-  };
-
-  fetchData();
-}, [org_id]);
+  
 
   return (
     <div className="services">
       <h2 className="section-title">Services</h2>
       <div className="services-actions">
-        <button className="add-button">Add Service</button>
-        <input type="text" placeholder="Search services..." className="search" />
+        <button className="add-button" onClick={handleCreateService}>Add Service</button>
+        {/* <input type="text" placeholder="Search services..." className="search" /> */}
       </div>
       <table className="table">
         <thead>
@@ -128,43 +136,65 @@ function Services({ org_id }) {
             <th>Name</th>
             <th>Description</th>
             <th>Duration (In minutes)</th>
-            <th>Actions</th>
+            {/* <th>Actions</th> */}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{services?.service_name}</td>
-            <td>{services?.service_description}</td>
-            <td>{services?.duration}</td>
-            <td><button className="edit-button">Edit</button> <button className="delete-button">Delete</button></td>
+          {services.map((service) => {
+            return(
+              <tr key={service.service_id}>
+            <td>{service.service_name}</td>
+            <td>{service.service_description}</td>
+            <td>{service.duration}</td>
+            {/* <td><button className="edit-button">Edit</button> <button className="delete-button">Delete</button></td> */}
           </tr>
+            )
+          })}
+          
         </tbody>
       </table>
+
+      {showModal && (
+        <div className="modal-backdrop">
+          <div className="modal-content">
+            <CreateServiceComponent org_id={org_id} onClose={handleCloseModal} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
 
-function Bookings() {
+Bookings.propTypes = {
+  bookings: PropTypes.string.isRequired,
+}
+
+function Bookings( { bookings } ) {
+  
   return (
     <div className="bookings">
       <h2 className="section-title">Bookings</h2>
-      <input type="text" placeholder="Filter by date/service..." className="search" />
+      {/* <input type="text" placeholder="Filter by date/service..." className="search" /> */}
       <table className="table">
         <thead>
           <tr>
             <th>Client</th>
-            <th>Time</th>
+            <th>Day/Time</th>
             <th>Service</th>
-            <th>Status</th>
+            <th>Client Contact</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Jane Doe</td>
-            <td>10:00 AM</td>
-            <td>Consulting</td>
-            <td>Confirmed</td>
-          </tr>
+          {bookings.map((booking) => {
+            const startTime = formatTime(booking.start_time.Microseconds)
+            return(
+          <tr key={booking.booking_id}>
+            <td>{booking.cus_name}</td>
+            <td>{`${booking.booking_date}, ${startTime}`}</td>
+            <td>{booking.service_name}</td>
+            <td>{booking.phone_number}</td>
+          </tr>)
+          })}
         </tbody>
       </table>
     </div>
@@ -192,16 +222,9 @@ function Profile({ org }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // const requestBody = {
-    //   service_name: formData.service_name,
-    //   service_description: formData.service_description,
-    //   duration: duration,
-    
-    // };
-
     try {
       const res = await fetch(
-        "https://api.queueless.xyz/api/v1/organization/update/profile",
+        "http://localhost:8085/api/v1/organization/update/profile",
         {
           method: "PATCH",
           headers: {
@@ -235,7 +258,7 @@ function Profile({ org }) {
         <input name="start_time" className="form-input" type="text" placeholder="e.g. 08:00:00" onChange={handleChange} value={formData.start_time} required/>
 
         <label className="form-label">End time</label>
-        <input name="end_time" className="form-input" type="text" placeholder="e.g. 17:00:00" onChange={handleChange} value={formData.end_time} required/>
+        <input name="end_time" className="form-input"  placeholder="e.g. 17:00:00" onChange={handleChange} value={formData.end_time} required/>
 
         <label className="form-label">Location</label>
         <input name="location" className="form-input" type="text" onChange={handleChange} value={formData.location}  />
@@ -246,7 +269,7 @@ function Profile({ org }) {
         {/* <label className="form-label">Upload Logo</label>
         <input className="form-input" type="file" /> */}
 
-        <button type="submit" className="submit-button">Save Changes</button>
+        <button type="submit" className="update-profile-button">Save Changes</button>
       </form>
     </div>
   );
@@ -254,16 +277,29 @@ function Profile({ org }) {
 
 export default function OrganizationDashboard() {
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleCreateService = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
   const {user, idToken, loading } = useFirebaseUser();
   const [userData, setUserData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [bookings, setBookings] = useState([])
+  const [services, setServices] = useState([])
 
+  //fetch organization data
   useEffect(() => {
   if (!user || !idToken) return;
 
   const fetchData = async () => {
     try {
-      const res = await fetch("https://api.queueless.xyz/api/v1/organization/data", {
+      const res = await fetch("http://localhost:8085/api/v1/organization/data", {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
@@ -286,6 +322,51 @@ export default function OrganizationDashboard() {
   fetchData();
 }, [user, idToken]);
 
+useEffect(() => {
+    // if (!userData?.org_id) return;  
+  const fetchData = async () => {
+    try {
+      const res = await fetch("https://api.queueless.xyz/api/v1/organization/bookings");
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setBookings(data.bookings);
+      console.log(data.bookings)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally{
+      // setIsLoading(false)
+    }
+  };
+
+  fetchData();
+}, [userData?.organization_id]);
+
+  useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const res = await fetch(`http://localhost:8085/api/v1/organizations/${userData?.organization_id}/services`);
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+
+      const data = await res.json();
+      setServices(data.services);
+      console.log(data.services)
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally{
+      // setIsLoading(false)
+    }
+  };
+
+  fetchData();
+}, [userData?.organization_id]);
+
   if (loading) return <LoadingAnimation />;
 
   if (!user) {
@@ -296,6 +377,7 @@ export default function OrganizationDashboard() {
     return <LoadingAnimation />
   }
 
+
   return (
     <div className="content">
       <div className=""> <OrganizationHeader orgName={userData?.name} /> </div>
@@ -304,9 +386,9 @@ export default function OrganizationDashboard() {
       <Sidebar org_name={userData?.name} />
       <div className="main">
         <Routes>
-          <Route path="/" element={<Dashboard org_name={userData?.name} org_id={userData?.organization_id} />} />
-          <Route path="service" element={<Services org_id={userData?.organization_id} />} />
-          <Route path="bookings" element={<Bookings />} />
+          <Route path="/" element={<Dashboard bookings={bookings} numberOfServices={services?.length} org_name={userData?.name} org_id={userData?.organization_id} showModal={showModal} setShowModal={setShowModal} handleCreateService={handleCreateService} handleCloseModal={handleCloseModal} />} />
+          <Route path="service" element={<Services services={services} org_id={userData?.organization_id} showModal={showModal} setShowModal={setShowModal} handleCreateService={handleCreateService} handleCloseModal={handleCloseModal} />} />
+          <Route path="bookings" element={<Bookings bookings={bookings} />} />
           <Route path="profile" element={<Profile org={userData} />} />
         </Routes>
       </div>
