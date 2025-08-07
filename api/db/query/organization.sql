@@ -118,3 +118,20 @@ WHERE service_id = $1
 -- name: CreateBooking :one
 INSERT INTO bookings (payment_id, service_id, slot_id, booking_date, status) VALUES ($1,$2,$3,$4,$5)
 RETURNING *;
+
+-- name: GetOrganizationBookings :many
+SELECT 
+  b.booking_id, 
+  b.booking_date, 
+  p.cus_name, 
+  p.cus_email, 
+  p.phone_number,
+  s.service_name, 
+  st.start_time
+FROM bookings b 
+LEFT JOIN payments p 
+  ON b.payment_id = p.payment_id 
+LEFT JOIN services s 
+  ON s.service_id = p.service_id
+LEFT JOIN service_slot_templates st 
+  ON st.id = p.slot_id;
