@@ -27,6 +27,7 @@ type Querier interface {
 	// FROM payments
 	// WHERE payment_id = $1;
 	GetBookingsInDateRange(ctx context.Context, arg GetBookingsInDateRangeParams) ([]GetBookingsInDateRangeRow, error)
+	GetOrganizationBookings(ctx context.Context) ([]GetOrganizationBookingsRow, error)
 	GetOrganizationData(ctx context.Context, email *string) (Organization, error)
 	GetOrganizations(ctx context.Context) ([]Organization, error)
 	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
