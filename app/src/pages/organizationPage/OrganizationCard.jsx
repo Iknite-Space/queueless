@@ -68,12 +68,13 @@ function OrganizationCard() {
         <input
           type="text"
           placeholder="Search organization..."
-          value={searchTerm}
+value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="org-search-bar"
         />
-   </div>
+  
 
+      </div>
       <div className="organization-grid">
         {isLoading ? (
           <LoadingAnimation name="organizations" />
