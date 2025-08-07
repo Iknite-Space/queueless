@@ -25,6 +25,10 @@ RETURNING service_id;
 SELECT * FROM organizations
 WHERE name <> '';
 
+-- name: GetOrganizationData :one
+SELECT * FROM organizations
+WHERE email = $1;
+
 -- name: GetServicesByOrganization :many
 SELECT * FROM services
 WHERE organization_id = $1;
