@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import emailjs from "@emailjs/browser";
+import { Link } from "react-router";
 import "./ContactUs.css";
 
 export const ContactUs = () => {
@@ -65,7 +66,8 @@ export const ContactUs = () => {
             Request Access
           </button>
           <div>
-            Already have an account? <a href="/login">Login</a>
+            Already have an account? <Link to="/login">Login</Link>
+            {/* <a href="/login">Login</a> */}
           </div>
         </form>
       </div>
