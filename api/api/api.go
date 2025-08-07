@@ -71,6 +71,9 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 
 	//update the organization table
 	r.PATCH("/api/v1/organization/update/profile", h.handleUpdateOrganization)
+
+	//get organization bookings
+	r.GET("/api/v1/organization/bookings", h.handleGetOrganizationBookings)
 	return r
 }
 
@@ -656,5 +659,25 @@ func (h *MessageHandler) handleUpdateOrganization(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":       "success",
 		"organization": org,
+	})
+}
+
+// Endpoint to get all bookings by organization
+func (h *MessageHandler) handleGetOrganizationBookings(c *gin.Context) {
+	// id := c.Param("id")
+	// if id == "" {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+	// 	return
+	// }
+
+	bookings, err := h.querier.GetOrganizationBookings(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":   "success",
+		"bookings": bookings,
 	})
 }
