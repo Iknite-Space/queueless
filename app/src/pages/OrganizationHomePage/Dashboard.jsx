@@ -92,7 +92,7 @@ function Services({ org_id }) {
   useEffect(() => {
   const fetchData = async () => {
     try {
-      const res = await fetch(`http://localhost:8085/api/v1/organizations/${org_id}/services`, {
+      const res = await fetch(`https://api.queueless.xyz/api/v1/organizations/${org_id}/services`, {
         // headers: {
         //   Authorization: `Bearer ${idToken}`,
         // },
@@ -201,7 +201,7 @@ function Profile({ org }) {
 
     try {
       const res = await fetch(
-        "http://localhost:8085/api/v1/organization/update/profile",
+        "https://api.queueless.xyz/api/v1/organization/update/profile",
         {
           method: "PATCH",
           headers: {
@@ -263,7 +263,7 @@ export default function OrganizationDashboard() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:8085/api/v1/organization/data", {
+      const res = await fetch("https://api.queueless.xyz/api/v1/organization/data", {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
