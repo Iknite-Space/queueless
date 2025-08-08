@@ -9,6 +9,7 @@ import { LuClock2 } from "react-icons/lu";
 import { GrStatusGood } from "react-icons/gr";
 import { SlLock } from "react-icons/sl";
 import { GiProgression } from "react-icons/gi";
+import { FaGears } from "react-icons/fa6";
 import PropTypes from 'prop-types'
 
 
@@ -107,32 +108,43 @@ function About( {onClickBookService} ) {
           </div>
         </div>
         <div className="organization-procedure-container">
+
+          <div className="user-card admin-card">
+            <h2>
+              <PiBuildingOffice className="user-card-icon" />
+              For Organizations
+            </h2>
+            <ul>
+              <li>
+                <span className="check-icon">&#10004;</span>Organization admins
+                register their organization name
+              </li>
+              <li>
+                <span className="check-icon">&#10004;</span>Set their various
+                services they offer as an organization
+              </li>
+              <li>
+                <span className="check-icon">&#10004;</span>Set the duration
+                needed to complete each service
+              </li>
+              <li>
+                <span className="check-icon">&#10004;</span>Also state their
+                working hour Start and End time on working days
+              </li>
+              <li>
+                <FaGears className="user-card-icon" />
+                The System generates the slots available for booking
+              </li>
+            </ul>
+          </div>
+          
           <div className="man-using-phone-image">
             <img
-              src="/assets/images/queue.jpg"
+              src="/assets/images/confirm-booking.jpg"
               alt="gentleman booking a service with phone"
             />
           </div>
-          <div className="customer-procedure">
-            
-<div className="user-card admin-card">
-          <h2>
-            <PiBuildingOffice className="user-card-icon" />
-            For Organizations
-          </h2>
-          <ul>
-            <li>
-              <span className="check-icon">&#10004;</span>Register
-            </li>
-            <li>
-              <span className="check-icon">&#10004;</span>Define services
-            </li>
-            <li>
-              <span className="check-icon">&#10004;</span>Manage bookings
-            </li>
-          </ul>
-        </div>
-          </div>
+
         </div>
       </section>
 
