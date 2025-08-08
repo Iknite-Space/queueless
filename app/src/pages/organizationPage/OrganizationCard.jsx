@@ -60,21 +60,8 @@ function OrganizationCard() {
   return (
     <div className="organization-page">
       <h1 className="page-title">Featured Organizations</h1>
+      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
 
-      {/* Search bar with icon */}
-       <div className="search-container">
-         <SearchBar/>
-        <div/>
-        <input
-          type="text"
-          placeholder="Search organization..."
-value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="org-search-bar"
-        />
-  
-
-      </div>
       <div className="organization-grid">
         {isLoading ? (
           <LoadingAnimation name="organizations" />
