@@ -1,19 +1,19 @@
 .search-container {
     display: flex;
     align-items: center;
-    width: 100%; /* Full width */
-    max-width: 1500px; /* Wider than before */
+    width: 100%;
+    max-width: 1500px;
     margin: 0 auto 2rem auto;
     background-color: #fff;
     border: 2px solid #ccc;
-    border-radius: 50px; /* Fully rounded ends */
+    border-radius: 50px;
     padding: 0.5rem 1.5rem;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
 /* Search icon styling */
 .search-icon {
-    margin-right: 0.8rem;
+    margin-right: 2rem;
     font-size: 1.4rem;
     color: #050404;
     font-weight: bold;
