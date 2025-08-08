@@ -7,11 +7,13 @@ import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation
 Cards.propTypes = {
   name: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
 };
 
-function Cards({ name, location }) {
+function Cards({ imageUrl, name, location }) {
   return (
     <div className="org-card">
+      <img src={imageUrl !== "" ? imageUrl : null} alt="organization-logo" />
       <h2 className="organization-name">{name}</h2>
       <p className="organization-location">{location}</p>
     </div>
@@ -20,36 +22,39 @@ function Cards({ name, location }) {
 
 function OrganizationCard() {
   const navigate = useNavigate();
-const [organizations, setOrganizations] = useState([]);
-const [isLoading, setIsLoading] = useState(true);
+  const [organizations, setOrganizations] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-useEffect(() => {
-  const fetchOrganizations = async () => {
-    try {
-      const res = await fetch("https://api.queueless.xyz/api/v1/organizations");
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      try {
+        const res = await fetch(
+          "https://api.queueless.xyz/api/v1/organizations"
+        );
 
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Status: ${res.status} - ${errorText}`);
+          // throw new Error("Network response was not ok");
+        }
+
+        const data = await res.json();
+        setOrganizations(data.organizations);
+      } catch (error) {
+        console.error("Failed to fetch organizations:", error);
+      } finally {
+        setIsLoading(false);
       }
+    };
 
-      const data = await res.json();
-      setOrganizations(data.organizations);
-    } catch (error) {
-      console.error("Failed to fetch organizations:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  fetchOrganizations();
-}, []);
-
-
+    fetchOrganizations();
+  }, []);
 
   return (
     <div className="organization-grid">
-      {isLoading ?( < LoadingAnimation name='organizations' />):
-      organizations.length > 0 ? (
+      {isLoading ? (
+        <LoadingAnimation name="organizations" />
+      ) : organizations.length > 0 ? (
         organizations.map((org) => (
           //  <div key={org.organization_id}>
           //     <h2>{org.name}</h2>
@@ -58,10 +63,14 @@ useEffect(() => {
           <div
             key={org.organization_id}
             onClick={() =>
-              navigate(`/${org.organization_id}/services`, { state : org})
+              navigate(`/${org.organization_id}/services`, { state: org })
             }
           >
-            <Cards name={org.name} location={org.location} />
+            <Cards
+              imageUrl={org.image_url}
+              name={org.name}
+              location={org.location}
+            />
           </div>
         ))
       ) : (
