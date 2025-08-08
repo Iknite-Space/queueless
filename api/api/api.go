@@ -619,6 +619,7 @@ type UpdateOrganizationRequest struct {
 	StartTime string `json:"start_time"`
 	EndTime   string `json:"end_time"`
 	Email     string `json:"email"`
+	ImageUrl  string `json:"image_url"`
 }
 
 // Endpoint to update organization info
@@ -650,6 +651,7 @@ func (h *MessageHandler) handleUpdateOrganization(c *gin.Context) {
 		StartTime: startTime,
 		EndTime:   endTime,
 		Email:     &req.Email,
+		ImageUrl:  req.ImageUrl,
 	})
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error updating organization data": err.Error()})
