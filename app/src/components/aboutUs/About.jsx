@@ -37,7 +37,7 @@ function About( {onClickBookService} ) {
       </section>
 
       {/* Audience Section */}
-      <section className="user-section">
+      {/* <section className="user-section">
         <div className="user-card customer-card">
           <h2>For Customers</h2>
           <ul>
@@ -71,6 +71,68 @@ function About( {onClickBookService} ) {
               <span className="check-icon">&#10004;</span>Manage bookings
             </li>
           </ul>
+        </div>
+      </section>
+       */}
+
+      <section className="how-to-use">
+        <h1>How To Use</h1>
+        <div className="customer-procedure-container">
+          <div className="man-using-phone-image">
+            <img
+              src="/assets/images/main-img.jpg"
+              alt="gentleman booking a service with phone"
+            />
+          </div>
+          <div className="user-card customer-card">
+            <h2>For Customers</h2>
+            <ul>
+              <li>
+                <FaRegUser className="user-card-icon" />
+                Search and Select the organization you want their services
+              </li>
+              <li>
+                <FaRegUser className="user-card-icon" />
+                Choose the service you want, and book a slot
+              </li>
+              <li>
+                <IoAddCircleOutline className="user-card-icon" />
+                Pick a date and time convenient for you to complete booking
+              </li>
+              <li>
+                <GiAvoidance className="user-card-icon" />
+                Avoid waiting and come at your desired time.
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="organization-procedure-container">
+          <div className="man-using-phone-image">
+            <img
+              src="/assets/images/queue.jpg"
+              alt="gentleman booking a service with phone"
+            />
+          </div>
+          <div className="customer-procedure">
+            
+<div className="user-card admin-card">
+          <h2>
+            <PiBuildingOffice className="user-card-icon" />
+            For Organizations
+          </h2>
+          <ul>
+            <li>
+              <span className="check-icon">&#10004;</span>Register
+            </li>
+            <li>
+              <span className="check-icon">&#10004;</span>Define services
+            </li>
+            <li>
+              <span className="check-icon">&#10004;</span>Manage bookings
+            </li>
+          </ul>
+        </div>
+          </div>
         </div>
       </section>
 
@@ -122,7 +184,9 @@ function About( {onClickBookService} ) {
           <button className="cta-org" onClick={onClickRegister}>
             Register Organization
           </button>
-          <button className="cta-user" onClick={onClickBookService}>Book a Service</button>
+          <button className="cta-user" onClick={onClickBookService}>
+            Book a Service
+          </button>
         </div>
       </section>
     </div>
