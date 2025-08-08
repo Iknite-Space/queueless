@@ -29,7 +29,7 @@ type Querier interface {
 	GetBookingsInDateRange(ctx context.Context, arg GetBookingsInDateRangeParams) ([]GetBookingsInDateRangeRow, error)
 	GetOrganizationBookings(ctx context.Context) ([]GetOrganizationBookingsRow, error)
 	GetOrganizationData(ctx context.Context, email *string) (Organization, error)
-	GetOrganizations(ctx context.Context) ([]Organization, error)
+	GetOrganizations(ctx context.Context) ([]GetOrganizationsRow, error)
 	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
 	// -- name: UpdatePaymentStatus :exec
 	// UPDATE payments

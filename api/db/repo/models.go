@@ -25,6 +25,7 @@ type Organization struct {
 	StartTime      pgtype.Time `json:"start_time"`
 	EndTime        pgtype.Time `json:"end_time"`
 	Email          *string     `json:"email"`
+	ImageUrl       string      `json:"image_url"`
 }
 
 type Payment struct {
