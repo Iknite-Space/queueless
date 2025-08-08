@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import "./OrganizationCard.css";
 import { useNavigate } from "react-router";
 import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation";
+import SearchBar from "../../components/Search/SearchBar";
 
 // Extended PropTypes to support imageUrl and serviceDuration
 Cards.propTypes = {
@@ -61,16 +62,17 @@ function OrganizationCard() {
       <h1 className="page-title">Featured Organizations</h1>
 
       {/* Search bar with icon */}
-      <div className="search-container">
-        <span className="search-icon">🔍</span>
+       <div className="search-container">
+         <SearchBar/>
+        <div/>
         <input
           type="text"
-          placeholder="Search organizati..."
+          placeholder="Search organization..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="org-search-bar"
         />
-      </div>
+   </div>
 
       <div className="organization-grid">
         {isLoading ? (
