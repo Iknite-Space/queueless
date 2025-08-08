@@ -1,3 +1,4 @@
+
 .organization-cards {
     display: flex;
     flex-wrap: wrap;
@@ -37,34 +38,161 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
-  padding: 2rem;
-} */
+padding: 2rem;
 
-.org-card {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(203, 101, 101, 0.08);
-  padding: 1.5rem;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  display: block;
-   margin-bottom: 2px;
-   cursor: pointer;
+/* Overall page layout */
+.organization-page {
+  padding: 2rem;
+   font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
 }
 
+/* Title styling */
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  text-align: left;
+  color: #000;
+}
+
+
+/* Search bar container */
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 100%; /* Full width */
+  max-width: 1500px; /* Wider than before */
+  margin: 0 auto 2rem auto;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 50px; /* Fully rounded ends */
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Search icon styling */
+.search-icon {
+  margin-right: 0.8rem;
+  font-size: 1.4rem;
+  color: #000;
+  font-weight: bold;
+}
+
+/* Input field */
+.org-search-bar {
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  flex-grow: 1;
+  background-color: transparent;
+}
+
+
+/* Grid layout for cards */
+.organization-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+@media (max-width: 1024px) {
+  .organization-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .organization-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .organization-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card base layout */
+.org-card {
+  background-color: #fff;
+  border: 2px solid #f8cdd4;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Hover effect for card */
 .org-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
+/* Image wrapper to control aspect ratio */
+.org-image-wrapper {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  padding-top: 16px; /* Added padding to prevent image from touching top border */
+}
 
+/* Image styling */
+.org-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Card content styles */
+.org-details {
+  padding: 1rem;
+  text-align: center;
+}
 
 .organization-name {
-  margin: 0.5rem 0;
   font-size: 1.25rem;
-  color: #333;
+  font-weight: 600;
+  margin: 0.5rem 0;
 }
 
-.organization-location {
+.organization-location,
+.organization-duration {
   font-size: 0.95rem;
-  color: #666;
+  color: #555;
+  margin: 0.3rem 0;
+}
+
+/* Pagination buttons */
+.pagination-buttons {
+  display: flex;
+  justify-content: right;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.nav-button {
+  background-color: #383b3d;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.nav-button:hover {
+  background-color: #005a9e;
 }

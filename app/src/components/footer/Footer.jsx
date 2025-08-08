@@ -14,10 +14,11 @@ export default function Footer() {
         <li><a href="home.com">Contact Us</a></li>
         <li><a href="home.com">FAQ</a></li>
         </ul>
+
       </div>
 
       <div className="footer-section">
-        <h3>Social</h3>
+      <h3>Social</h3>
         <ul>
           <li>
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
@@ -35,9 +36,9 @@ export default function Footer() {
             </a>
           </li>
         </ul>
-      </div>
+      </div> 
 
-      <div className="footer-section">
+       <div className="footer-section">
         <h3>Legal</h3>
         <ul>
           <li><a href="home.com">Terms of Service</a></li>
@@ -53,3 +54,4 @@ export default function Footer() {
     </footer>
   );
 }
+

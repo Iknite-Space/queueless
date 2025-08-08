@@ -3,7 +3,7 @@ import "./LandingPage.css";
 import { useNavigate } from "react-router";
 import Header from "../../components/header/Header";
 import About from "../../components/aboutUs/About";
-import Footer from "../../components/footer/Footer";
+
 
 export function LandingPage() {
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export function LandingPage() {
 
       <About onClickBookService={handleClickBookSlot} />
 
-      <Footer />
+
     </div>
   );
 }

@@ -8,6 +8,7 @@ import "./ServicesPage.css";
 import { useNavigate, useParams, useLocation } from "react-router";
 import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation";
 
+
 ServiceCard.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
@@ -86,5 +87,4 @@ function ServicesPage() {
     </div>
   );
 }
-
 export default ServicesPage;
