@@ -18,7 +18,7 @@ export function LandingPage() {
       <Header />
       <main>
         <img
-          src="/assets/images/main-img.jpg"
+          src="/assets/images/waiting.jpg"
           alt="main-background"
           className="main-bg-image"
         />
