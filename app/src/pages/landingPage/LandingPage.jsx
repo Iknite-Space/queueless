@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import Header from "../../components/header/Header";
 import About from "../../components/aboutUs/About";
 
+
 export function LandingPage() {
   const navigate = useNavigate();
 
@@ -45,6 +46,7 @@ export function LandingPage() {
       </main>
 
       <About onClickBookService={handleClickBookSlot} />
+
 
     </div>
   );

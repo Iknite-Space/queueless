@@ -13,6 +13,8 @@ import { Authentication } from "./components/Authentication/Authentication";
 import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
 import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
 import Footer from "./components/footer/Footer";
+import About from "./components/aboutUs/About";
+
 function App() {
   return (
     <>
@@ -36,12 +38,14 @@ function App() {
 
           <Route path="/contact" element={<ContactUs />} />
 
+          {/* don't delete,  Routes for testing */}
+          <Route path="/about" element={<About />} />
+
           <Route path="/login" element={<Authentication />} />
-          <Route path="/home" element={<OrganizationDashboard/>}/>
-          {/* <Route path="/home" element={<OrganizationHomePage />} /> */}
           <Route path="/organization//*" element={<OrganizationDashboard />} />
           <Route path="/create-service" element={<CreateServiceComponent />} />
-        </Routes>      
+        </Routes>
+        
       </Router>
       <Footer />
     </>
