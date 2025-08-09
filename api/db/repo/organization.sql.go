@@ -223,6 +223,81 @@ func (q *Queries) GetBookingsInDateRange(ctx context.Context, arg GetBookingsInD
 	return items, nil
 }
 
+const getOrganizationBookings = `-- name: GetOrganizationBookings :many
+SELECT 
+  b.booking_id, 
+  b.booking_date, 
+  p.cus_name, 
+  p.cus_email, 
+  p.phone_number,
+  s.service_name, 
+  st.start_time
+FROM bookings b 
+LEFT JOIN payments p 
+  ON b.payment_id = p.payment_id 
+LEFT JOIN services s 
+  ON s.service_id = p.service_id
+LEFT JOIN service_slot_templates st 
+  ON st.id = p.slot_id
+`
+
+type GetOrganizationBookingsRow struct {
+	BookingID   string      `json:"booking_id"`
+	BookingDate pgtype.Date `json:"booking_date"`
+	CusName     string      `json:"cus_name"`
+	CusEmail    string      `json:"cus_email"`
+	PhoneNumber string      `json:"phone_number"`
+	ServiceName *string     `json:"service_name"`
+	StartTime   pgtype.Time `json:"start_time"`
+}
+
+func (q *Queries) GetOrganizationBookings(ctx context.Context) ([]GetOrganizationBookingsRow, error) {
+	rows, err := q.db.Query(ctx, getOrganizationBookings)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []GetOrganizationBookingsRow{}
+	for rows.Next() {
+		var i GetOrganizationBookingsRow
+		if err := rows.Scan(
+			&i.BookingID,
+			&i.BookingDate,
+			&i.CusName,
+			&i.CusEmail,
+			&i.PhoneNumber,
+			&i.ServiceName,
+			&i.StartTime,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getOrganizationData = `-- name: GetOrganizationData :one
+SELECT organization_id, name, location, start_time, end_time, email FROM organizations
+WHERE email = $1
+`
+
+func (q *Queries) GetOrganizationData(ctx context.Context, email *string) (Organization, error) {
+	row := q.db.QueryRow(ctx, getOrganizationData, email)
+	var i Organization
+	err := row.Scan(
+		&i.OrganizationID,
+		&i.Name,
+		&i.Location,
+		&i.StartTime,
+		&i.EndTime,
+		&i.Email,
+	)
+	return i, err
+}
+
 const getOrganizations = `-- name: GetOrganizations :many
 SELECT organization_id, name, location, start_time, end_time, email FROM organizations
 WHERE name <> ''

@@ -40,7 +40,7 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.Use(cors.New(cors.Config{
 		// included https://api.queueless.xyz to handle endpoint, as the access point
 		AllowOrigins:     []string{"http://localhost:3000", "https://queueless.xyz"},
-		AllowMethods:     []string{"GET", "POST", "OPTIONS"},
+		AllowMethods:     []string{"GET", "POST", "OPTIONS", "PATCH", "PUT"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Accept", "Authorization"},
 		AllowCredentials: true,
 	}))
@@ -71,6 +71,9 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 
 	//update the organization table
 	r.PATCH("/api/v1/organization/update/profile", h.handleUpdateOrganization)
+
+	//get organization bookings
+	r.GET("/api/v1/organization/bookings", h.handleGetOrganizationBookings)
 	return r
 }
 
@@ -178,6 +181,7 @@ func (h *MessageHandler) handleCreateService(c *gin.Context) {
 	var req repo.CreateServiceParams
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println(err.Error())
 		return
 	}
 
@@ -593,19 +597,19 @@ func (h *MessageHandler) handleGetOrganizationData(c *gin.Context) {
 		return
 	}
 
-	uid := token.UID
-	email := token.Claims
+	//get user credentials
+	// uid := token.UID
+	user_email := token.Claims["email"].(string) // convert email to type interface to string.
 
-	// organizations, err := h.querier.GetOrganizations(c)
-	// if err != nil {
-	// 	c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	// 	return
-	// }
+	org, err := h.querier.GetOrganizationData(c, &user_email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"Error, failed to get organization data": err.Error()})
+	}
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":           "success",
-		"organization_uid": uid,
-		"claims":           email,
+		"organizationData": org,
+		"email":            user_email,
 	})
 }
 
@@ -655,5 +659,25 @@ func (h *MessageHandler) handleUpdateOrganization(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"status":       "success",
 		"organization": org,
+	})
+}
+
+// Endpoint to get all bookings by organization
+func (h *MessageHandler) handleGetOrganizationBookings(c *gin.Context) {
+	// id := c.Param("id")
+	// if id == "" {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+	// 	return
+	// }
+
+	bookings, err := h.querier.GetOrganizationBookings(c)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"status":   "success",
+		"bookings": bookings,
 	})
 }

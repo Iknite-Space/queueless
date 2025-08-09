@@ -30,10 +30,10 @@ export function Authentication() {
       try {
         await doSignInWithEmailAndPassword(form.email, form.password)
         setForm({email:"", password:""})
-        navigate("/home")
+        navigate("/organization/")
       } catch (error) {
         toast.error(error.Message || "Login failed. Try again");
-        console.log("Login error:", error.Message)
+        console.log("Login error:", error)
       } finally {
         setIsSigningIn(false);
       }
