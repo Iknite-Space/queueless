@@ -3,7 +3,6 @@ import "./LandingPage.css";
 import { useNavigate } from "react-router";
 import Header from "../../components/header/Header";
 import About from "../../components/aboutUs/About";
-import Footer from "../../components/footer/Footer";
 
 export function LandingPage() {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ export function LandingPage() {
             <p className="head-text">Skip the queue</p>
             <div className="description">
               <p>
-                Find the services you need and reserve your a spot for a
+                Find the services you want and reserve your a spot for a
                 hassle-free visit.
               </p>
             </div>
@@ -47,7 +46,6 @@ export function LandingPage() {
 
       <About onClickBookService={handleClickBookSlot} />
 
-      <Footer />
     </div>
   );
 }
