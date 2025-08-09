@@ -51,7 +51,7 @@ INSERT INTO organizations (
 ) VALUES (
     $1, $2, $3, $4, $5
 )
-RETURNING organization_id, name, location, start_time, end_time, email
+RETURNING organization_id, name, location, start_time, end_time, email, image_url
 `
 
 type CreateOrganizationParams struct {
@@ -78,6 +78,7 @@ func (q *Queries) CreateOrganization(ctx context.Context, arg CreateOrganization
 		&i.StartTime,
 		&i.EndTime,
 		&i.Email,
+		&i.ImageUrl,
 	)
 	return i, err
 }
@@ -280,7 +281,7 @@ func (q *Queries) GetOrganizationBookings(ctx context.Context) ([]GetOrganizatio
 }
 
 const getOrganizationData = `-- name: GetOrganizationData :one
-SELECT organization_id, name, location, start_time, end_time, email FROM organizations
+SELECT organization_id, name, location, start_time, end_time, email, image_url FROM organizations
 WHERE email = $1
 `
 
@@ -294,31 +295,41 @@ func (q *Queries) GetOrganizationData(ctx context.Context, email *string) (Organ
 		&i.StartTime,
 		&i.EndTime,
 		&i.Email,
+		&i.ImageUrl,
 	)
 	return i, err
 }
 
 const getOrganizations = `-- name: GetOrganizations :many
-SELECT organization_id, name, location, start_time, end_time, email FROM organizations
+SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time FROM organizations
 WHERE name <> ''
 `
 
-func (q *Queries) GetOrganizations(ctx context.Context) ([]Organization, error) {
+type GetOrganizationsRow struct {
+	OrganizationID string      `json:"organization_id"`
+	Name           string      `json:"name"`
+	Location       *string     `json:"location"`
+	ImageUrl       string      `json:"image_url"`
+	StartTime      pgtype.Time `json:"start_time"`
+	EndTime        pgtype.Time `json:"end_time"`
+}
+
+func (q *Queries) GetOrganizations(ctx context.Context) ([]GetOrganizationsRow, error) {
 	rows, err := q.db.Query(ctx, getOrganizations)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	items := []Organization{}
+	items := []GetOrganizationsRow{}
 	for rows.Next() {
-		var i Organization
+		var i GetOrganizationsRow
 		if err := rows.Scan(
 			&i.OrganizationID,
 			&i.Name,
 			&i.Location,
+			&i.ImageUrl,
 			&i.StartTime,
 			&i.EndTime,
-			&i.Email,
 		); err != nil {
 			return nil, err
 		}
@@ -507,9 +518,9 @@ func (q *Queries) InsertSlotTemplate(ctx context.Context, arg InsertSlotTemplate
 
 const updateOrganizationData = `-- name: UpdateOrganizationData :one
 UPDATE organizations
-SET name = $1, location = $2, start_time = $3, end_time = $4
-WHERE email = $5
-RETURNING organization_id, name, location, start_time, end_time, email
+SET name = $1, location = $2, start_time = $3, end_time = $4, image_url = $5
+WHERE email = $6
+RETURNING organization_id, name, location, start_time, end_time, email, image_url
 `
 
 type UpdateOrganizationDataParams struct {
@@ -517,6 +528,7 @@ type UpdateOrganizationDataParams struct {
 	Location  *string     `json:"location"`
 	StartTime pgtype.Time `json:"start_time"`
 	EndTime   pgtype.Time `json:"end_time"`
+	ImageUrl  string      `json:"image_url"`
 	Email     *string     `json:"email"`
 }
 
@@ -526,6 +538,7 @@ func (q *Queries) UpdateOrganizationData(ctx context.Context, arg UpdateOrganiza
 		arg.Location,
 		arg.StartTime,
 		arg.EndTime,
+		arg.ImageUrl,
 		arg.Email,
 	)
 	var i Organization
@@ -536,6 +549,7 @@ func (q *Queries) UpdateOrganizationData(ctx context.Context, arg UpdateOrganiza
 		&i.StartTime,
 		&i.EndTime,
 		&i.Email,
+		&i.ImageUrl,
 	)
 	return i, err
 }

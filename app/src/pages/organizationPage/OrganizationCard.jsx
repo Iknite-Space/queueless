@@ -9,22 +9,20 @@ import SearchBar from "../../components/Search/SearchBar";
 Cards.propTypes = {
   name: PropTypes.string.isRequired,
   location: PropTypes.string.isRequired,
-  imageUrl: PropTypes.string,
-  serviceDuration: PropTypes.string,
+  imageUrl: PropTypes.string.isRequired,
 };
 
-// Card layout with image and duration below it
-function Cards({ name, location, imageUrl,}) {
+function Cards({ imageUrl, name, location }) {
   return (
     <div className="org-card">
-      {/* Image inside card layout */}
-      <div className="org-image-wrapper">
-        <img src={imageUrl} alt={`${name}`} className="org-image" />
+    <div className="org-image-wrapper">
+      <img src={imageUrl !== "" ? imageUrl : null} alt="organization-logo" />
       </div>
-      <div className="org-details">
-        <h2 className="organization-name">{name}</h2>
-        <p className="organization-location">{location}</p>
-      </div>
+ <div className="org-details">
+      <h2 className="organization-name">{name}</h2>
+      <p className="organization-location">{location}</p>
+ </div>
+
     </div>
   );
 }
@@ -33,13 +31,18 @@ function OrganizationCard() {
   const navigate = useNavigate();
   const [organizations, setOrganizations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
   const [searchTerm, setSearchTerm] = useState("");
+
 
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
         const res = await fetch("https://api.queueless.xyz/api/v1/organizations");
-        if (!res.ok) throw new Error("Network response was not ok");
+        if (!res.ok) {
+          const errorText = await res.text();
+          throw new Error(`Status: ${res.status} - ${errorText}`);
+        }
 
         const data = await res.json();
         setOrganizations(data.organizations);
@@ -87,10 +90,10 @@ value={searchTerm}
               }
             >
               <Cards
-                name={org.name}
-                location={org.location}
-                imageUrl="/assets/images/org2.png"
-              />
+              imageUrl={org.image_url}
+              name={org.name}
+              location={org.location}
+            />
             </div>
           ))
         ) : (

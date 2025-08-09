@@ -10,6 +10,7 @@ import { CreateServiceComponent } from "../../components/CreateServiceComponent/
 import { OrganizationHeader } from "../../components/header/OrganizationHeader";
 import { doSignOut } from '../../firebase/auth'
 import { formatTime } from "../../utils/format_time";
+import { handleFileUpload } from "../../utils/HandleUploadFile";
 
 
 Sidebar.propTypes = {
@@ -212,6 +213,8 @@ function Profile({ org }) {
       email: org?.email
     });
 
+  const [selectedImage, setSelectedImage] = useState()
+
     const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -222,6 +225,14 @@ function Profile({ org }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const imageUrl = await handleFileUpload(selectedImage)
+    console.log(imageUrl)
+
+    const requestBody = {
+      ...formData,
+      image_url: imageUrl
+    }
+
     try {
       const res = await fetch(
         "http://localhost:8085/api/v1/organization/update/profile",
@@ -230,20 +241,19 @@ function Profile({ org }) {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(requestBody),
         }
       );
 
       if (res.ok) {
         alert("organization info updated successfully!");
+        console.log(JSON.stringify(requestBody))
         
       } else {
         alert("Failed to update organization information.");
-        console.log(JSON.stringify(formData))
       }
     } catch (error) {
       console.error("Error:", error);
-      console.log(JSON.stringify(formData))
     }
   };
 
@@ -266,8 +276,10 @@ function Profile({ org }) {
         <label className="form-label">Organization Email</label>
         <input name="email" className="form-input std-email" type="email" value={formData.email} readOnly/>
 
-        {/* <label className="form-label">Upload Logo</label>
-        <input className="form-input" type="file" /> */}
+        <label className="form-label">Upload Logo</label>
+        <input name="logo" className="form-input" type="file" onChange={(event) => {
+          setSelectedImage(event.target.files[0])
+        }} />
 
         <button type="submit" className="update-profile-button">Save Changes</button>
       </form>

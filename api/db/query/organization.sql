@@ -9,8 +9,8 @@ RETURNING *;
 
 -- name: UpdateOrganizationData :one
 UPDATE organizations
-SET name = $1, location = $2, start_time = $3, end_time = $4
-WHERE email = $5
+SET name = $1, location = $2, start_time = $3, end_time = $4, image_url = $5
+WHERE email = $6
 RETURNING *;
 
 -- name: CreateService :one
@@ -22,7 +22,7 @@ INSERT INTO services (
 RETURNING service_id;
 
 -- name: GetOrganizations :many
-SELECT * FROM organizations
+SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time FROM organizations
 WHERE name <> '';
 
 -- name: GetOrganizationData :one
