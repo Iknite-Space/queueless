@@ -98,7 +98,7 @@ function About( {onClickBookService} ) {
               </li>
               <li>
                 <IoAddCircleOutline className="user-card-icon" />
-                Pick a date and time convenient for you to complete booking
+                Pick a date and time convenient for you to complete your booking
               </li>
               <li>
                 <GiAvoidance className="user-card-icon" />

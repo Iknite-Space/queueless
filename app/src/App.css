@@ -12,3 +12,13 @@ html {
 body {
   background-color: var(--primary-light)
 }
+
+
+.app-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+} 
+.page-content {
+  flex: 1;
+}  

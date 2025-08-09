@@ -4,6 +4,9 @@
     color: hsl(0, 43%, 96%);
     font-size: 14px;
     border-top: 1px solid #ccc;
+    /* position: fixed;
+    bottom: 0;
+    width: 100%; */
   }
 
   .footer-content {

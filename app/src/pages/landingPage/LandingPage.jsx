@@ -28,7 +28,7 @@ export function LandingPage() {
             <p className="head-text">Skip the queue</p>
             <div className="description">
               <p>
-                Find the services you need and reserve your a spot for a
+                Find the services you want and reserve your a spot for a
                 hassle-free visit.
               </p>
             </div>
@@ -46,7 +46,6 @@ export function LandingPage() {
       </main>
 
       <About onClickBookService={handleClickBookSlot} />
-
 
     </div>
   );

@@ -65,6 +65,7 @@ function ServicesPage() {
 
   // Render the service cards inside a responsive container
   return (
+    <>
     <div className="services-grid">
 
     {services.length > 0 ? (
@@ -85,6 +86,8 @@ function ServicesPage() {
       <LoadingAnimation name={services}/>
    </> )}
     </div>
+   </>
   );
+
 }
 export default ServicesPage;
