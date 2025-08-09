@@ -13,7 +13,7 @@ function Header() {
       <div className="nav-bar">
         <ul>
           <li>
-            <a href="/">Home</a>
+            <Link to="/" >Home</Link>
           </li>
           <li>
             <a href="#about">About</a>

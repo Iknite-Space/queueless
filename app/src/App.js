@@ -10,17 +10,17 @@ import { ServiceSlotsPage } from "./pages/slotsPage/ServiceSlotsPage";
 import OrganizationCard from "./pages/organizationPage/OrganizationCard";
 import { ContactUs } from "./pages/ContactUsPage/ContactUs";
 
-import About from "./components/aboutUs/About";
-
 import { Authentication } from "./components/Authentication/Authentication";
 import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
 import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
-
+import Footer from "./components/footer/Footer";
+import About from "./components/aboutUs/About";
 
 function App() {
   return (
-    <>
+    <div className="app-layout">
       <Router>
+        <div className="page-content">
         <Routes>
           {/*  Default landing or placeholder */}
           <Route path="/" element={<LandingPage />} />
@@ -40,16 +40,16 @@ function App() {
 
           <Route path="/contact" element={<ContactUs />} />
 
-          {/* don't delete,  Routes for testing */}
-          <Route path="/about" element={<About />} />
-
           <Route path="/login" element={<Authentication />} />
           <Route path="/organization//*" element={<OrganizationDashboard />} />
           <Route path="/create-service" element={<CreateServiceComponent />} />
         </Routes>
-        
+        </div>
+        <Footer />
       </Router>
-    </>
+
+    </div>
+
   );
 }
 

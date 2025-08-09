@@ -3,7 +3,7 @@ import "./LandingPage.css";
 import { useNavigate } from "react-router";
 import Header from "../../components/header/Header";
 import About from "../../components/aboutUs/About";
-import Footer from "../../components/footer/Footer";
+
 
 export function LandingPage() {
   const navigate = useNavigate();
@@ -14,21 +14,23 @@ export function LandingPage() {
 
 
   return (
-    <>
+    <div className="landing-page-body">
       <Header />
       <main>
+        <img
+          src="/assets/images/waiting.jpg"
+          alt="main-background"
+          className="main-bg-image"
+        />
         <div className="main-container">
           <div className="preview-box">
-            <p className="head-text">
-              Book Appointment For Your Service Easily
-            </p>
+            <p className="head-text">Book your spot in seconds.</p>
+            <p className="head-text">Skip the queue</p>
             <div className="description">
               <p>
-                Browse trusted organizations. Pick a service. Reserve your time
-                slot instantly.
+                Find the services you want and reserve your a spot for a
+                hassle-free visit.
               </p>
-              <br />
-              <p>Register your organization. Display your various services</p>
             </div>
 
             <div className="button-container">
@@ -40,15 +42,11 @@ export function LandingPage() {
               </button>
             </div>
           </div>
-          <div className="hero-image">
-            <img src="/assets/images/hero-image.svg" alt="hero caption" />
-          </div>
         </div>
       </main>
 
-      <About onClickBookService={handleClickBookSlot}/>
+      <About onClickBookService={handleClickBookSlot} />
 
-      <Footer />
-    </>
+    </div>
   );
 }
