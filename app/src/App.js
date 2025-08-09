@@ -14,7 +14,6 @@ import { Authentication } from "./components/Authentication/Authentication";
 import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
 import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
 import Footer from "./components/footer/Footer";
-import About from "./components/aboutUs/About";
 
 function App() {
   return (
