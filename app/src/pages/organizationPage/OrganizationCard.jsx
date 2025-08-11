@@ -16,7 +16,7 @@ function Cards({ imageUrl, name, location }) {
   return (
     <div className="org-card">
     <div className="org-image-wrapper">
-      <img src={imageUrl !== "" ? imageUrl : null} alt="organization-logo" />
+      <img src={imageUrl !== "" ? imageUrl : null} alt={`${name}-logo`} />
       </div>
  <div className="org-details">
       <h2 className="organization-name">{name}</h2>
@@ -49,7 +49,7 @@ function OrganizationCard() {
       } catch (error) {
         console.error("Failed to fetch organizations:", error);
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); 
       }
     };
 
@@ -67,7 +67,6 @@ function OrganizationCard() {
       {/* Search bar with icon */}
        <div className="search-container">
          <SearchBar/>
-        <div/>
         <input
           type="text"
           placeholder="Search organization..."
@@ -75,8 +74,6 @@ value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="org-search-bar"
         />
-  
-
       </div>
       <div className="organization-grid">
         {isLoading ? (
