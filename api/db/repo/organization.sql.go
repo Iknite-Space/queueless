@@ -283,7 +283,7 @@ func (q *Queries) GetOrganizationBookings(ctx context.Context) ([]GetOrganizatio
 }
 
 const getOrganizationData = `-- name: GetOrganizationData :one
-SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time FROM organizations
+SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time, email FROM organizations
 WHERE email = $1
 `
 
@@ -294,6 +294,7 @@ type GetOrganizationDataRow struct {
 	ImageUrl       string      `json:"image_url"`
 	StartTime      pgtype.Time `json:"start_time"`
 	EndTime        pgtype.Time `json:"end_time"`
+	Email          *string     `json:"email"`
 }
 
 func (q *Queries) GetOrganizationData(ctx context.Context, email *string) (GetOrganizationDataRow, error) {
@@ -306,6 +307,7 @@ func (q *Queries) GetOrganizationData(ctx context.Context, email *string) (GetOr
 		&i.ImageUrl,
 		&i.StartTime,
 		&i.EndTime,
+		&i.Email,
 	)
 	return i, err
 }
