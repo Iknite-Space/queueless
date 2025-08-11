@@ -47,9 +47,9 @@ func (q *Queries) CreateBooking(ctx context.Context, arg CreateBookingParams) (B
 
 const createOrganization = `-- name: CreateOrganization :one
 INSERT INTO organizations (
-     name, location, start_time, end_time, email
+     name, location, start_time, end_time, email, image_url
 ) VALUES (
-    $1, $2, $3, $4, $5
+    $1, $2, $3, $4, $5, $6
 )
 RETURNING organization_id, name, location, start_time, end_time, email, image_url
 `
@@ -60,6 +60,7 @@ type CreateOrganizationParams struct {
 	StartTime pgtype.Time `json:"start_time"`
 	EndTime   pgtype.Time `json:"end_time"`
 	Email     *string     `json:"email"`
+	ImageUrl  string      `json:"image_url"`
 }
 
 func (q *Queries) CreateOrganization(ctx context.Context, arg CreateOrganizationParams) (Organization, error) {
@@ -69,6 +70,7 @@ func (q *Queries) CreateOrganization(ctx context.Context, arg CreateOrganization
 		arg.StartTime,
 		arg.EndTime,
 		arg.Email,
+		arg.ImageUrl,
 	)
 	var i Organization
 	err := row.Scan(
@@ -281,21 +283,29 @@ func (q *Queries) GetOrganizationBookings(ctx context.Context) ([]GetOrganizatio
 }
 
 const getOrganizationData = `-- name: GetOrganizationData :one
-SELECT organization_id, name, location, start_time, end_time, email, image_url FROM organizations
+SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time FROM organizations
 WHERE email = $1
 `
 
-func (q *Queries) GetOrganizationData(ctx context.Context, email *string) (Organization, error) {
+type GetOrganizationDataRow struct {
+	OrganizationID string      `json:"organization_id"`
+	Name           string      `json:"name"`
+	Location       *string     `json:"location"`
+	ImageUrl       string      `json:"image_url"`
+	StartTime      pgtype.Time `json:"start_time"`
+	EndTime        pgtype.Time `json:"end_time"`
+}
+
+func (q *Queries) GetOrganizationData(ctx context.Context, email *string) (GetOrganizationDataRow, error) {
 	row := q.db.QueryRow(ctx, getOrganizationData, email)
-	var i Organization
+	var i GetOrganizationDataRow
 	err := row.Scan(
 		&i.OrganizationID,
 		&i.Name,
 		&i.Location,
+		&i.ImageUrl,
 		&i.StartTime,
 		&i.EndTime,
-		&i.Email,
-		&i.ImageUrl,
 	)
 	return i, err
 }

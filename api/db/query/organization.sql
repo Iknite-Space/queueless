@@ -1,9 +1,9 @@
 
 -- name: CreateOrganization :one
 INSERT INTO organizations (
-     name, location, start_time, end_time, email
+     name, location, start_time, end_time, email, image_url
 ) VALUES (
-    $1, $2, $3, $4, $5
+    $1, $2, $3, $4, $5, $6
 )
 RETURNING *;
 
@@ -26,7 +26,7 @@ SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, st
 WHERE name <> '';
 
 -- name: GetOrganizationData :one
-SELECT * FROM organizations
+SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time FROM organizations
 WHERE email = $1;
 
 -- name: GetServicesByOrganization :many
