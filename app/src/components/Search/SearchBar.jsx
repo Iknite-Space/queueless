@@ -6,7 +6,8 @@ function SearchBar(){
 
 return (
     <>
-      <CiSearch className=".search-icon" />
+    
+      <CiSearch className="search-icon" />
     </>
   );
   }
