@@ -28,7 +28,7 @@ type Querier interface {
 	// WHERE payment_id = $1;
 	GetBookingsInDateRange(ctx context.Context, arg GetBookingsInDateRangeParams) ([]GetBookingsInDateRangeRow, error)
 	GetOrganizationBookings(ctx context.Context) ([]GetOrganizationBookingsRow, error)
-	GetOrganizationData(ctx context.Context, email *string) (Organization, error)
+	GetOrganizationData(ctx context.Context, email *string) (GetOrganizationDataRow, error)
 	GetOrganizations(ctx context.Context) ([]GetOrganizationsRow, error)
 	GetPaymentByID(ctx context.Context, paymentID string) (Payment, error)
 	// -- name: UpdatePaymentStatus :exec
