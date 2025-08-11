@@ -235,7 +235,7 @@ function Profile({ org }) {
 
     try {
       const res = await fetch(
-        "http://localhost:8085/api/v1/organization/update/profile",
+        "https://api.queueless.xyz/api/v1/organization/update/profile",
         {
           method: "PATCH",
           headers: {
