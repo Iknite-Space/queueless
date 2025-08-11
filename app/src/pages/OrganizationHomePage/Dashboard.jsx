@@ -311,7 +311,7 @@ export default function OrganizationDashboard() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:8085/api/v1/organization/data", {
+      const res = await fetch("https://api.queueless.xyz/api/v1/organization/data", {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
@@ -360,7 +360,7 @@ useEffect(() => {
   useEffect(() => {
   const fetchData = async () => {
     try {
-      const res = await fetch(`http://localhost:8085/api/v1/organizations/${userData?.organization_id}/services`);
+      const res = await fetch(`https://api.queueless.xyz/api/v1/organizations/${userData?.organization_id}/services`);
 
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
