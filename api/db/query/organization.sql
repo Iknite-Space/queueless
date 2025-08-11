@@ -26,7 +26,7 @@ SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, st
 WHERE name <> '';
 
 -- name: GetOrganizationData :one
-SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time FROM organizations
+SELECT organization_id, name, location, COALESCE(image_url, '') AS image_url, start_time, end_time, email FROM organizations
 WHERE email = $1;
 
 -- name: GetServicesByOrganization :many
