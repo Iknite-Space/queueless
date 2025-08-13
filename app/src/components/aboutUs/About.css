@@ -1,3 +1,4 @@
+/* @import "/assets/images/qless-team.jpeg" */
 
 .about-container {
   font-family: arial;
@@ -37,6 +38,60 @@
 .about-description .third-line{
   margin-left: 20px;
 }
+
+
+
+/* who we are section */
+
+.team-qless{
+  background-color: red;
+  height: 80vh;
+}
+.team-qless img{
+width: 100%;
+/* object-fit:cover ; */
+}
+
+
+.about-section {
+  padding: 60px 20px;
+  /* background-color: var(--primary-light); */
+  text-align: center;
+  /* background-image: url("../../../public/assets/images/qless-team.jpeg"); */
+  /* background-repeat: no-repeat; */
+}
+
+.about-title {
+  font-size: 2.5rem;
+  color: var(--accent-orange);
+  margin-bottom: 20px;
+}
+
+.about-description {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto 40px;
+  color: var(--primary-dark);
+}
+
+.about-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
+}
+
+.highlight-box {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+
+
+
 
 .user-section {
   display: flex;
