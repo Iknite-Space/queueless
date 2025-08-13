@@ -15,14 +15,13 @@ Cards.propTypes = {
 function Cards({ imageUrl, name, location }) {
   return (
     <div className="org-card">
-    <div className="org-image-wrapper">
-      <img src={imageUrl !== "" ? imageUrl : null} alt={`${name}-logo`} />
+      <div className="org-image-wrapper">
+        <img src={imageUrl !== "" ? imageUrl : null} alt={`${name}-logo`} />
       </div>
- <div className="org-details">
-      <h2 className="organization-name">{name}</h2>
-      <p className="organization-location">{location}</p>
- </div>
-
+      <div className="org-details">
+        <h2 className="organization-name">{name}</h2>
+        <p className="organization-location">{location}</p>
+      </div>
     </div>
   );
 }
@@ -34,11 +33,12 @@ function OrganizationCard() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-
   useEffect(() => {
     const fetchOrganizations = async () => {
       try {
-        const res = await fetch("https://api.queueless.xyz/api/v1/organizations");
+        const res = await fetch(
+          "https://api.queueless.xyz/api/v1/organizations"
+        );
         if (!res.ok) {
           const errorText = await res.text();
           throw new Error(`Status: ${res.status} - ${errorText}`);
@@ -49,7 +49,7 @@ function OrganizationCard() {
       } catch (error) {
         console.error("Failed to fetch organizations:", error);
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     };
 
@@ -64,17 +64,11 @@ function OrganizationCard() {
     <div className="organization-page">
       <h1 className="page-title">Featured Organizations</h1>
 
-      {/* Search bar with icon */}
-       <div className="search-container">
-         <SearchBar/>
-        <input
-          type="text"
-          placeholder="Search organization..."
-value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="org-search-bar"
-        />
-      </div>
+      <SearchBar
+        placeholder="Search organization..."
+        value={searchTerm}
+        onChange={setSearchTerm}
+      />
       <div className="organization-grid">
         {isLoading ? (
           <LoadingAnimation name="organizations" />
@@ -83,14 +77,14 @@ value={searchTerm}
             <div
               key={org.organization_id}
               onClick={() =>
-                navigate(`/${org.organization_id}/services`, { state: org })
+                navigate(`/${org.organization_id}/services`, { state: {org, organizations} })
               }
             >
               <Cards
-              imageUrl={org.image_url}
-              name={org.name}
-              location={org.location}
-            />
+                imageUrl={org.image_url}
+                name={org.name}
+                location={org.location}
+              />
             </div>
           ))
         ) : (

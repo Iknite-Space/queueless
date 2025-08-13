@@ -4,7 +4,7 @@
   width: 50%;
   box-sizing: border-box;
   background-color: white;
-  margin: 35px auto;
+  margin: 100px auto 35px auto;
   border-radius: 15px;
 }
 
@@ -17,12 +17,12 @@
 }
 
 .week-header-controls {
-  font-weight: bolder;
+  font-weight: bolder; 
   text-align: center;
   margin-bottom: 16px;
 }
 
-.nav-button {
+.week-header-controls .nav-button {
   background-color: var(--accent-orange); 
   color: white;
   padding: 8px 16px;
@@ -32,7 +32,7 @@
   font-size: 14px;
 }
 
-.nav-button:hover {
+.week-header-controls .nav-button:hover {
   background-color: #eca16c; 
 }
 

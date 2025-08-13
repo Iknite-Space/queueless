@@ -3,6 +3,7 @@
   padding: 4rem;
   font-family: 'Segoe UI', sans-serif;
   background-color: #ffffff;
+  margin-top: 60px;
 }
 
 /* Title styling */
@@ -16,37 +17,6 @@
   
 }
 
-
-/* Search bar container */
-.search-container {
-  display: flex;
-  align-items: center;
-  width: 100%; 
-  max-width: 1500px; 
-  margin: 0 auto 2.5rem auto;
-  border: 1px solid #062882;
-  border-radius: 20px 20px 20px 20px;
-  box-shadow:  0 0 0 3px #C0DBFB;
-}
-
-/* Search icon styling */
-.search-icon {
-  margin-right: 0.8rem;
-  font-size: 1.4rem;
-  color: #000;
-  font-weight: bold;
-}
-
-/* Input field */
-.org-search-bar {
-  border: none;
-  outline: none;
-  font-size: 1rem;
-  flex-grow: 1;
-  background-color: transparent;
-}
-
-
 /* Grid layout for cards */
 .organization-grid {
   display: grid;
@@ -57,7 +27,7 @@
   margin: auto;
 }
 
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
   .organization-grid {
     grid-template-columns: 1fr 1fr 1fr;
   }
@@ -73,7 +43,7 @@
   .organization-grid {
     grid-template-columns: 1fr;
   }
-}
+} */
 
 /* Card base layout */
 .org-card {
