@@ -18,15 +18,19 @@
   cursor: pointer;
   }
 
-/* .search-container input {
-  height: 40px;
-  font-size: 16px;
-} */
-
 /* Search icon styling */
 .search-icon {
   margin-right: 0.8rem;
   font-size: 1.4rem;
   color: #000;
   font-weight: bold;
+}
+
+/* Input field */
+.org-search-bar {
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  flex-grow: 1;
+  background-color: transparent;
 }

@@ -73,21 +73,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       date: date,
     };
 
-    // handle final form submission here (e.g. POST request)
-
-    // setStep(3); // show payment pending screen
-
-    // //simulate dummy payment processing
-    // setTimeout(() => {
-    //   const success = Math.random() > 0.5; //50% chance of success or failure
-
-    //   if (success) {
-    //     setStep(4); // Payment successful
-    //   } else {
-    //     setStep(5); // payment failed
-    //   }
-    // }, 4000); // 4 seconds to simulate delay
-
     console.log(appPayload);
     // handle final form submission here (e.g. POST request)
     try {
@@ -100,6 +85,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
           },
         }
       );
+      setStep(3); // Show "Processing Payment"
       console.log("Submitted:", response);
       const paymentId = response.data.payment.payment_id;
       // extracted payment id is is saved to the browser to use
@@ -108,16 +94,17 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
       console.log("created payment id", paymentId);
 
       setPaymentId(paymentId); // allows UI to use it
-      setStep(3); // Show "Processing Payment"
+      
 
       // console.log("saved payment is:", savedPaymentId);
     } catch (err) {
+      alert("sorry, payment request could not be made. make sure your mobile number is 9 digits")
       console.log("submission failed", err);
     }
   };
 
   return (
-    <div className="input-background">
+    <div className="form-input-background">
       <h2 className="form-header">
         {step === 1
           ? "Fill in your details to confirm your slot"
@@ -137,13 +124,6 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
           step === 1 ? "input-form-container" : "confirm-details-container"
         }
       >
-        {/* <div className="input-image">
-          <img
-            src="/assets/images/input-form-img.png"
-            alt="customer input form"
-            width={400}
-          />
-        </div> */}
 
         {step === 1 && (
           <form className="customer-details" onSubmit={handleNext}>
@@ -166,7 +146,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               />
               <input
                 type="tel"
-                name="phone"
+                name="phone" 
                 placeholder="Momo Number 6xx xxx xxx"
                 value={formData.phone}
                 onChange={handleChange}
@@ -263,7 +243,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
           <div className="customer-details">
             <div className="confirmation-page">
               {/* <h3>Processing your payment...</h3> */}
-              <LoadingAnimation name="...waiting for confirmation" />
+              <LoadingAnimation name="...confirm your payment" />
               {/* {paymentId && <PollingStatus paymentId={paymentId} />} */}
             {paymentId && (
               <StatusSocket
