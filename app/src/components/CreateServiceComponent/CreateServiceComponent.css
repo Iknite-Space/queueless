@@ -11,7 +11,7 @@
   z-index: 999;
 }
 
-.modal-content {
+.modal-backdrop .modal-content {
   background-color: #fff;
   padding: 30px;
   width: 400px;
@@ -19,14 +19,14 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
-.modal-content h2 {
+.modal-backdrop .modal-content h2 {
   margin-top: 0;
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.modal-content input,
-.modal-content textarea {
+.modal-backdrop .modal-content input,
+.modal-backdrop .modal-content textarea {
   width: 100%;
   padding: 10px;
   margin-bottom: 15px;
@@ -35,7 +35,7 @@
   border: 1px solid #ccc;
 }
 
-.modal-content textarea {
+.modal-backdrop .modal-content textarea {
   resize: vertical;
   height: 80px;
 }

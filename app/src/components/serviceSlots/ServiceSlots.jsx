@@ -50,13 +50,7 @@ export function ServiceSlots({ org, service, date, bookedSlotIds = [], paymentSt
     const date = new Date(ms);
     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
-  // const navigate = useNavigate();
 
-  // const handleClickSlot = () => {
-  //   navigate("/input");
-  //   setShowModal(true);
-
-  // };
 
   const handleOpenModal = (slot) => {
     const ms = slot.start_time.Microseconds / 1000;
@@ -129,7 +123,7 @@ export function ServiceSlots({ org, service, date, bookedSlotIds = [], paymentSt
       })}
 
       <Modal
-        showModal={showModal}
+        showModal={showModal} 
         handleCloseModal={handleCloseModal}
         org={org}
         service={service}

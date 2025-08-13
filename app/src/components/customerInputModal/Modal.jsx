@@ -17,9 +17,8 @@ Modal.propTypes = {
 
 function Modal({showModal, handleCloseModal, org, service, slot, date}) {
   return (
-    <>
       <div 
-        className={`modal-overlay nput-background ${showModal ? 'modal-show' : ''}`}
+        className={`modal-overlay ${showModal ? 'modal-show' : ''}`}
         onClick={handleCloseModal}   
       >
         <div className="modal-content"
@@ -28,7 +27,6 @@ function Modal({showModal, handleCloseModal, org, service, slot, date}) {
           <CustomerInput handleCloseModal={handleCloseModal} org={org} service={service} slot={slot} date={date}/>
         </div>
       </div>
-    </>
   );
 }
 

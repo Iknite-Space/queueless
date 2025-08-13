@@ -119,7 +119,7 @@ const bookingsByDate = React.useMemo(() => {
           <button onClick={goToNextWeek} className="nav-button">
             Next →
           </button>
-        </div>
+        </div> 
         <div className="div">
         <div className="week-grid">
           {weekDates.map((d, i) => {

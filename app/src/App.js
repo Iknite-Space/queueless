@@ -14,11 +14,13 @@ import { Authentication } from "./components/Authentication/Authentication";
 import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
 import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
 import Footer from "./components/footer/Footer";
+import Header from "./components/header/Header";
 
 function App() {
   return (
     <div className="app-layout">
       <Router>
+        <Header />
         <div className="page-content">
         <Routes>
           {/*  Default landing or placeholder */}
@@ -34,14 +36,13 @@ function App() {
             path="/service/:serviceId/slots"
             element={<ServiceSlotsPage />}
           />
-          {/*  input  Screen */}
-          {/* <Route path="/input" element={<CustomerInput />} /> */}
 
           <Route path="/contact" element={<ContactUs />} />
 
           <Route path="/login" element={<Authentication />} />
           <Route path="/organization//*" element={<OrganizationDashboard />} />
           <Route path="/create-service" element={<CreateServiceComponent />} />
+
         </Routes>
         </div>
         <Footer />

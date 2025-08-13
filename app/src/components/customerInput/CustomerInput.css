@@ -1,12 +1,8 @@
-  .input-background{
+  .form-input-background{
    width: 800px;
    height: 600px;
   background: linear-gradient(to bottom right, #02153D, #0149be);
   border-radius: 15px;
-  /* position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center; */
 } 
 
 .form-header {
@@ -23,19 +19,17 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 50%;
+  width: 60%;
   height: fit-content;
   margin: 40px auto 0 auto;
   border-radius: 7px;
-    /* background: linear-gradient(to bottom right, #041844d2, #0149be); */
 }
 
 .customer-input {
   display: flex;
   flex-direction: column;
-  
-
   padding: 30px 10px 10px 10px;
+  width: 300px;
 }
 
 .customer-input input {
@@ -47,7 +41,6 @@
   -ms-border-radius: 4px;
   -o-border-radius: 4px;
   padding: 10px;
-  width: 300px;
   margin-bottom: 40px;
   color:var(--text-dark);
 
@@ -61,7 +54,6 @@
 .input-form-actions {
   display: flex;
   justify-content: space-around;
-  /* padding: 10px; */
   margin-block-start: 30px;
 }
   
@@ -82,19 +74,6 @@
   border-style: none;
   cursor: pointer;
 }
-/* .submit-button {
-  background: var(--accent-orange);
-  padding: 8px 15px;
-  border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  -ms-border-radius: 6px;
-  -o-border-radius: 6px;
-  border-style: none;
-  cursor: pointer;
-}  */
-
-/* styles for the confirm details page */
 
 .confirm-row {
   display: flex;

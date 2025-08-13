@@ -1,17 +1,4 @@
 
-/* .form-container {
-  width: 700px;
-  margin: 200px auto 0 auto;
-  background-color: brown;
-} */
-
-/* .form-container label{
-  display: block;
-  margin-bottom: 6px;
-} */
-/* .contact-details {
-  background: linear-gradient(to top left, var(--primary-dark), var(--primary-blue));
-} */
 .form-container form {
   background: rgb(192, 191, 191);
   width:500px;
