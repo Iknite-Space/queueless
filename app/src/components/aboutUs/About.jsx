@@ -37,44 +37,34 @@ function About( {onClickBookService} ) {
         </p>
       </section>
 
-      {/* Audience Section */}
-      {/* <section className="user-section">
-        <div className="user-card customer-card">
-          <h2>For Customers</h2>
-          <ul>
-            <li>
-              <FaRegUser className="user-card-icon" />
-              Browse services
-            </li>
-            <li>
-              <IoAddCircleOutline className="user-card-icon" />
-              Pick a time
-            </li>
-            <li>
-              <GiAvoidance className="user-card-icon" />
-              Avoid waiting
-            </li>
-          </ul>
-        </div>
-        <div className="user-card admin-card">
-          <h2>
-            <PiBuildingOffice className="user-card-icon" />
-            For Organizations
-          </h2>
-          <ul>
-            <li>
-              <span className="check-icon">&#10004;</span>Register
-            </li>
-            <li>
-              <span className="check-icon">&#10004;</span>Define services
-            </li>
-            <li>
-              <span className="check-icon">&#10004;</span>Manage bookings
-            </li>
-          </ul>
+    <div className="team-qless">
+          <img src="/assets/images/qless-team.jpeg" alt="about team" />
+<section className="about-section">
+        <h2 className="about-title">Who We Are</h2>
+        <p className="about-description">
+          We are a passionate team dedicated to making service booking fast,
+          easy, and stress-free. Whether you are scheduling a visit or managing
+          appointments, we are here to simplify the process.
+        </p>
+
+        <div className="about-highlights">
+          <div className="highlight-box">
+            <h3>⏱️ Fast Booking</h3>
+            <p>Reserve your spot in seconds.</p>
+          </div>
+          <div className="highlight-box">
+            <h3>🤝 Trusted Partners</h3>
+            <p>Working with verified organizations.</p>
+          </div>
+          <div className="highlight-box">
+            <h3>📍 Local Impact</h3>
+            <p>Serving communities across Cameroon.</p>
+          </div>
         </div>
       </section>
-       */}
+    </div>
+
+      
 
       <section className="how-to-use">
         <h1>How To Use</h1>
@@ -108,7 +98,6 @@ function About( {onClickBookService} ) {
           </div>
         </div>
         <div className="organization-procedure-container">
-
           <div className="user-card admin-card">
             <h2>
               <PiBuildingOffice className="user-card-icon" />
@@ -137,14 +126,13 @@ function About( {onClickBookService} ) {
               </li>
             </ul>
           </div>
-          
+
           <div className="man-using-phone-image">
             <img
               src="/assets/images/confirm-booking.jpg"
               alt="gentleman booking a service with phone"
             />
           </div>
-
         </div>
       </section>
 

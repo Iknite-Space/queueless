@@ -22,9 +22,9 @@ type PaymentRequest struct {
 
 type PaymentResponse struct {
 	Reference string `json:"reference"`
-	UssdCode  string `json:"ussd_code"` // Changed from Ussd_Code to match JSON tag
+	UssdCode  string `json:"ussd_code"` 
 	Operator  string `json:"operator"`
-	Status    string `json:"status"` // Campay often includes status
+	Status    string `json:"status"` 
 }
 
 func RequestPayment(momoNumber, amount, currency, description, ref string) (*PaymentResponse, error) {
@@ -89,7 +89,7 @@ func RequestPayment(momoNumber, amount, currency, description, ref string) (*Pay
 		UssdCode  string `json:"ussd_code"`
 		Operator  string `json:"operator"`
 		Status    string `json:"status"`
-		Error     string `json:"error"` // Campay sometimes returns errors here
+		Error     string `json:"error"` 
 	}
 
 	if err := json.Unmarshal(bodyBytes, &result); err != nil {
