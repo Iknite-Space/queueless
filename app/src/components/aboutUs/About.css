@@ -9,68 +9,76 @@
 
 .about-header-section {
   text-align: center;
-  /* padding: 5rem 2rem 3rem; */
-  /* background-color: lightblue; */
-}
-
-.about-header-text {
-  font-size: 4rem;
+    font-size: 2.8rem;
   color: var(--accent-orange);
-  width: 600px;
-  margin: 0 auto;
+  min-width: 75%;
+  margin: 0 auto 4rem;
   font-weight: 500;
+  
 }
 
-.about-description {
-  font-size: 2rem;
-  margin: 1rem auto;
-  width:720px;
-  text-align: center;
-  line-height: 1.18em ;
+.gradient-text {
+  font-size: 48px; /* Adjust font size as needed */
+  font-weight: bold;
+  background-image: linear-gradient(to right, #f32170, #ff6b08, #ec16ec, #f8e21f);
+  -webkit-background-clip: text;
+  background-clip: text; /* Standard property */
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Standard property */
 }
 
-.brand-name{
-  font-weight: 800;
-}
 
-/* remember to delete this (.third-line) and do it well */
-
-.about-description .third-line{
-  margin-left: 20px;
-}
 
 
 
 /* who we are section */
 
 .team-qless{
-  background-color: red;
-  height: 80vh;
+  background-color: var(--bg-white);
+  height: 60vh;
+  display: flex;
+  padding: 4rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  
 }
+
+.team-qless-img-container{
+ width: 40%;
+
+}
+
 .team-qless img{
-width: 100%;
-/* object-fit:cover ; */
+  border-radius: 4px;
+  width: 100%;
+  object-fit: cover;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
 }
 
 
 .about-section {
-  padding: 60px 20px;
+  padding: 0px 20px;
   /* background-color: var(--primary-light); */
   text-align: center;
-  /* background-image: url("../../../public/assets/images/qless-team.jpeg"); */
-  /* background-repeat: no-repeat; */
+  color: white;
+  text-align: center;
+  min-width: 45%;
 }
 
-.about-title {
+.about-title, .usage-title {
   font-size: 2.5rem;
   color: var(--accent-orange);
-  margin-bottom: 20px;
+  margin-bottom: 80px;
 }
 
 .about-description {
   font-size: 1.2rem;
   max-width: 800px;
-  margin: 0 auto 40px;
+  margin: 0 auto 4rem;
   color: var(--primary-dark);
 }
 
@@ -84,6 +92,7 @@ width: 100%;
 .highlight-box {
   background-color: white;
   border-radius: 10px;
+  color: var(--primary-dark);
   padding: 20px;
   width: 250px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -207,12 +216,7 @@ width: 100%;
     padding: 3rem 2rem;
   text-align: center;
   font-size: 1.4rem;
-}
-
-.how-to-use h1{
-text-align: center;
-font-size: 2rem;
-margin-block-end: 4rem;
+  
 }
 
 .customer-procedure-container, .organization-procedure-container{
@@ -220,6 +224,11 @@ margin-block-end: 4rem;
   flex: auto;
   justify-content: space-between;
   width: 100%;
+
+}
+
+.customer-procedure-container{
+  margin-block-end: 4rem;
 }
 
 .man-using-phone-image {
