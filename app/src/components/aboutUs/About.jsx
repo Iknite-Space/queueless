@@ -150,7 +150,7 @@ function About({ onClickBookService }) {
 
       {/* Features Section */}
       <section className="features-section">
-        <h2>Why It Works</h2>
+        <h2 className="why-it-works-title">Why It Works</h2>
         <div className="features-grid">
           <div className="feature-card">
             <LuClock2 className="feature-icons" /> Time-efficient
