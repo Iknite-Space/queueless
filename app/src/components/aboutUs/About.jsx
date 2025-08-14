@@ -10,15 +10,13 @@ import { GrStatusGood } from "react-icons/gr";
 import { SlLock } from "react-icons/sl";
 import { GiProgression } from "react-icons/gi";
 import { FaGears } from "react-icons/fa6";
-import PropTypes from 'prop-types'
-
+import PropTypes from "prop-types";
 
 About.propTypes = {
-  onClickBookService: PropTypes.func.isRequired
-}
+  onClickBookService: PropTypes.func.isRequired,
+};
 
-function About( {onClickBookService} ) {
-
+function About({ onClickBookService }) {
   const navigate = useNavigate();
   const onClickRegister = () => {
     navigate("/contact");
@@ -27,47 +25,45 @@ function About( {onClickBookService} ) {
   return (
     <div id="about" className="about-container">
       {/* header Section */}
-      <section className="about-header-section">
-        <p className="about-header-text">Book Services Without the Wait</p>
-        {/* <p>Skip the queue. Book your slot. Save time.</p> */}
-        <p className="about-description">
-          <span className="brand-name">QLess</span> enables customers book slots
-          for services at their convenience, while organizations
-          <span className="third-line">manage time effortlessly.</span>{" "}
+      <section className="about-header-section ">
+        <p className="gradient-text">Get Served Without the Wait</p>
+        <p className="gradient-text">
+          Register Organization & manage queues seamlessly
         </p>
       </section>
 
-    <div className="team-qless">
+      <div className="team-qless">
+        <div className="team-qless-img-container">
           <img src="/assets/images/qless-team.jpeg" alt="about team" />
-<section className="about-section">
-        <h2 className="about-title">Who We Are</h2>
-        <p className="about-description">
-          We are a passionate team dedicated to making service booking fast,
-          easy, and stress-free. Whether you are scheduling a visit or managing
-          appointments, we are here to simplify the process.
-        </p>
-
-        <div className="about-highlights">
-          <div className="highlight-box">
-            <h3>⏱️ Fast Booking</h3>
-            <p>Reserve your spot in seconds.</p>
-          </div>
-          <div className="highlight-box">
-            <h3>🤝 Trusted Partners</h3>
-            <p>Working with verified organizations.</p>
-          </div>
-          <div className="highlight-box">
-            <h3>📍 Local Impact</h3>
-            <p>Serving communities across Cameroon.</p>
-          </div>
         </div>
-      </section>
-    </div>
+        <section className="about-section">
+          <h2 className="about-title">Who We Are</h2>
+          <p className="about-description">
+            We are a passionate team dedicated to making service booking fast,
+            easy, and stress-free. Whether you are want a service as a customer
+            or provide a service as an organization, we are here to simplify the
+            process.
+          </p>
 
-      
+          <div className="about-highlights">
+            <div className="highlight-box">
+              <h3>⏱️ Fast Booking</h3>
+              <p>Reserve your spot in seconds.</p>
+            </div>
+            <div className="highlight-box">
+              <h3>🤝 Trusted Partners</h3>
+              <p>Working with verified organizations.</p>
+            </div>
+            <div className="highlight-box">
+              <h3>📍 Local Impact</h3>
+              <p>Serving communities across Cameroon.</p>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <section className="how-to-use">
-        <h1>How To Use</h1>
+        <h1 className="usage-title">How To Use</h1>
         <div className="customer-procedure-container">
           <div className="man-using-phone-image">
             <img
