@@ -15,6 +15,7 @@ import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
 import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
 import HeaderLayout from "./components/layouts/HeaderLayout";
 import PlainLayout from "./components/layouts/PlainLayout";
+import Footer from "./components/footer/Footer";
 
 function App() {
   return (
@@ -42,7 +43,6 @@ function App() {
             <Route element={<PlainLayout/>}>
               <Route path="/contact" element={<ContactUs />} />
 
-              <Route path="/login" element={<Authentication />} />
               <Route
                 path="/organization//*"
                 element={<OrganizationDashboard />}
@@ -52,8 +52,10 @@ function App() {
                 element={<CreateServiceComponent />}
               />
             </Route>
+              <Route path="/login" element={<Authentication />} />
           </Routes>
         </div>
+        <Footer />
       </Router>
     </div>
   );
