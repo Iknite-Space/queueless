@@ -1,3 +1,4 @@
+/* @import "/assets/images/qless-team.jpeg" */
 
 .about-container {
   font-family: arial;
@@ -8,35 +9,98 @@
 
 .about-header-section {
   text-align: center;
-  /* padding: 5rem 2rem 3rem; */
-  /* background-color: lightblue; */
+    font-size: 2.8rem;
+  color: var(--accent-orange);
+  min-width: 75%;
+  margin: 0 auto 4rem;
+  font-weight: 500;
+  
 }
 
-.about-header-text {
-  font-size: 4rem;
+.gradient-text {
+  font-size: 48px; /* Adjust font size as needed */
+  font-weight: bold;
+  background-image: linear-gradient(to right, #f32170, #ff6b08, #ec16ec, #f8e21f);
+  -webkit-background-clip: text;
+  background-clip: text; /* Standard property */
+  -webkit-text-fill-color: transparent;
+  color: transparent; /* Standard property */
+}
+
+
+
+
+
+/* who we are section */
+
+.team-qless{
+  background-color: var(--bg-white);
+  height: 60vh;
+  display: flex;
+  padding: 4rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  
+}
+
+.team-qless-img-container{
+ width: 40%;
+
+}
+
+.team-qless img{
+  border-radius: 4px;
+  width: 100%;
+  object-fit: cover;
+  background-color: rgba(0, 0, 0, 0.5);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  -o-border-radius: 4px;
+}
+
+
+.about-section {
+  padding: 0px 20px;
+  /* background-color: var(--primary-light); */
+  text-align: center;
+  color: white;
+  text-align: center;
+  min-width: 45%;
+}
+
+.about-title, .usage-title, .why-it-works-title {
+  font-size: 2.5rem;
   color: var(--accent-orange);
-  width: 600px;
-  margin: 0 auto;
-  font-weight: 500;
+  margin-bottom: 80px;
 }
 
 .about-description {
-  font-size: 2rem;
-  margin: 1rem auto;
-  width:720px;
-  text-align: center;
-  line-height: 1.18em ;
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto 4rem;
+  color: var(--primary-dark);
 }
 
-.brand-name{
-  font-weight: 800;
+.about-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 
-/* remember to delete this (.third-line) and do it well */
-
-.about-description .third-line{
-  margin-left: 20px;
+.highlight-box {
+  background-color: white;
+  border-radius: 10px;
+  color: var(--primary-dark);
+  padding: 20px;
+  width: 250px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
+
+
+
+
 
 .user-section {
   display: flex;
@@ -152,12 +216,7 @@
     padding: 3rem 2rem;
   text-align: center;
   font-size: 1.4rem;
-}
-
-.how-to-use h1{
-text-align: center;
-font-size: 2rem;
-margin-block-end: 4rem;
+  
 }
 
 .customer-procedure-container, .organization-procedure-container{
@@ -165,6 +224,11 @@ margin-block-end: 4rem;
   flex: auto;
   justify-content: space-between;
   width: 100%;
+
+}
+
+.customer-procedure-container{
+  margin-block-end: 4rem;
 }
 
 .man-using-phone-image {
@@ -212,27 +276,15 @@ width: 50%;
 
 .cta-org, .cta-user {
   padding: 0.8rem 2rem;
-  font-size: 1rem;
+  font-size: 1.35rem;
   border-radius: 50px;
   border: none;
+  background-color: var(--accent-orange);
+  color: var(--primary-white);
 }
 .cta-org:hover, .cta-user:hover{
   cursor: pointer;
-  box-shadow: 3px 3px 2px rgba(0, 0, 0, 0.3);
-
+  box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.3);
 
 }
 
-.cta-org {
-  background-color: var(--alert-amber);
-  color: var(--primary-dark);
-   font-size: 24px;
-  font-weight: 800;
-}
-
-.cta-user {
-  background-color: var(--info-blue);
-  color: var(--primary-white);
-  font-size: 24px;
-  font-weight: 800;
-}

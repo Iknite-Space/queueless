@@ -31,7 +31,7 @@ import Modal from "../../components/customerInputModal/Modal";
 export function ServiceSlotsPage() {
   return (
     <>
-    <Header />
+      <Header />
       <div className="slot-page-container">
         {/* <div className="calendar">
           <DatePicker />

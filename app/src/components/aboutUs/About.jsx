@@ -10,15 +10,13 @@ import { GrStatusGood } from "react-icons/gr";
 import { SlLock } from "react-icons/sl";
 import { GiProgression } from "react-icons/gi";
 import { FaGears } from "react-icons/fa6";
-import PropTypes from 'prop-types'
-
+import PropTypes from "prop-types";
 
 About.propTypes = {
-  onClickBookService: PropTypes.func.isRequired
-}
+  onClickBookService: PropTypes.func.isRequired,
+};
 
-function About( {onClickBookService} ) {
-
+function About({ onClickBookService }) {
   const navigate = useNavigate();
   const onClickRegister = () => {
     navigate("/contact");
@@ -27,57 +25,45 @@ function About( {onClickBookService} ) {
   return (
     <div id="about" className="about-container">
       {/* header Section */}
-      <section className="about-header-section">
-        <p className="about-header-text">Book Services Without the Wait</p>
-        {/* <p>Skip the queue. Book your slot. Save time.</p> */}
-        <p className="about-description">
-          <span className="brand-name">QLess</span> enables customers book slots
-          for services at their convenience, while organizations
-          <span className="third-line">manage time effortlessly.</span>{" "}
+      <section className="about-header-section ">
+        <p className="gradient-text">Get Served Without the Wait</p>
+        <p className="gradient-text">
+          Register Organization & manage queues seamlessly
         </p>
       </section>
 
-      {/* Audience Section */}
-      {/* <section className="user-section">
-        <div className="user-card customer-card">
-          <h2>For Customers</h2>
-          <ul>
-            <li>
-              <FaRegUser className="user-card-icon" />
-              Browse services
-            </li>
-            <li>
-              <IoAddCircleOutline className="user-card-icon" />
-              Pick a time
-            </li>
-            <li>
-              <GiAvoidance className="user-card-icon" />
-              Avoid waiting
-            </li>
-          </ul>
+      <div className="team-qless">
+        <div className="team-qless-img-container">
+          <img src="/assets/images/qless-team.jpeg" alt="about team" />
         </div>
-        <div className="user-card admin-card">
-          <h2>
-            <PiBuildingOffice className="user-card-icon" />
-            For Organizations
-          </h2>
-          <ul>
-            <li>
-              <span className="check-icon">&#10004;</span>Register
-            </li>
-            <li>
-              <span className="check-icon">&#10004;</span>Define services
-            </li>
-            <li>
-              <span className="check-icon">&#10004;</span>Manage bookings
-            </li>
-          </ul>
-        </div>
-      </section>
-       */}
+        <section className="about-section">
+          <h2 className="about-title">Who We Are</h2>
+          <p className="about-description">
+            We are a passionate team dedicated to making service booking fast,
+            easy, and stress-free. Whether you are want a service as a customer
+            or provide a service as an organization, we are here to simplify the
+            process.
+          </p>
+
+          <div className="about-highlights">
+            <div className="highlight-box">
+              <h3>⏱️ Fast Booking</h3>
+              <p>Reserve your spot in seconds.</p>
+            </div>
+            <div className="highlight-box">
+              <h3>🤝 Trusted Partners</h3>
+              <p>Working with verified organizations.</p>
+            </div>
+            <div className="highlight-box">
+              <h3>📍 Local Impact</h3>
+              <p>Serving communities across Cameroon.</p>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <section className="how-to-use">
-        <h1>How To Use</h1>
+        <h1 className="usage-title">How To Use</h1>
         <div className="customer-procedure-container">
           <div className="man-using-phone-image">
             <img
@@ -108,7 +94,6 @@ function About( {onClickBookService} ) {
           </div>
         </div>
         <div className="organization-procedure-container">
-
           <div className="user-card admin-card">
             <h2>
               <PiBuildingOffice className="user-card-icon" />
@@ -137,14 +122,13 @@ function About( {onClickBookService} ) {
               </li>
             </ul>
           </div>
-          
+
           <div className="man-using-phone-image">
             <img
               src="/assets/images/confirm-booking.jpg"
               alt="gentleman booking a service with phone"
             />
           </div>
-
         </div>
       </section>
 
@@ -166,7 +150,7 @@ function About( {onClickBookService} ) {
 
       {/* Features Section */}
       <section className="features-section">
-        <h2>Why It Works</h2>
+        <h2 className="why-it-works-title">Why It Works</h2>
         <div className="features-grid">
           <div className="feature-card">
             <LuClock2 className="feature-icons" /> Time-efficient
