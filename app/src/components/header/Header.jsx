@@ -1,7 +1,8 @@
 import React from 'react'
 import './Header.css'
-import SearchInput from '../searchInput/SearchInput';
+// import SearchInput from '../searchInput/SearchInput';
 import { Link } from "react-router-dom";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 function Header() {
 
@@ -12,22 +13,26 @@ function Header() {
       </div>
       <div className="nav-bar">
         <ul>
-          <li>
-            <Link to="/" >Home</Link>
-          </li>
-          <li>
+          <nav>
+            <Link to="/">Home</Link>
+          </nav>
+          <nav>
             <a href="#about">About</a>
-          </li>
-          <li>
+          </nav>
+          <nav>
+            <a href="#services">Service</a>
+          </nav>
+          <nav>
             {/* preferable to use link so as not to re-load the pages but does the single page rendering */}
-            <Link to="/contact">Register Services</Link>
+            <Link to="/contact" className="register-nav">
+              Register
+            </Link>
             {/* <a href="/contact">Services</a> */}
-          </li>
+          </nav>
+        <GiHamburgerMenu className='hamburger-icon'/>
         </ul>
       </div>
-      <div className="search-bar-container">
-        <SearchInput />
-      </div>
+      <div className="search-bar-container">{/* <SearchInput /> */}</div>
     </div>
   );
 };
