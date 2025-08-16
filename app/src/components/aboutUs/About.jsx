@@ -133,7 +133,7 @@ function About({ onClickBookService }) {
       </section>
 
       {/* Flow Section */}
-      <section className="flow-section">
+      <section id="services" className="flow-section">
         <h2>Flow Visualization</h2>
         <div className="flow-diagram">
           <div className="flow-step">Organization Registers</div>
