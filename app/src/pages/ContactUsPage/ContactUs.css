@@ -1,104 +1,109 @@
-
-.form-container form {
-  background: rgb(192, 191, 191);
-  width:500px;
-  margin: 20px auto;
-  padding: 20px
-}
 .contact-details {
   max-width: 700px;
   margin: 50px auto;
-  background-color: #ffffff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 1px 30px 20px 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
   color: #333333;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.form-header h1 {
-  text-align:center;
-  margin-bottom:5px;
-  margin-top:25px;
-  color: blue;
-}
-
-.form-header p {
-  text-align:center;
-  color: blue;
-}
 .form-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .form-header h1 {
-  color: #007bff; 
-  font-size: 2rem;
+  color: #007bff;
+  font-size: 1.9rem;
+  font-weight: 700;
   margin-bottom: 10px;
 }
 
 .form-header p {
   font-size: 1rem;
   color: #666666;
+  line-height: 1.5;
 }
 
 .form-container form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
+  width: 100%; 
 }
 
-label {
+.form-container label {
   font-weight: 600;
-  margin-bottom: 5px;
+  color: #444444;
 }
 
 .input-block,
 textarea {
-  padding: 12px 16px;
+  padding: 14px 16px;
   font-size: 1rem;
   background-color: #f9f9f9;
   border: 1px solid #cccccc;
-  border-radius: 8px;
+  border-radius: 10px;
   resize: none;
   transition: border 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 10px;
 }
 
 .input-block:focus,
 textarea:focus {
-  border-color: #007bff; 
+  border-color: #007bff;
   outline: none;
-  box-shadow: 0 0 5px #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
 }
 
 .submit-btn {
-  background-color: #007bff; 
+  background-color: #007bff;
   color: white;
-  padding: 12px;
+  padding: 14px;
   border: none;
-  border-radius: 8px;
-  font-weight: bold;
+  border-radius: 25px;
+  font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .submit-btn:hover {
-  background-color: #ff5e2f; 
+  background-color: #0056b3;
+  transform: translateY(-2px);
 }
 
 form div {
   text-align: center;
   margin-top: 15px;
   font-size: 0.95rem;
+  color: #555555;
 }
 
 form div a {
-  color: #007bff; 
+  color: #007bff;
   text-decoration: none;
   font-weight: 600;
+  margin-left: 4px;
 }
 
 form div a:hover {
   text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .contact-details {
+    padding: 25px 20px;
+  }
+
+  .form-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .form-container form {
+    gap: 15px;
+  }
 }
