@@ -55,6 +55,7 @@ export function Authentication() {
           <input
             type="email"
             name="email"
+            placeholder="Enter email"
             value={form.email}
             onChange={handleChange}
             required
@@ -66,6 +67,7 @@ export function Authentication() {
           <input
             type="password"
             name="password"
+            placeholder="Enter password"
             value={form.password}
             onChange={handleChange}
             required
