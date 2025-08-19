@@ -34,3 +34,10 @@
   flex-grow: 1;
   background-color: transparent;
 }
+
+@media (max-width: 480px) {
+  .search-container {
+  width: 90%; 
+  margin: 0 auto 1.5rem auto;
+  }
+} 
