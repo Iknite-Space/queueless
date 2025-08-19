@@ -15,6 +15,7 @@ import OrganizationDashboard from "./pages/OrganizationHomePage/Dashboard";
 import { CreateServiceComponent } from "./components/CreateServiceComponent/CreateServiceComponent";
 import HeaderLayout from "./components/layouts/HeaderLayout";
 import PlainLayout from "./components/layouts/PlainLayout";
+import Carousel from "./components/carousel/Carousel";
 import Footer from "./components/footer/Footer";
 
 function App() {
@@ -38,9 +39,11 @@ function App() {
                 path="/service/:serviceId/slots"
                 element={<ServiceSlotsPage />}
               />
+              <Route path="/slider" element={<Carousel />}/>
             </Route>
 
-            <Route element={<PlainLayout/>}>
+            {/* Routes without main header */}
+            <Route element={<PlainLayout />}>
               <Route path="/contact" element={<ContactUs />} />
 
               <Route
@@ -52,7 +55,7 @@ function App() {
                 element={<CreateServiceComponent />}
               />
             </Route>
-              <Route path="/login" element={<Authentication />} />
+            <Route path="/login" element={<Authentication />} />
           </Routes>
         </div>
         <Footer />
