@@ -20,30 +20,36 @@
 /* Grid layout for cards */
 .organization-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: /*1fr 1fr 1fr;*/
+    repeat(auto-fit, minmax(350px,1fr));
   gap: 2.5rem;
   padding: 1rem;
-  width: 90%;
-  margin: auto;
-}
-
-/* @media (max-width: 1024px) {
-  .organization-grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-
-@media (max-width: 700px) {
-  .organization-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  max-width: 90%;
+  margin: 0 auto 0 auto;
 }
 
 @media (max-width: 480px) {
+  .organization-page {
+  padding: 1.2rem;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #ffffff;
+  margin-top: 60px;
+}
   .organization-grid {
     grid-template-columns: 1fr;
+    min-width: 350px;
+    margin: auto;
   }
-} */
+  .page-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  margin-left: 1rem;
+  text-align: center;
+  color: #000;
+  margin-top: 20px;
+}
+} 
 
 /* Card base layout */
 .org-card {
