@@ -15,10 +15,12 @@ export const ContactUs = () => {
       })
       .then(
         () => {
-          console.log("Request sent! We'll get back to you.");
+          alert("Request sent! We'll get back to you soon.");
+          form.current.reset(); // clear form after success
         },
         (error) => {
-          console.log("Failed to send:", error.text);
+          alert("Failed to send:", error);
+          console.log(error)
         }
       );
   };
@@ -53,6 +55,7 @@ export const ContactUs = () => {
           <label>Message</label>
           <textarea
             id="message"
+            name="message"
             rows="12"
             cols="50"
             placeholder="Enter your message here..."
@@ -63,7 +66,7 @@ export const ContactUs = () => {
             id="submit"
             value="Submit"
           >
-            Request Access
+            Submit
           </button>
           <div>
             Already have an account? <Link to="/login">Login</Link>

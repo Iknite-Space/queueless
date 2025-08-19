@@ -7,6 +7,7 @@ import "./ServicesPage.css";
 import { useNavigate, useParams, useLocation } from "react-router";
 import LoadingAnimation from "../../components/loadingAnimation/LoadingAnimation";
 import SearchBar from "../../components/Search/SearchBar";
+import { truncateDescription } from "../../utils/trim_text";
 
 ServiceCard.propTypes = {
   name: PropTypes.string.isRequired,
@@ -20,7 +21,7 @@ function ServiceCard({ name, description, duration }) {
     <>
       <div className="card">
         <h3 className="card-name">{name}</h3>
-        <p className="card-description">{description}</p>
+        <p className="card-description">{truncateDescription(description, 8)}</p>
         <p className="card-duration">{duration} Minutes</p>
       </div>
     </>
