@@ -1,7 +1,6 @@
 import React from "react";
 import "./LandingPage.css";
 import { useNavigate } from "react-router";
-import Header from "../../components/header/Header";
 import About from "../../components/aboutUs/About";
 
 
@@ -15,7 +14,6 @@ export function LandingPage() {
 
   return (
     <div className="landing-page-body">
-      <Header />
       <main>
         <img
           src="/assets/images/waiting.jpg"
@@ -40,13 +38,18 @@ export function LandingPage() {
               >
                 Book A Service
               </button>
+              <button
+                className="navigation-button"
+                onClick={handleClickBookSlot}
+              >
+                Register Organization
+              </button>
             </div>
           </div>
         </div>
       </main>
 
       <About onClickBookService={handleClickBookSlot} />
-
     </div>
   );
 }
