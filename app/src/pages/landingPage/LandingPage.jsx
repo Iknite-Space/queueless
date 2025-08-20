@@ -22,13 +22,15 @@ export function LandingPage() {
         />
         <div className="main-container">
           <div className="preview-box">
-            <p className="head-text">Book your spot in seconds.</p>
-            <p className="head-text">Skip the queue</p>
-            <div className="description">
-              <p>
-                Find the services you want and reserve your a spot for a
-                hassle-free visit.
-              </p>
+            <div className="hero-text">
+              <p className="head-text">Book your spot in seconds.</p>
+              <p className="head-text">Skip the queue</p>
+              <div className="description">
+                <p>
+                  Find the services you want and reserve your a spot for a
+                  hassle-free visit.
+                </p>
+              </div>
             </div>
 
             <div className="button-container">
