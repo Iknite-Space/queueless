@@ -142,7 +142,7 @@
   }
 
   .about-description{
-    /* margin-bottom: 1rem; */
+    font-size: 1rem;
     padding: 0px;
     margin-bottom: 2px;
   }
