@@ -44,11 +44,13 @@ function ServicesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const res = await fetch(
-          `https://api.queueless.xyz/api/v1/organizations/${selectedOrgId}/services`
+          `${baseUrl}/api/v1/organizations/${selectedOrgId}/services`
         );
 
         if (!res.ok) {
@@ -65,10 +67,11 @@ function ServicesPage() {
         );
       } finally {
         setIsLoading(false);
-      }
+      } 
     };
 
     fetchServices();
+    // eslint-disable-next-line
   }, [selectedOrgId, selectedOrg.name]);
 
   const filteredServices = services.filter((service) =>
