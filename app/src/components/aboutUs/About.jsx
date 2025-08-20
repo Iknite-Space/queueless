@@ -31,7 +31,8 @@ function About({ onClickBookService }) {
           Register Organization & manage queues seamlessly
         </p>
       </section>
-
+<section className="who-we-are">
+        <h2 className=" mobile-view-title">Who We Are</h2>
       <div className="team-qless">
         <div className="team-qless-img-container">
           <img src="/assets/images/qless-team.jpeg" alt="about team" />
@@ -61,6 +62,7 @@ function About({ onClickBookService }) {
           </div>
         </section>
       </div>
+      </section>
 
       <section className="how-to-use">
         <h1 className="usage-title">How To Use</h1>
