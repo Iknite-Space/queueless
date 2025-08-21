@@ -27,6 +27,9 @@ function Cards({ imageUrl, name, location }) {
 }
 
 function OrganizationCard() {
+
+  const baseUrl = process.env.REACT_APP_BASE_URL;
+
   const navigate = useNavigate();
   const [organizations, setOrganizations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -37,7 +40,7 @@ function OrganizationCard() {
     const fetchOrganizations = async () => {
       try {
         const res = await fetch(
-          "https://api.queueless.xyz/api/v1/organizations"
+          `${baseUrl}/api/v1/organizations`
         );
         if (!res.ok) {
           const errorText = await res.text();
@@ -46,6 +49,7 @@ function OrganizationCard() {
 
         const data = await res.json();
         setOrganizations(data.organizations);
+        console.log(baseUrl)
       } catch (error) {
         console.error("Failed to fetch organizations:", error);
       } finally {
@@ -54,6 +58,7 @@ function OrganizationCard() {
     };
 
     fetchOrganizations();
+   // eslint-disable-next-line
   }, []);
 
   const filteredOrgs = organizations.filter((org) =>
