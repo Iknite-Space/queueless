@@ -64,6 +64,7 @@ function About({ onClickBookService }) {
       </div>
       </section>
 
+
       <section className="how-to-use">
         <h1 className="usage-title">How To Use</h1>
         <div className="customer-procedure-container">
