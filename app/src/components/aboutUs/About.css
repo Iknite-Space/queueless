@@ -27,13 +27,15 @@
   color: transparent; /* Standard property */
 }
 
-@media (min-width: 361px) and (max-width: 440px) {
+@media (min-width: 370px) and (max-width: 480px) {
   .gradient-text{
-    font-size:  1.4rem;
+    font-size:  1.8rem;
   }
+
+
 }
 
-@media (max-width: 360px) {
+@media (max-width: 369px) {
   .gradient-text{
     font-size:  1rem;
   }
@@ -91,7 +93,7 @@
   min-width: 45%;
 }
 
-.about-title, .usage-title, .why-it-works-title, .mobile-view-title {
+.about-title, .usage-title, .why-it-works-title, .mobile-view-title, .flow-section-title {
   font-size: 2.5rem;
   color: var(--accent-orange);
   margin-bottom: 80px;
@@ -101,7 +103,7 @@
   font-size: 1.2rem;
   max-width: 800px;
   margin: 0 auto 4rem;
-  color: var(--primary-dark);
+  color: var(--text-muted);
 }
 
 .about-highlights {
@@ -120,7 +122,7 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-@media (min-width: 361px) and (max-width: 440px){
+@media (min-width: 361px) and (max-width: 480px){
   .mobile-view-title{
     display: block;
     margin-block: 1rem;
@@ -136,16 +138,21 @@
     padding: 1.5em; 
     flex-direction: column-reverse;
     height: 45vh;
-    justify-content: none;
+    justify-content: block-start;
   }
   .about-title{
     display: none;
   }
+  .about-section{
+    padding: 0px;
+  }
 
   .about-description{
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding: 0px;
     margin-bottom: 2px;
+
+    text-align: center;
   }
 
   .about-highlights{
@@ -153,12 +160,14 @@
   }
 
   .team-qless-img-container{
-    background-color: #ff6b08;
     display: flex;
     justify-content: center;
     margin-inline: auto;
-    width: 50%;
+    width: 100%;
+    margin-top: 1rem;
   }
+
+
 }
 
 
@@ -270,6 +279,8 @@
 
 }
 
+/* How to use section */
+
 .how-to-use{
 
   background-color: var(--primary-white);
@@ -319,7 +330,43 @@ width: 50%;
  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.01);
 }
 
+@media (min-width: 361px) and (max-width: 480px){
+  .customer-procedure-container, .organization-procedure-container{
+    flex-direction: column;
+       font-size: 0.9rem;
+  }
+  .usage-title{
+    margin-block-end: 20px;
+  }
 
+  .man-using-phone-image{
+    width: 100%;
+  }
+
+  .customer-procedure-container{
+    flex-direction: column-reverse ;
+  }
+
+    .user-card-icon{
+  font-size: 1.5rem;
+  margin-inline-end: 20px;
+}
+
+ .user-card{
+  width: 100%;
+ }
+.user-card li{
+   align-items: left;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .user-card h2{
+    width: 100%;
+    font-size: 1.2rem;
+  }
+ 
+}
 
 .cta-section {
   text-align: center;
