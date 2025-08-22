@@ -111,7 +111,7 @@
 @media (max-width: 480px) {
  .landing-page-body{
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   object-fit: cover;
   
  }
@@ -152,8 +152,8 @@
   padding: 0.4rem 0.6rem;
  }
    .button-container{
-    background-color: #eedac2;
     width: 100%;
+    justify-content: space-around;
   }
 }
 

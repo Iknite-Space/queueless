@@ -50,8 +50,8 @@ export function LandingPage() {
           </div>
         </div>
       </main>
-
       <About onClickBookService={handleClickBookSlot} />
+
     </div>
   );
 }
