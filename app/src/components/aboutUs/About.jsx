@@ -31,42 +31,43 @@ function About({ onClickBookService }) {
           Register Organization & manage queues seamlessly
         </p>
       </section>
-<section className="who-we-are">
+      <section className="who-we-are">
         <h2 className=" mobile-view-title">Who We Are</h2>
-      <div className="team-qless">
-        <div className="team-qless-img-container">
-          <img src="/assets/images/qless-team.jpeg" alt="about team" />
-        </div>
-        <section className="about-section">
-          <h2 className="about-title">Who We Are</h2>
-          <p className="about-description">
-            We are a passionate team dedicated to making service booking fast,
-            easy, and stress-free. Whether you are want a service as a customer
-            or provide a service as an organization, we are here to simplify the
-            process.
-          </p>
-
-          <div className="about-highlights">
-            <div className="highlight-box">
-              <h3>⏱️ Fast Booking</h3>
-              <p>Reserve your spot in seconds.</p>
-            </div>
-            <div className="highlight-box">
-              <h3>🤝 Trusted Partners</h3>
-              <p>Working with verified organizations.</p>
-            </div>
-            <div className="highlight-box">
-              <h3>📍 Local Impact</h3>
-              <p>Serving communities across Cameroon.</p>
-            </div>
+        <div className="team-qless">
+          <div className="team-qless-img-container">
+            <img src="/assets/images/qless-team.jpeg" alt="about team" />
           </div>
-        </section>
-      </div>
+          <section className="about-section">
+            <h2 className="about-title">Who We Are</h2>
+            <p className="about-description">
+              We are a passionate team dedicated to making service booking fast,
+              easy, and stress-free. <br />
+              Whether you are want a service as a customer or provide a service
+              as an organization, we are here to simplify the process.
+            </p>
+
+            <div className="about-highlights">
+              <div className="highlight-box">
+                <h3>⏱️ Fast Booking</h3>
+                <p>Reserve your spot in seconds.</p>
+              </div>
+              <div className="highlight-box">
+                <h3>🤝 Trusted Partners</h3>
+                <p>Working with verified organizations.</p>
+              </div>
+              <div className="highlight-box">
+                <h3>📍 Local Impact</h3>
+                <p>Serving communities across Cameroon.</p>
+              </div>
+            </div>
+          </section>
+        </div>
       </section>
 
 
       <section className="how-to-use">
         <h1 className="usage-title">How To Use</h1>
+
         <div className="customer-procedure-container">
           <div className="man-using-phone-image">
             <img
@@ -96,6 +97,7 @@ function About({ onClickBookService }) {
             </ul>
           </div>
         </div>
+
         <div className="organization-procedure-container">
           <div className="user-card admin-card">
             <h2>
@@ -137,7 +139,7 @@ function About({ onClickBookService }) {
 
       {/* Flow Section */}
       <section id="services" className="flow-section">
-        <h2>Flow Visualization</h2>
+        <h2 className="flow-section-title">Flow Visualization</h2>
         <div className="flow-diagram">
           <div className="flow-step">Organization Registers</div>
           <span>→</span>
