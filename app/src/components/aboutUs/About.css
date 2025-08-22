@@ -136,7 +136,7 @@
     padding: 1.5em; 
     flex-direction: column-reverse;
     height: 45vh;
-    justify-content: none;
+    justify-content: block-start;
   }
   .about-title{
     display: none;
@@ -153,11 +153,11 @@
   }
 
   .team-qless-img-container{
-    background-color: #ff6b08;
     display: flex;
     justify-content: center;
     margin-inline: auto;
-    width: 50%;
+    width: 100%;
+    margin-top: 1rem;
   }
 }
 
