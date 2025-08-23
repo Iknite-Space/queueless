@@ -1,4 +1,4 @@
-/* @import "/assets/images/qless-team.jpeg" */
+ /* @import "/assets/images/qless-team.jpeg"
 
 .about-container {
   font-family: arial;
@@ -18,13 +18,12 @@
 }
 
 .gradient-text {
-  font-size: 48px; /* Adjust font size as needed */
   font-weight: bold;
   background-image: linear-gradient(to right, #f32170, #ff6b08, #ec16ec, #f8e21f);
   -webkit-background-clip: text;
-  background-clip: text; /* Standard property */
+  background-clip: text; 
   -webkit-text-fill-color: transparent;
-  color: transparent; /* Standard property */
+  color: transparent; 
 }
 
 @media (min-width: 370px) and (max-width: 480px) {
@@ -45,18 +44,14 @@
 
 
 
-/* who we are section */
 
 .who-we-are{
   background-color: var(--bg-white);
   display:flex ;
   flex-direction: column;
-}
-/* hidding the title to use rather in the mobile view */
-.mobile-view-title{
-  display: none;
-}
+}*/
 
+/*
 .team-qless{
   height: 60vh;
   display: flex;
@@ -86,7 +81,6 @@
 
 .about-section {
   padding: 0px 20px;
-  /* background-color: var(--primary-light); */
   text-align: center;
   color: white;
   text-align: center;
@@ -259,7 +253,6 @@
   padding: 1rem 1.5rem;
   border-radius: 10px;
   font-size: 1.5rem;
-  /* font-weight: 600; */
   min-width: 150px;
   text-align: center;
   transition: transform 0.3s ease;
@@ -277,11 +270,11 @@
   font-size: 60px;
   font-weight: 200;
 
-}
+}*/
 
 /* How to use section */
 
-.how-to-use{
+/*.how-to-use{
 
   background-color: var(--primary-white);
     padding: 3rem 2rem;
@@ -326,7 +319,6 @@ width: 50%;
   text-align: center;
   width: 48%;
   flex: 1;
-  /* padding: 2.5rem; */
  box-shadow: 3px 3px 7px rgba(0, 0, 0, 0.01);
 }
 
@@ -394,4 +386,315 @@ width: 50%;
   box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.3);
 
 }
+ 
+ */
 
+
+ /* RESET */
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-gray: #f7f7f7;
+  --text-dark: #02153D;
+  --text-muted: #4a4a4a;
+  --primary-white: #ffffff;
+  --accent-orange: #ff6b08;
+  --primary-dark: #02153D;
+}
+
+body {
+  font-family: Arial, sans-serif;
+} */
+
+/* CONTAINER */
+.about-container {
+  background-color: var(--bg-gray);
+  color: var(--text-dark);
+  padding: 5% 5%;
+}
+
+/* HEADER SECTION */
+.about-header-section {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.gradient-text {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: bold;
+  background-image: linear-gradient(to right, #f32170, #ff6b08, #ec16ec, #f8e21f);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* WHO WE ARE SECTION */
+.who-we-are {
+  background-color: var(--primary-white);
+  padding: 2rem 0;
+}
+
+/* hidding the title to use rather in the mobile view */
+.mobile-view-title{
+  display: none;
+}
+
+.team-qless {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-qless-img-container {
+  flex: 1 1 300px;
+}
+
+.team-qless-img-container img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.about-section {
+  flex: 1 1 300px;
+  text-align: center;
+  color: var(--text-dark);
+}
+
+.about-title,
+.usage-title,
+.why-it-works-title,
+.flow-section-title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  color: var(--accent-orange);
+  margin-bottom: 1.5rem;
+}
+
+.about-description {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.about-highlights {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.highlight-box {
+  background-color: var(--primary-white);
+  color: var(--primary-dark);
+  padding: 1.5rem;
+  width: clamp(200px, 25%, 280px);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  text-align: left;
+}
+
+/* HOW TO USE SECTION */
+.how-to-use {
+  background-color: var(--primary-white);
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.customer-procedure-container,
+.organization-procedure-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: space-between;
+  margin-bottom: 4rem;
+}
+
+.man-using-phone-image {
+  flex: 1 1 300px;
+}
+
+.man-using-phone-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.user-card {
+  flex: 1 1 300px;
+  background-color: rgba(255, 255, 255, 0.6);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  text-align: left;
+}
+
+.user-card h2 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+}
+
+.user-card ul {
+  list-style: none;
+}
+
+.user-card li {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.user-card-icon,
+.check-icon {
+  margin-right: 0.8rem;
+  font-size: 1.5rem;
+  color: var(--accent-orange);
+}
+
+/* FLOW SECTION */
+.flow-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.flow-diagram {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  font-size: 1rem;
+}
+
+.flow-step {
+  background-color: var(--primary-white);
+  color: var(--text-dark);
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+/* FEATURES SECTION */
+.features-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.features-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.feature-card {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: var(--primary-dark);
+  padding: 1.5rem;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 140px;
+  max-width: 200px;
+  flex: 1 1 auto;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: scale(1.05);
+}
+
+.feature-card .feature-icons {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+/* CTA SECTION */
+.cta-section {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.cta-org,
+.cta-user {
+  background-color: var(--accent-orange);
+  color: var(--primary-white);
+  border: none;
+  border-radius: 50px;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+}
+
+.cta-org:hover,
+.cta-user:hover {
+  box-shadow: 0px 2px 7px rgba(0, 0, 0, 0.3);
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 768px) {
+  .team-qless,
+  .customer-procedure-container,
+  .organization-procedure-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .user-card {
+    width: 100%;
+  }
+
+  .cta-buttons {
+    flex-direction: column;
+  }
+
+  .flow-diagram {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .gradient-text {
+    font-size: 1.5rem;
+  }
+
+  .about-description,
+  .user-card li {
+    font-size: 0.9rem;
+  }
+
+  .feature-card {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  .feature-icons {
+    font-size: 2rem;
+  }
+
+  .cta-org,
+  .cta-user {
+    width: 100%;
+  }
+
+    .customer-procedure-container{
+    flex-direction: column-reverse ;
+  }
+
+}
