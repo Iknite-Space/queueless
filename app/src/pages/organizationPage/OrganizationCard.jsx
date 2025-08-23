@@ -13,7 +13,7 @@ Cards.propTypes = {
 };
 
 function Cards({ imageUrl, name, location }) {
-  return (
+  return ( 
     <div className="org-card">
       <div className="org-image-wrapper">
         <img src={imageUrl !== "" ? imageUrl : null} alt={`${name}-logo`} />
