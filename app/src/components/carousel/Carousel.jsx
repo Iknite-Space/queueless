@@ -7,7 +7,7 @@ import PropTypes from "prop-types"
 const slides = [
   {
     id: 1,
-    image: "/assets/images/queue.jpg",
+    image: "/assets/images/confirm-booking.jpg",
     headline: "Book your spot in seconds.",
     sub: "Skip the queue",
     description:
@@ -16,7 +16,6 @@ const slides = [
       text: "View Organizations",
       action: "/organizations",
     },
-
   },
   {
     id: 2,
@@ -29,7 +28,18 @@ const slides = [
       text: "Register Organization",
       action: "/register",
     },
-  
+  },
+  {
+    id: 3,
+    image: "/assets/images/waiting.jpg",
+    headline: "Don't waste time waiting.",
+    sub: " QLess is here.",
+    description:
+      "Tired of waiting at offices for a service and fail at meeting other needs?, visit QLess and escape the wait.",
+    button1: {
+      text: "View Organization",
+      action: "/organizations",
+    },
   },
 ];
 
@@ -43,7 +53,7 @@ export default function Carousel({ navigate }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 10000); // Slide every 7 seconds
+    }, 7000); 
     return () => clearInterval(interval);
   }, []);
 

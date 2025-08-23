@@ -1,9 +1,9 @@
 
 
 
-.main-bg-image{
-  /*padding-top: 90px;
-  */position: absolute;
+/* .main-bg-image{
+  padding-top: 90px;
+  position: absolute;
   top: 0%;
   left: 0;
   width: 100%;
@@ -16,7 +16,11 @@
   -moz-transform: scaleX(-1);
   -ms-transform: scaleX(-1);
   -o-transform: scaleX(-1);
-  margin-block-start: 75px;
+
+} */
+
+.landing-page-body{
+  margin-block-start: 80px;
 }
 
 .main-container{

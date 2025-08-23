@@ -29,7 +29,10 @@ export default function Slide({ slide, navigate }) {
 
   return (
     <main className="slide">
-      <img src={slide.image} alt="slide background" className="main-bg-image" />
+      <div
+        className="slide-background"
+        style={{ backgroundImage: `url(${slide.image})` }}
+      />
       <div className="main-container">
         <div className="preview-box">
           <div className="hero-text">
@@ -46,12 +49,6 @@ export default function Slide({ slide, navigate }) {
             >
               {slide.button1.text}
             </button>
-            {/* <button
-              className="navigation-button"
-              onClick={() => handleClick(slide.button2.action)}
-            >
-              {slide.button2.text}
-            </button> */}
           </div>
         </div>
       </div>
