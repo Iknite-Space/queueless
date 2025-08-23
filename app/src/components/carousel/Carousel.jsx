@@ -26,7 +26,7 @@ const slides = [
       "Register your organization and streamline your appointment process.",
     button1: {
       text: "Register Organization",
-      action: "/register",
+      action: "/contact",
     },
   },
   {
