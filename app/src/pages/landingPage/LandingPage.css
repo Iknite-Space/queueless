@@ -1,9 +1,8 @@
 
 
-
 .main-bg-image{
-  /*padding-top: 90px;
-  */position: absolute;
+  padding-top: 90px;
+  position: absolute;
   top: 0%;
   left: 0;
   width: 100%;
@@ -16,8 +15,9 @@
   -moz-transform: scaleX(-1);
   -ms-transform: scaleX(-1);
   -o-transform: scaleX(-1);
-  margin-block-start: 75px;
+
 }
+
 
 .main-container{
 
@@ -33,8 +33,7 @@
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
-  margin-inline: 10% 0;
-  /* background-color: #f19469; */
+  background-color: #f19469;
 }
 .hero-text{
   width: 520px;
@@ -158,7 +157,7 @@
 }
 
 
-@media (max-width: 360px){
+@media  (max-width: 360px){
 
    .landing-page-body{
   width: 100vw;
@@ -190,5 +189,11 @@
   width: fit-content;
   font-size: 0.6rem;
   padding: 0.4rem 0.6rem;
+ }
+    .landing-page-body{
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  
  }
 }

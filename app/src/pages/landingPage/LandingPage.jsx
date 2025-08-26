@@ -2,6 +2,8 @@ import React from "react";
 import "./LandingPage.css";
 import { useNavigate } from "react-router";
 import About from "../../components/aboutUs/About";
+import Carousel from "../../components/carousel/Carousel";
+
 
 
 export function LandingPage() {
@@ -20,17 +22,16 @@ export function LandingPage() {
           alt="main-background"
           className="main-bg-image"
         />
-        <div className="main-container">
+        <Carousel navigate={navigate} />
+        {/* <div className="main-container">
           <div className="preview-box">
-            <div className="hero-text">
-              <p className="head-text">Book your spot in seconds.</p>
-              <p className="head-text">Skip the queue</p>
-              <div className="description">
-                <p>
-                  Find the services you want and reserve your a spot for a
-                  hassle-free visit.
-                </p>
-              </div>
+            <p className="head-text">Book your spot in seconds.</p>
+            <p className="head-text">Skip the queue</p>
+            <div className="description">
+              <p>
+                Find the services you want and reserve your a spot for a
+                hassle-free visit.
+              </p>
             </div>
 
             <div className="button-container">
@@ -38,20 +39,31 @@ export function LandingPage() {
                 className="navigation-button"
                 onClick={handleClickBookSlot}
               >
-                Book A Service
-              </button>
-              <button
-                className="navigation-button"
-                onClick={handleClickBookSlot}
-              >
-                Register Organization
+                View Organization
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </main>
-      <About onClickBookService={handleClickBookSlot} />
 
+      <About onClickBookService={handleClickBookSlot} />
     </div>
   );
 }
+
+// import React from "react";
+// import "./LandingPage.css";
+// import { useNavigate } from "react-router";
+// import About from "../../components/aboutUs/About";
+// import Carousel from "../../components/carousel/Carousel";
+
+// export function LandingPage() {
+//   const navigate = useNavigate();
+
+//   return (
+//     <div className="landing-page-body">
+//       <Carousel navigate={navigate} />
+//       <About onClickBookService={() => navigate("/organizations")} />
+//  </div>
+//   );
+// }
