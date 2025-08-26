@@ -157,7 +157,7 @@
 }
 
 
-@media (max-width: 360px){
+@media  (max-width: 360px){
 
    .landing-page-body{
   width: 100vw;
@@ -189,5 +189,11 @@
   width: fit-content;
   font-size: 0.6rem;
   padding: 0.4rem 0.6rem;
+ }
+    .landing-page-body{
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  
  }
 }
