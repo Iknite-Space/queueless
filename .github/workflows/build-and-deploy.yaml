@@ -102,8 +102,9 @@ jobs:
           s3_path="s3://app-artifacts-${{ steps.read_aws_account_id.outputs.aws_account_id }}/$commit_hash/"
 
             cd app
-            # inject the environment variables into the app
+            
             echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env
+            ls .env
             cat .env
             npm install
             npm run build
