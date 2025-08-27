@@ -104,6 +104,7 @@ jobs:
             cd app
             # inject the environment variables into the app
             echo "REACT_APP_BASE_URL=${{ secrets.REACT_APP_BASE_URL }}" >> .env
+            cat .env
             npm install
             npm run build
             aws s3 cp ./build "$s3_path" --recursive

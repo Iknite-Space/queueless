@@ -37,6 +37,10 @@ function OrganizationCard() {
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
+    console.log("this is the base url", baseUrl)
+  },[baseUrl])
+
+  useEffect(() => {
     const fetchOrganizations = async () => {
       try {
         const res = await fetch(
