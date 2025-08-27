@@ -103,8 +103,6 @@ jobs:
 
             cd app
             echo "REACT_APP_BASE_URL=$REACT_APP_BASE_URL" > .env
-            cat build/static/js/main.*.js | grep REACT_APP_BASE_URL
-            ls -l .env
             cat .env
             npm install
             npm run build
