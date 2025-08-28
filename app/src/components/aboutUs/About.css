@@ -82,11 +82,18 @@
 .highlight-box {
   background-color: var(--primary-white);
   color: var(--primary-dark);
-  padding: 1.5rem;
-  width: clamp(200px, 25%, 280px);
+  padding: 1rem ;
+  width: clamp(220px, 25%, 300px);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.08);
   text-align: left;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.highlight-box {
+  margin-block-end: 0.6rem;
 }
 
 /* HOW TO USE SECTION */
