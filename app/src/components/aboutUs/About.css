@@ -7,17 +7,22 @@
 }
 
 /* HEADER SECTION */
+
+
 .about-header-section {
   text-align: center;
   margin-bottom: 3rem;
+  padding: 2rem 1rem; 
 }
 
+
 .gradient-text {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-  font-weight: bold;
-  background-image: linear-gradient(to right, #f32170, #ff6b08, #ec16ec, #f8e21f);
+  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-weight: 700;
+  line-height: 1.3; 
+  margin-bottom: 1rem; 
+  background-image: linear-gradient(to right,#f32170,#ff6b08,#ec16ec,#f8e21f );
   background-clip: text;
-  -webkit-background-clip: text;
   color: transparent;
 }
 
@@ -82,11 +87,18 @@
 .highlight-box {
   background-color: var(--primary-white);
   color: var(--primary-dark);
-  padding: 1.5rem;
-  width: clamp(200px, 25%, 280px);
+  padding: 1rem ;
+  width: clamp(220px, 25%, 300px);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.08);
   text-align: left;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.highlight-box {
+  margin-block-end: 0.6rem;
 }
 
 /* HOW TO USE SECTION */
@@ -161,6 +173,7 @@
   gap: 1rem;
   margin-top: 2rem;
   font-size: 1rem;
+  align-items: center;
 }
 
 .flow-step {
@@ -178,9 +191,10 @@
 }
 
 .features-grid {
-  display: flex;
+ display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 1.5rem;
 }
 
@@ -192,8 +206,9 @@
   text-align: center;
   min-width: 140px;
   max-width: 200px;
-  flex: 1 1 auto;
-  transition: transform 0.3s ease;
+   flex: 1 1 auto; 
+   transition: transform 0.3s ease; 
+   display: block; 
 }
 
 .feature-card:hover {
@@ -283,6 +298,15 @@
 
     .customer-procedure-container{
     flex-direction: column-reverse ;
+  }
+
+    .about-header-section {
+    padding:  1rem;
+  }
+
+  .gradient-text {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    line-height: 1.2;
   }
 
 

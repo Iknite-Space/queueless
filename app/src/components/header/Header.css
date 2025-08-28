@@ -1,4 +1,4 @@
-/* 
+
 
 .header {
   display: flex;
@@ -15,124 +15,16 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
-.logo h1 {
-  font-size: 2rem;
+.qless-logo{
+  width: clamp(7rem, 15vw, 20rem);
+  height: auto;
   color: var(--accent-orange);
   cursor: pointer;
-}
-
-.nav-bar ul {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav-bar ul li {
-  list-style: none;
-}
-
-.nav-bar ul li a {
-  text-decoration: none;
-  color: var(--text-dark);
-  font-size: 1rem;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-}
-
-.nav-bar ul li a:hover {
-  color: var(--accent-orange);
-  border-bottom: 2px solid var(--accent-orange);
-}
-
-.register-nav {
-  border: 1px solid var(--accent-orange);
-  border-radius: 4px;
-}
-
-.register-nav:hover {
-  background-color: var(--accent-orange);
-}
-
- .register-nav:hover {
-  font-size: 20px;
 
 }
 
-.hamburger-icon {
-  display: none;
-  font-size: 1.8rem;
-  cursor: pointer;
-}
 
 
-@media (max-width: 900px) {
-  .hamburger-icon {
-    display: block;
-  }
-
-  .nav-bar {
-    position: absolute;
-    top: 80px;
-    left: 0;
-    right: 0;
-    background-color: var(--bg-white);
-    width: 100%;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    padding: 1.5rem 0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-bar.open {
-    display: flex;
-  }
-
-  .nav-bar ul {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .nav-bar ul li a {
-    font-size: 1.2rem;
-  }
-}
-
-@media (max-width: 360px) {
-  .logo h1 {
-    font-size: 1.5rem;
-  }
-
-  .nav-bar ul li a {
-    font-size: 1rem;
-  }
-
-  .register-nav {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.9rem;
-  }
-} */
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 80px;
-  background-color: var(--bg-white);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 2000;
-  padding: 0 5%;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
-}
-
-.logo h1 {
-  font-size: 2rem;
-  color: var(--accent-orange);
-  cursor: pointer;
-}
 
 .nav-bar ul {
   display: flex;
@@ -163,7 +55,7 @@
   transition: all 0.3s ease;
 }
 
-.register-nav:hover {
+.nav-bar ul li .register-nav:hover {
   background-color: var(--accent-orange);
   color: white;
   transform: scale(1.05);
@@ -238,9 +130,7 @@
 
 /* Optional fix for very small screens */
 @media (max-width: 360px) {
-  .logo h1 {
-    font-size: 1.5rem;
-  }
+
 
   .nav-bar ul li a {
     font-size: 1rem;
