@@ -163,7 +163,7 @@
   transition: all 0.3s ease;
 }
 
-.register-nav:hover {
+.nav-bar ul li .register-nav:hover {
   background-color: var(--accent-orange);
   color: white;
   transform: scale(1.05);
