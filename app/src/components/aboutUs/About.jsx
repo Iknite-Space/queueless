@@ -158,22 +158,21 @@ function About({ onClickBookService }) {
         <h2 className="why-it-works-title">Why It Works</h2>
         <div className="features-grid">
           <div className="feature-card">
-            <LuClock2 className="feature-icons" /> Time-efficient
+            <LuClock2 className="feature-icons" /> <p>Time-efficient</p>
           </div>
           <div className="feature-card">
-            <GrStatusGood className="feature-icons" /> Easy to use
+            <GrStatusGood className="feature-icons" /> <p>Easy to use</p>
           </div>
           <div className="feature-card">
-            <SlLock className="feature-icons" />
-            Secure
+            <SlLock className="feature-icons" /><p>Secure</p>
+            
           </div>
           <div className="feature-card">
             <GiProgression
               className="feature-icons"
-              // size={60}
-              // fontWeight={400}
-            />
-            Scalable
+             
+            /><p>Scalable</p>
+            
           </div>
         </div>
       </section>
@@ -186,7 +185,7 @@ function About({ onClickBookService }) {
             Register Organization
           </button>
           <button className="cta-user" onClick={onClickBookService}>
-            Book a Service
+            View Organization
           </button>
         </div>
       </section>
