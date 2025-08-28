@@ -19,9 +19,9 @@ function Header() {
   return (
     <>
       <header className="header">
-        <div className="logo">
-          <h1>QLess.</h1>
-        </div>
+    
+          <img src="/assets/images/logo.png" alt="queueless logo" className="qless-logo"/>
+        
 
         <nav className={`nav-bar ${isMenuOpen ? "open" : ""}`}>
           <ul>
