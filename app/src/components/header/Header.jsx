@@ -41,7 +41,11 @@ function Header() {
                 Register
               </Link>
             </li>
-            
+            <li>
+              <Link to="/login" className="register-nav">
+                Login
+              </Link>
+            </li>
           </ul>
         </nav>
 
