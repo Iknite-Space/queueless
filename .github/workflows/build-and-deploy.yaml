@@ -202,5 +202,5 @@ jobs:
                   --no-fail-on-empty-changeset \
                   --capabilities CAPABILITY_NAMED_IAM
 
-  # #               distribution_id=$(aws cloudformation describe-stacks --stack-name "$stack_name" --query "Stacks[0].Outputs[?OutputKey=='AppCloudfrontDistributionId'].OutputValue"  --output text )
-  # #               aws cloudfront create-invalidation --distribution-id "$distribution_id" --paths '/*'
+                distribution_id=$(aws cloudformation describe-stacks --stack-name "$stack_name" --query "Stacks[0].Outputs[?OutputKey=='AppCloudfrontDistributionId'].OutputValue"  --output text )
+                aws cloudfront create-invalidation --distribution-id "$distribution_id" --paths '/*'
