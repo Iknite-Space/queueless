@@ -15,11 +15,11 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
 }
 
+
 .qless-logo{
-  width: clamp(7rem, 15vw, 20rem);
+  width: clamp(7rem, 15vw, 15rem);
   height: auto;
-  color: var(--accent-orange);
-  cursor: pointer;
+  cursor: pointer;  
 
 }
 

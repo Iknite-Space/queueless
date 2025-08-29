@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
@@ -19,9 +17,13 @@ function Header() {
   return (
     <>
       <header className="header">
-    
-          <img src="/assets/images/logo.png" alt="queueless logo" className="qless-logo"/>
-        
+        <Link to="/">
+          <img
+            src="/assets/images/logo.png"
+            alt="queueless logo"
+            className="qless-logo"
+          />
+        </Link>
 
         <nav className={`nav-bar ${isMenuOpen ? "open" : ""}`}>
           <ul>
@@ -39,6 +41,7 @@ function Header() {
                 Register
               </Link>
             </li>
+            
           </ul>
         </nav>
 
