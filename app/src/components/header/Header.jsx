@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Header.css";
 import { Link } from "react-router-dom";
+import{Link as ScrollLink} from 'react-scroll'
 import { GiHamburgerMenu } from "react-icons/gi";
 
 function Header() {
@@ -30,11 +31,21 @@ function Header() {
             <li>
               <Link to="/">Home</Link>
             </li>
+
             <li>
-              <a href="#about">About</a>
+              <ScrollLink to="about" smooth={true}
+                onClick={() => setIsMenuOpen(false)}>
+                About
+              </ScrollLink>
             </li>
             <li>
-              <a href="#services">Service</a>
+              <ScrollLink
+                to="services"
+                smooth={true}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Service
+              </ScrollLink>
             </li>
             <li>
               <Link to="/contact" className="register-nav">
