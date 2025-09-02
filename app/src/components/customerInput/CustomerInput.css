@@ -1,8 +1,15 @@
-  .form-input-background{
-   width: 800px;
-   height: 600px;
+.form-input-background{
+  width: 800px;            
+  max-width: 92vw;       
   background: linear-gradient(to bottom right, #02153D, #0149be);
   border-radius: 15px;
+  padding: 0rem 2rem 2rem;
+  box-sizing: border-box;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 } 
 
 .form-header {
@@ -12,38 +19,39 @@
   padding-top: 55px;
 }
 
-
 .input-form-container {
   padding: 20px 0px;
   background: #f3f3f3;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 60%;
   height: fit-content;
-  margin: 40px auto 0 auto;
   border-radius: 7px;
+  width: 80%;
+}
+
+.customer-details{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .customer-input {
   display: flex;
   flex-direction: column;
   padding: 30px 10px 10px 10px;
-  width: 300px;
+  width: 70%;
+  height: 300px;
 }
 
 .customer-input input {
   border-radius: 4px;
   border-style: none;
   height: 30px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
   padding: 10px;
   margin-bottom: 40px;
-  color:var(--text-dark);
-
+  color: var(--text-dark);
 }
 
 .customer-input select {
@@ -55,8 +63,9 @@
   display: flex;
   justify-content: space-around;
   margin-block-start: 30px;
+  width: 70%;
 }
-  
+
 .input-form-actions button {
   font-family: arial;
   color: white;
@@ -67,12 +76,12 @@
   background: var(--accent-orange);
   padding: 10px 15px;
   border-radius: 6px;
-  -webkit-border-radius: 6px;
-  -moz-border-radius: 6px;
-  -ms-border-radius: 6px;
-  -o-border-radius: 6px;
   border-style: none;
   cursor: pointer;
+}
+
+.confirmation-page{
+  width: 100%;
 }
 
 .confirm-row {
@@ -80,6 +89,7 @@
   justify-content: space-between;
   margin-bottom: 1rem;
   font-size: 1rem;
+  line-height: 1.5;
 }
 .confirm-label {
   color: #555;
@@ -93,10 +103,60 @@
 }
 
 .confirm-details-container {
-  width: 70%;
-  padding: 25px;
+  width: 100%;
+  padding: 30px;
   background: #f3f3f3;
-  width: 70%;
   margin: 40px auto 0 auto;
   border-radius: 7px;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  @media (max-width: 600px) {
+  .form-input-background {
+    width: 95%;
+    padding: 1rem;
+  }
+
+  .customer-input {
+    width: 100%;
+    height: auto;
+  }
+
+  .input-form-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .input-form-actions button {
+    width: 100%;
+    font-size: 1rem;
+  }
+
+  /* Confirmation page mobile fix */
+  .confirm-details-container {
+    width: 100%;
+    padding: 15px;
+  }
+
+  .confirm-row {
+    flex-direction: column;   /* stack label + value */
+    align-items: flex-start;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+  }
+
+  .confirm-label {
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .confirm-value {
+    text-align: left;
+    font-weight: 500;
+    color: #111;
+  }
+}
+
 }
