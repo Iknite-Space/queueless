@@ -82,6 +82,7 @@
 
 .confirmation-page{
   width: 100%;
+  height: auto;
 }
 
 .confirm-row {
@@ -110,8 +111,6 @@
   border-radius: 7px;
 }
 
-/* Responsive tweaks */
-@media (max-width: 600px) {
   @media (max-width: 600px) {
   .form-input-background {
     width: 95%;
@@ -141,7 +140,7 @@
   }
 
   .confirm-row {
-    flex-direction: column;   /* stack label + value */
+    flex-direction: column;   
     align-items: flex-start;
     font-size: 0.95rem;
     margin-bottom: 15px;
@@ -159,4 +158,4 @@
   }
 }
 
-}
+

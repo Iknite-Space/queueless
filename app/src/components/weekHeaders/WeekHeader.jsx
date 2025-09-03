@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-
 import { useLocation } from "react-router";
 import {
   format,
@@ -12,7 +11,6 @@ import {
   subWeeks,
   isToday,
 } from "date-fns";
-
 
 import { ServiceSlots } from "../serviceSlots/ServiceSlots";
 
@@ -24,12 +22,12 @@ export function WeekHeader() {
   );
   const [weekDates, setWeekDates] = useState([]);
 
-    // Get payment status saved in localstorage
+  // Get payment status saved in localstorage
   const [paymentStatus, setPaymentStatus] = useState(() =>
-  localStorage.getItem("paymentStatus")
-);
+    localStorage.getItem("paymentStatus")
+  );
 
-    // extract the state elements sent via navigate
+  // extract the state elements sent via navigate
   const location = useLocation();
   const { org, service } = location.state || {};
 
@@ -65,50 +63,49 @@ export function WeekHeader() {
 
   //fetch weekly slots
   useEffect(() => {
-  const startDate = format(currentWeekStart, "yyyy-MM-dd");
-  const endDate = format(addDays(currentWeekStart, 6), "yyyy-MM-dd");
+    const startDate = format(currentWeekStart, "yyyy-MM-dd");
+    const endDate = format(addDays(currentWeekStart, 6), "yyyy-MM-dd");
 
-  if (!service.service_id) return;
+    if (!service.service_id) return;
 
-  axios
-    .get(`https://api.queueless.xyz/api/v1/service/${service.service_id}/bookings`, {
-      params: {
-        start: startDate,
-        end: endDate,
-      },
-    })
-    .then((response) => {
-      setWeeklyBookings(response.data.bookings);
+    axios
+      .get(
+        `https://api.queueless.xyz/api/v1/service/${service.service_id}/bookings`,
+        {
+          params: {
+            start: startDate,
+            end: endDate,
+          },
+        }
+      )
+      .then((response) => {
+        setWeeklyBookings(response.data.bookings);
+      })
+      .catch((error) => {
+        console.error("Error fetching bookings:", error);
+      });
+  }, [currentWeekStart, service.service_id, paymentStatus]);
 
-    })
-    .catch((error) => {
-      console.error("Error fetching bookings:", error);
-    });
-}, [currentWeekStart, service.service_id, paymentStatus]);
-
-const bookingsByDate = React.useMemo(() => {
-  return weeklyBookings.reduce((acc, booking) => {
-    if (!acc[booking.booking_date]) acc[booking.booking_date] = [];
-    acc[booking.booking_date].push(booking.slot_id);
-    return acc;
-  }, {});
-}, [weeklyBookings]);
-
-
+  const bookingsByDate = React.useMemo(() => {
+    return weeklyBookings.reduce((acc, booking) => {
+      if (!acc[booking.booking_date]) acc[booking.booking_date] = [];
+      acc[booking.booking_date].push(booking.slot_id);
+      return acc;
+    }, {});
+  }, [weeklyBookings]);
 
   const goToNextWeek = () => setCurrentWeekStart((prev) => addWeeks(prev, 1));
   const goToPreviousWeek = () =>
     setCurrentWeekStart((prev) => subWeeks(prev, 1));
 
   return (
-
     <>
       <div className="week-header-container">
         <div className="slot-info">
-                  <h1>Book An Appointment</h1>
-                  <h2 className="org">{org.name}</h2>
-                  <h3 className="service">{service.service_name}</h3>
-                </div>
+          <h1>Book An Appointment</h1>
+          <h2 className="org">{org.name}</h2>
+          <h3 className="service">{service.service_name}</h3>
+        </div>
         <div className="week-header-controls">
           <button onClick={goToPreviousWeek} className="nav-button">
             ← Previous
@@ -119,29 +116,38 @@ const bookingsByDate = React.useMemo(() => {
           <button onClick={goToNextWeek} className="nav-button">
             Next →
           </button>
-        </div> 
-        <div className="div">
-        <div className="week-grid">
-          {weekDates.map((d, i) => {
-            // const isPast = d.fullDate < new Date() && !isToday(d.fullDate);
-            console.log(d.fullDate)
-
-            return (
-              <div
-                key={i}
-                className={`week-day ${isToday(d.fullDate) ? "today" : ""}`}
-              >
-                <div className="date-name">
-                  <div className="day-name">{d.day}</div>
-                  <div className="day-date">{d.date}</div>
-                </div>
-                <div className="time-slots">
-                  <ServiceSlots org={org} service={service} date={d.fullDate.toISOString()} bookedSlotIds={bookingsByDate[format(d.fullDate, "yyyy-MM-dd")] || []} paymentStatus={paymentStatus} setPaymentStatus={setPaymentStatus} /> 
-                </div>
-              </div>
-            );
-          })}
         </div>
+        <div className="div">
+          <div className="week-grid">
+            {weekDates.map((d, i) => {
+              // const isPast = d.fullDate < new Date() && !isToday(d.fullDate);
+              console.log(d.fullDate);
+
+              return (
+                <div
+                  key={i}
+                  className={`week-day ${isToday(d.fullDate) ? "today" : ""}`}
+                >
+                  <div className="date-name">
+                    <div className="day-name">{d.day}</div>
+                    <div className="day-date">{d.date}</div>
+                  </div>
+                  <div className="time-slots">
+                    <ServiceSlots
+                      org={org}
+                      service={service}
+                      date={d.fullDate.toISOString()}
+                      bookedSlotIds={
+                        bookingsByDate[format(d.fullDate, "yyyy-MM-dd")] || []
+                      }
+                      paymentStatus={paymentStatus}
+                      setPaymentStatus={setPaymentStatus}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </>
