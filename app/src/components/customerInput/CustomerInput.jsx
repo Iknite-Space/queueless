@@ -217,7 +217,7 @@ function CustomerInput({ handleCloseModal, org, service, slot, date }) {
               </div>
               <div className="confirm-row">
                 <p className="confirm-label">Amount to pay:</p>
-                <p className="confirm-value">{formData.serviceFee}</p>
+                <p className="confirm-value">{formData.serviceFee}XAF</p>
               </div>
             </div>
             <div className="input-form-actions">

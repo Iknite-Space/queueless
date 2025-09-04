@@ -10,13 +10,14 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  
 } 
 
 .form-header {
   color: white;
   font-family: arial;
   text-align: center;
-  padding-top: 55px;
+  padding-top: clamp(20px, 6vw, 55px);
 }
 
 .input-form-container {
@@ -82,6 +83,7 @@
 
 .confirmation-page{
   width: 100%;
+  height: auto;
 }
 
 .confirm-row {
@@ -90,6 +92,7 @@
   margin-bottom: 1rem;
   font-size: 1rem;
   line-height: 1.5;
+  
 }
 .confirm-label {
   color: #555;
@@ -110,8 +113,6 @@
   border-radius: 7px;
 }
 
-/* Responsive tweaks */
-@media (max-width: 600px) {
   @media (max-width: 600px) {
   .form-input-background {
     width: 95%;
@@ -124,39 +125,44 @@
   }
 
   .input-form-actions {
-    flex-direction: column;
     gap: 10px;
     width: 100%;
+    align-items: center;
   }
 
   .input-form-actions button {
-    width: 100%;
+    width: 32%;
+    min-width: 80px;
     font-size: 1rem;
+    padding-inline: 10px;
   }
 
   /* Confirmation page mobile fix */
   .confirm-details-container {
     width: 100%;
     padding: 15px;
+    margin: 0px;
   }
 
   .confirm-row {
-    flex-direction: column;   /* stack label + value */
+    flex-direction: row;   
     align-items: flex-start;
     font-size: 0.95rem;
     margin-bottom: 15px;
+    
   }
 
   .confirm-label {
     font-weight: 600;
     margin-bottom: 5px;
+     text-align: left;
   }
 
   .confirm-value {
-    text-align: left;
+    text-align: right;
     font-weight: 500;
     color: #111;
   }
 }
 
-}
+

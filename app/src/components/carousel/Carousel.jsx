@@ -53,7 +53,7 @@ export default function Carousel({ navigate }) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % slides.length);
-    }, 5000); // 7s autoplay
+    }, 3500); 
     return () => clearInterval(interval);
   }, []);
 

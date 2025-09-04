@@ -64,7 +64,7 @@
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.8s ease;
-  width: 60%;
+  width: 80%;
 }
 
 .slide.active .hero-text {
