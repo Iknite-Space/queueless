@@ -338,7 +338,7 @@ useEffect(() => {
     // if (!userData?.org_id) return;  
   const fetchData = async () => {
     try {
-      const res = await fetch("https://api.queueless.xyz/api/v1/organization/bookings");
+      const res = await fetch(`https://api.queueless.xyz/api/v1/organization/${userData?.organization_id}/bookings`);
 
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -348,7 +348,7 @@ useEffect(() => {
       setBookings(data.bookings);
       console.log(data.bookings)
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error); 
     } finally{
       // setIsLoading(false)
     }
