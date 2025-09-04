@@ -121,6 +121,7 @@ RETURNING *;
 
 -- name: GetOrganizationBookings :many
 SELECT 
+  o.organization_id,
   b.booking_id, 
   b.booking_date, 
   p.cus_name, 
@@ -134,4 +135,7 @@ LEFT JOIN payments p
 LEFT JOIN services s 
   ON s.service_id = p.service_id
 LEFT JOIN service_slot_templates st 
-  ON st.id = p.slot_id;
+  ON st.id = p.slot_id
+LEFT JOIN organizations o
+  ON o.organization_id = s.organization_id
+WHERE o.organization_id = $1;
