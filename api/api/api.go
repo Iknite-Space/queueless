@@ -73,7 +73,7 @@ func (h *MessageHandler) WireHttpHandler() http.Handler {
 	r.PATCH("/api/v1/organization/update/profile", h.handleUpdateOrganization)
 
 	//get organization bookings
-	r.GET("/api/v1/organization/bookings", h.handleGetOrganizationBookings)
+	r.GET("/api/v1/organization/:id/bookings", h.handleGetOrganizationBookings)
 	return r
 }
 
@@ -666,13 +666,13 @@ func (h *MessageHandler) handleUpdateOrganization(c *gin.Context) {
 
 // Endpoint to get all bookings by organization
 func (h *MessageHandler) handleGetOrganizationBookings(c *gin.Context) {
-	// id := c.Param("id")
-	// if id == "" {
-	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
-	// 	return
-	// }
+	id := c.Param("id")
+	if id == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "id is required"})
+		return
+	}
 
-	bookings, err := h.querier.GetOrganizationBookings(c)
+	bookings, err := h.querier.GetOrganizationBookings(c, id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
