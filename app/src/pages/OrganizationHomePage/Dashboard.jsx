@@ -24,7 +24,7 @@ function Sidebar({ org_name }) {
     <div className="sidebar">
       <h2 className="sidebar-title">{org_name}</h2>
       <nav className="sidebar-nav">
-        <Link className="sidebar-link" to="/organization">Home</Link>
+        <Link className="sidebar-link" to="/organization">Dashboard</Link>
         <Link className="sidebar-link" to="/organization/service">Services</Link>
         <Link className="sidebar-link" to="/organization/bookings">Bookings</Link>
         <Link className="sidebar-link" to="/organization/profile">Profile</Link>
@@ -205,11 +205,13 @@ Profile.propTypes = {
   org: PropTypes.object.isRequired,
 }
 function Profile({ org }) {
+  const startTime = formatTime(org?.start_time.Microseconds)
+  const endTime = formatTime(org?.end_time.Microseconds)
   const [formData, setFormData] = useState({
       name: org?.name,
       location: org?.location,
-      start_time: "",
-      end_time: "",
+      start_time: startTime,
+      end_time: endTime,
       email: org?.email
     });
 
@@ -250,7 +252,7 @@ function Profile({ org }) {
         console.log(JSON.stringify(requestBody))
         
       } else {
-        alert("Failed to update organization information.");
+        alert("Failed to update organization information. Make sure your time is in this format: HH:MM:SS");
       }
     } catch (error) {
       console.error("Error:", error);
